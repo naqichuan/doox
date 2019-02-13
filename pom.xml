@@ -31,6 +31,8 @@
     </modules>
 
     <properties>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <doox.commons.version>3.1.1-SNAPSHOT</doox.commons.version>
         <commons-lang3.version>3.7</commons-lang3.version>
         <beanutils.version>1.9.3</beanutils.version>
