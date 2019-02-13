@@ -1,10 +1,6 @@
 #########################
 #### GENERAL or ROOT ####
 #########################
-fetch
-push
-out
-
 # Transifex
 .transifexrc
 
