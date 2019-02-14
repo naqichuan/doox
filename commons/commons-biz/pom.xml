@@ -15,9 +15,10 @@
 
     <name>commons-biz</name>
     <url>http://nqcx.org</url>
+
     <dependencies>
         <dependency>
-            <groupId>org.nqcx.doox</groupId>
+            <groupId>org.nqcx.doox.commons</groupId>
             <artifactId>commons-lang</artifactId>
             <version>${project.version}</version>
         </dependency>
