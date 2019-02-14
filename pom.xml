@@ -12,6 +12,14 @@
     <name>doox</name>
     <url>http://nqcx.org</url>
 
+    <developers>
+        <developer>
+            <id>1</id>
+            <name>Naqi Chuan</name>
+            <email>naiqchuan@163.com</email>
+        </developer>
+    </developers>
+
     <distributionManagement>
         <repository>
             <id>chineseall-releases</id>
@@ -25,9 +33,17 @@
         </snapshotRepository>
     </distributionManagement>
 
+    <scm>
+        <connection>scm:git@github.com:naqichuan/doox.git</connection>
+        <developerConnection>scm:git@github.com:naqichuan/doox.git</developerConnection>
+        <url>https://github.com/naqichuan/doox/tree/${project.scm.tag}</url>
+        <tag>master</tag>
+    </scm>
+
     <modules>
         <module>parent</module>
         <module>commons</module>
+        <module>tree</module>
     </modules>
 
     <properties>
