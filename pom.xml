@@ -44,6 +44,7 @@
         <module>parent</module>
         <module>commons</module>
         <module>tree</module>
+        <module>user-agent</module>
     </modules>
 
     <properties>
