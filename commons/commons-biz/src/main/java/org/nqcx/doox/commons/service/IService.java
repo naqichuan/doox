@@ -21,10 +21,10 @@ public interface IService<DO, PO, ID> {
     /**
      * 保存数据
      *
-     * @param pos pos
+     * @param po po
      * @return t
      */
-    PO save(PO pos);
+    PO save(PO po);
 
     /**
      * 保存多条数据
@@ -45,10 +45,10 @@ public interface IService<DO, PO, ID> {
     /**
      * 修改数据
      *
-     * @param pos pos
-     * @return pos
+     * @param po po
+     * @return po
      */
-    PO modify(PO pos);
+    PO modify(PO po);
 
     /**
      * 修改多条数据
@@ -67,7 +67,7 @@ public interface IService<DO, PO, ID> {
     List<PO> modifyAll(PO... pos);
 
     /**
-     * Retrieves an pos by its id
+     * Retrieves an po by its id
      *
      * @param id id
      * @return t
