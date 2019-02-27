@@ -6,22 +6,41 @@
 
 package org.nqcx.doox.commons.data.mapper;
 
+import org.apache.ibatis.reflection.property.PropertyNamer;
 import org.nqcx.doox.commons.dao.IDAO;
 import org.nqcx.doox.commons.lang.o.DTO;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import javax.persistence.Column;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
 
 /**
  * @author naqichuan 2018/12/3 10:13
  */
 public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> implements IDAO<PO, ID> {
 
+    protected final Map<String, String> fieldMapping = new LinkedHashMap<>();
     protected final Mapper mapper;
 
     public MapperSupport(Mapper mapper) {
+        Type t = getClass().getGenericSuperclass();
+        if (t instanceof ParameterizedType) {
+            Type[] types = ((ParameterizedType) t).getActualTypeArguments();
+            Class<PO> classpo = (Class<PO>) types[1];
+            Method[] methods;
+            if (classpo != null && (methods = classpo.getMethods()) != null) {
+                for (Method m : methods) {
+                    Column c = m.getAnnotation(Column.class);
+                    if (c == null)
+                        continue;
+
+                    fieldMapping.put(PropertyNamer.methodToProperty(m.getName()), c.name().trim());
+                }
+            }
+        }
+
         this.mapper = mapper;
     }
 
@@ -109,12 +128,17 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
      * @return map
      */
     public static Map<String, Object> parseParams(DTO dto) {
+        return parseParams(dto, null);
+    }
+
+    public static Map<String, Object> parseParams(DTO dto, Map<String, String> fieldMapping) {
         Map<String, Object> map = new HashMap<>();
 
         if (dto != null && dto.getParamsMap() != null)
-            map.putAll(dto.getParamsMap());
+            dto.getParamsMap().forEach((k, v) -> map.put(fieldMapping == null ? k : fieldMapping.getOrDefault(k, k), v));
+
         if (dto != null && dto.getSort() != null)
-            map.put("_order_", "ORDER BY " + dto.getSort().orderString());
+            map.put("_order_", "ORDER BY " + dto.getSort().orderString(fieldMapping));
 
         if (dto != null && dto.getPage() != null)
             map.put("_page_", "LIMIT " + dto.getPage().getStartIndex() + ", " + dto.getPage().getPageSize());
