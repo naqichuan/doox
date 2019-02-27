@@ -142,7 +142,7 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
         Map<String, Object> map = new HashMap<>();
 
         if (dto != null && dto.getParamsMap() != null)
-            dto.getParamsMap().forEach((k, v) -> map.put(fieldMapping == null ? k : fieldMapping.getOrDefault(k, k), v));
+            dto.getParamsMap().forEach(map::put);
 
         if (dto != null && dto.getSort() != null)
             map.put("_order_", "ORDER BY " + dto.getSort().orderString(fieldMapping));
