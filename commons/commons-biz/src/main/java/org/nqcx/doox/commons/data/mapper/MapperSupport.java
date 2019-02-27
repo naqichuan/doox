@@ -90,7 +90,7 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
 
     @Override
     public List<PO> listAll(DTO dto) {
-        return mapper.findAll(parseParams(dto == null ? new DTO() : dto));
+        return mapper.findAll(parseParams(dto == null ? new DTO() : dto, fieldMapping));
     }
 
     @Override
@@ -101,14 +101,14 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
         if (dto.getPage() != null)
             dto.getPage().setTotalCount(this.getCount(dto));
 
-        dto.setList(mapper.findAll(parseParams(dto)));
+        dto.setList(mapper.findAll(parseParams(dto, fieldMapping)));
 
         return dto.setSuccess(true);
     }
 
     @Override
     public long getCount(DTO dto) {
-        return mapper.getCount(parseParams(dto == null ? new DTO() : dto));
+        return mapper.getCount(parseParams(dto == null ? new DTO() : dto, fieldMapping));
     }
 
     @Override
@@ -131,6 +131,13 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
         return parseParams(dto, null);
     }
 
+    /**
+     * 解析参数，返回 mapper 需要的参数
+     *
+     * @param dto          dto
+     * @param fieldMapping field mapping
+     * @return map
+     */
     public static Map<String, Object> parseParams(DTO dto, Map<String, String> fieldMapping) {
         Map<String, Object> map = new HashMap<>();
 
