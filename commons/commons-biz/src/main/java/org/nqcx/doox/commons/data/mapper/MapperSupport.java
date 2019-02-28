@@ -46,6 +46,9 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
 
     @Override
     public PO save(PO po) {
+        if (po == null)
+            return null;
+
         mapper.save(po);
 
         return po;
@@ -53,6 +56,9 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
 
     @Override
     public PO modify(PO po) {
+        if (po == null)
+            return null;
+
         mapper.update(po);
 
         return po;
@@ -61,7 +67,7 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
     @Override
     public List<PO> saveAll(List<PO> pos) {
         if (pos == null)
-            return null;
+            return new ArrayList<>(0);
 
         pos.forEach(this::save);
 
@@ -71,7 +77,7 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
     @Override
     public List<PO> modifyAll(List<PO> pos) {
         if (pos == null)
-            return null;
+            return new ArrayList<>(0);
 
         pos.forEach(this::modify);
 
@@ -85,12 +91,14 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
 
     @Override
     public List<PO> findAllByIds(List<ID> ids) {
-        return mapper.findByIds(ids);
+        List<PO> list;
+        return (list = mapper.findByIds(ids)) == null ? new ArrayList<>(0) : list;
     }
 
     @Override
     public List<PO> listAll(DTO dto) {
-        return mapper.findAll(parseParams(dto == null ? new DTO() : dto, fieldMapping));
+        List<PO> list;
+        return (list = mapper.findAll(parseParams(dto == null ? new DTO() : dto, fieldMapping))) == null ? new ArrayList<>(0) : list;
     }
 
     @Override
@@ -101,7 +109,8 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
         if (dto.getPage() != null)
             dto.getPage().setTotalCount(this.getCount(dto));
 
-        dto.setList(mapper.findAll(parseParams(dto, fieldMapping)));
+        List<PO> list;
+        dto.setList((list = mapper.findAll(parseParams(dto, fieldMapping))) == null ? new ArrayList<>(0) : list);
 
         return dto.setSuccess(true);
     }
