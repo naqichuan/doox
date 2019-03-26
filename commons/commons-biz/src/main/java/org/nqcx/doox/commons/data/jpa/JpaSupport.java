@@ -19,7 +19,6 @@ import org.springframework.util.Assert;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author naqichuan 2018/12/3 10:17
@@ -67,10 +66,10 @@ public abstract class JpaSupport<JPA extends IJpa<PO, ID>, PO, ID> implements ID
     }
 
     @Override
-    public Optional<PO> findById(ID id) {
+    public PO findById(ID id) {
         Assert.notNull(id, "ID must be not null.");
 
-        return jpa.findById(id);
+        return jpa.findById(id).orElse(null);
     }
 
     @Override

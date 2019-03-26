@@ -85,8 +85,8 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
     }
 
     @Override
-    public Optional<PO> findById(ID id) {
-        return Optional.ofNullable(mapper.findById(id));
+    public PO findById(ID id) {
+        return mapper.findById(id);
     }
 
     @Override

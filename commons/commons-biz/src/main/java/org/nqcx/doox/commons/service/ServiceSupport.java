@@ -16,7 +16,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author naqichuan 2014年8月14日 上午10:48:24
@@ -140,12 +139,12 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, DO, PO, ID> imple
     }
 
     @Override
-    public Optional<DO> findById(ID id) {
+    public DO findById(ID id) {
         try {
-            Optional<PO> po = dao.findById(id);
+            PO po = dao.findById(id);
             if (classdo == classpo)
-                return afterFoud((Optional<DO>) po);
-            return afterFoud(Orika.o2o(po, classdo));
+                return afterFoud((DO) po);
+            return afterFoud(Orika.o2o(dao.findById(id), classdo));
         } catch (Exception e) {
             throw new ServiceException("ServiceSupport findById error", e);
         }
@@ -203,7 +202,10 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, DO, PO, ID> imple
 
         try {
             DTO result = dao.findAll(dto);
-            if (result != null && result.isSuccess() && result.getList().size() > 0 && classdo != classpo)
+            if (result == null)
+                result = new DTO();
+
+            if (result.isSuccess() && result.getList().size() > 0 && classdo != classpo)
                 result.setList(Orika.l2l(result.getList(), classdo));
 
             return result.setSuccess(true).setList(afterFoud(result.getList()));
@@ -219,18 +221,6 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, DO, PO, ID> imple
      * @return DO
      */
     protected DO afterFoud(DO do_) {
-        return do_;
-    }
-
-    /**
-     * 查询一条数据后处理
-     *
-     * @param do_
-     * @return DO
-     */
-    protected Optional<DO> afterFoud(Optional<DO> do_) {
-        if (do_ != null && do_.isPresent())
-            afterFoud(do_.get());
         return do_;
     }
 

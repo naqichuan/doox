@@ -11,7 +11,6 @@ package org.nqcx.doox.commons.dao;
 import org.nqcx.doox.commons.lang.o.DTO;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author naqichuan 2014年8月14日 上午10:41:33
@@ -56,7 +55,7 @@ public interface IDAO<PO, ID> {
      * @param id id
      * @return t
      */
-    Optional<PO> findById(ID id);
+    PO findById(ID id);
 
     /**
      * Return all by ids

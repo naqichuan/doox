@@ -97,6 +97,4 @@ public class Orika {
     public static <O, T> List<T> l2l(List<O> list, Class<T> clazz) {
         return getMapper().mapAsList(list, clazz);
     }
-
-
 }

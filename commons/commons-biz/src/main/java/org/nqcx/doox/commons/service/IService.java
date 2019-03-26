@@ -11,7 +11,6 @@ package org.nqcx.doox.commons.service;
 import org.nqcx.doox.commons.lang.o.DTO;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author naqichuan 2014年8月14日 上午10:52:21
@@ -72,7 +71,7 @@ public interface IService<DO, PO, ID> {
      * @param id id
      * @return t
      */
-    Optional<DO> findById(ID id);
+    DO findById(ID id);
 
     /**
      * Return all by ids
