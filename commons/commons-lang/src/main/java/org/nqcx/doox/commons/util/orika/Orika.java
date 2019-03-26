@@ -42,14 +42,38 @@ public class Orika {
     }
 
     /**
+     * @param o   Original object
+     * @param t   Target object
+     * @param <O> Original
+     * @param <T> Target
+     * @return Target instance
+     */
+    public static <O, T> T o2o(O o, T t) {
+        getMapper().map(o, t);
+        return t;
+    }
+
+    /**
      * @param o     o
      * @param clazz class
      * @param <O>   Original
      * @param <T>   Target
      * @return Target instance
      */
-    public static <O, T> Optional<T> o2o(Optional<O> o, Class<T> clazz) {
-        return o.isPresent() ? Optional.ofNullable(o2o(o.orElse(null), clazz)) : Optional.empty();
+    public static <O, T> Optional<T> o2oo(O o, Class<T> clazz) {
+        return Optional.ofNullable(o).map(t -> o2o(t, clazz));
+    }
+
+    /**
+     * @param o   Original object
+     * @param t   Target object
+     * @param <O> Original
+     * @param <T> Target
+     * @return Target instance
+     */
+    public static <O, T> Optional<T> o2oo(O o, T t) {
+        getMapper().map(o, t);
+        return Optional.ofNullable(t);
     }
 
     /**
@@ -74,15 +98,5 @@ public class Orika {
         return getMapper().mapAsList(list, clazz);
     }
 
-    /**
-     * @param o   Original object
-     * @param t   Target object
-     * @param <O> Original
-     * @param <T> Target
-     * @return Target instance
-     */
-    public static <O, T> T copy(O o, T t) {
-        getMapper().map(o, t);
-        return t;
-    }
+
 }
