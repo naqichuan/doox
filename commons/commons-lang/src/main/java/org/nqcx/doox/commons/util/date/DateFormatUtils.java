@@ -19,6 +19,7 @@ public class DateFormatUtils extends org.apache.commons.lang3.time.DateFormatUti
     public static final String MONTH_FORMAT = "yyyy-MM";
     public static final String MONTHONLY_FORMAT = "MM";
     public static final String DATE_FORMAT = "yyyy-MM-dd";
+    public static final String MONTH_DAY_FORMAT = "MM-dd";
     public static final String DAY_FORMAT = "dd";
     public static final String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String TIMEONLY_FORMAT = "HH:mm:ss";
@@ -44,6 +45,10 @@ public class DateFormatUtils extends org.apache.commons.lang3.time.DateFormatUti
      * Nqcx formatter for date without time zone. The format used is <tt>yyyy-MM-dd</tt>.
      */
     public static final FastDateFormat NQCX_DATE_FORMAT = FastDateFormat.getInstance(DATE_FORMAT);
+    /**
+     * Nqcx formatter for date without time zone. The format used is <tt>MM-dd</tt>.
+     */
+    public static final FastDateFormat NQCX_MONTH_DAY_FORMAT = FastDateFormat.getInstance(MONTH_DAY_FORMAT);
 
     /**
      * Nqcx formatter for day without time zone. The format used is <tt>dd</tt>.
