@@ -200,7 +200,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         cal.setTime(date);
         String week = String.valueOf(cal.get(Calendar.WEEK_OF_YEAR));
 
-        return String.valueOf(cal.get(Calendar.YEAR)) + "-"
+        return cal.get(Calendar.YEAR) + "-"
                 + (week.length() == 1 ? "0" + week : week);
     }
 
@@ -211,7 +211,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * @return
      */
     public static Date firstDayOfWeek(String yearweek) {
-        String[] yws = yearweek.split("-");
+        String[] yws;
+        if (yearweek == null || (yws = yearweek.split("-")).length != 2)
+            return null;
+
         int year = Integer.parseInt(yws[0]);
         int week = Integer.parseInt(yws[1]);
 
