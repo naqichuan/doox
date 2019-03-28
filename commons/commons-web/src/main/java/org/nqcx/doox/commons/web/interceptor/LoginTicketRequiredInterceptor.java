@@ -37,7 +37,7 @@ public class LoginTicketRequiredInterceptor extends LoginRequiredInterceptor {
             } else {
                 logger.info("RemoteAddr [" + request.getRemoteAddr() + "] from normal way check ticket false!");
 
-                response.sendRedirect(getAuthorizeUrl(request));
+                response.sendRedirect(buildInternalAuthorizeUrl(request, true));
             }
 
             return false;

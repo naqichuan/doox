@@ -26,9 +26,6 @@ public class LoginRequiredInterceptor extends WebContextInterceptor {
 
     private final static Logger logger = LoggerFactory.getLogger(LoginRequiredInterceptor.class);
 
-    protected UrlBuilder homeUrl;
-    protected UrlBuilder authorizeUrl;
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
@@ -43,13 +40,11 @@ public class LoginRequiredInterceptor extends WebContextInterceptor {
             } else {
                 logger.info("RemoteAddr [" + request.getRemoteAddr() + "] from normal way check login false!");
 
-                response.sendRedirect(getAuthorizeUrl(request));
+                response.sendRedirect(buildInternalAuthorizeUrl(request, true));
             }
 
             return false;
         }
-
-        logger.info("Account [" + loginContext.getAccount() + "] check login true!");
 
         return true;
     }
@@ -90,75 +85,52 @@ public class LoginRequiredInterceptor extends WebContextInterceptor {
 
 
     /**
-     * 使用 getAuthorizeUrl() 方法
+     * 生成 url 不包含 contextPath
      *
-     * @param request
-     * @return
+     * @param request request
+     * @return String
      */
-    protected String getAuthorizeUrl(HttpServletRequest request) {
-        return getAuthorizeUrl(request, null);
+    protected String buildInternalAuthorizeUrl(HttpServletRequest request) {
+        return buildInternalAuthorizeUrl(request, false);
     }
 
     /**
-     * @param request
-     * @return
+     * @param request request
+     * @return String
      */
-    protected String getAuthorizeUrl(HttpServletRequest request, Map<String, String> params) {
-        if (homeUrl == null)
-            return "";
-        UrlBuilder.Builder currentUrlBuilder = homeUrl.forPath(request.getServletPath());
-        currentUrlBuilder.put(request.getParameterMap());
-
-        if (authorizeUrl == null)
-            return "";
-        UrlBuilder.Builder authorizeUrlBuilder = authorizeUrl.forPath();
-
-        if (params != null && params.size() > 0)
-            authorizeUrlBuilder.put(params);
-        authorizeUrlBuilder.put("redirectUrl", generateRedirectUrl(currentUrlBuilder));
-
-        return authorizeUrlBuilder.build();
+    protected String buildInternalAuthorizeUrl(HttpServletRequest request, boolean containContextPath) {
+        return new UrlBuilder().forPath(authorizeUri(containContextPath ? request.getContextPath() : ""))
+                .put("redirectUrl", buildInternalRedirectUrl(request.getServletPath(), request.getParameterMap()))
+                .build();
     }
 
     /**
-     * 对当前的 url 进行处理，生成符合预期的 redirectUrl
+     * @param prefix
+     * @return
+     */
+    private String authorizeUri(String prefix) {
+        return prefix + authorizeUri();
+    }
+
+    /**
+     * @return 验证登录状态的 uri
+     */
+    protected String authorizeUri() {
+        return "/account/login";
+    }
+
+    /**
+     * 生成符合预期的 redirectUrl，该 url 不包含 contextPath
      * <p/>
-     * 该方法用于子类扩展和重构 redirectUrl
+     * 如果其它需求，子类扩展和重载
      *
-     * @param currentUrlBuilder currentUrlBuilder
-     * @return
+     * @param servletPath servletPath
+     * @param params      params
+     * @return 生成不包含 contextPath 的 url
      */
-    protected String generateRedirectUrl(UrlBuilder.Builder currentUrlBuilder) {
-        if (currentUrlBuilder == null)
-            return null;
-        return currentUrlBuilder.build();
-    }
-
-    /**
-     * 用于配置文件中配置注入
-     *
-     * @param homeUrl
-     */
-    public void setHomeUrl(UrlBuilder homeUrl) {
-        this.homeUrl = homeUrl;
-    }
-
-    /**
-     * 用于配置文件中配置注入，用 setAuthorizeUrl() 代替
-     *
-     * @param authorizeUrl
-     */
-    @Deprecated
-    public void setLoginUrl(UrlBuilder authorizeUrl) {
-        this.authorizeUrl = authorizeUrl;
-    }
-
-    /**
-     * 用于配置文件中配置注入
-     *
-     * @param authorizeUrl
-     */
-    public void setAuthorizeUrl(UrlBuilder authorizeUrl) {
-        this.authorizeUrl = authorizeUrl;
+    protected String buildInternalRedirectUrl(String servletPath, Map<String, ?> params) {
+        return new UrlBuilder().forPath(servletPath)
+                .put(params)
+                .buildUri();
     }
 }

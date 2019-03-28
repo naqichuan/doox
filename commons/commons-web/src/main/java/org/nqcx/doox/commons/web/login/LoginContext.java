@@ -23,13 +23,7 @@ public class LoginContext implements Serializable {
 
     private final static Logger logger = LoggerFactory.getLogger(LoginContext.class);
 
-    private final static ThreadLocal<LoginContext> holder = new ThreadLocal<LoginContext>() {
-
-        @Override
-        protected LoginContext initialValue() {
-            return new LoginContext();
-        }
-    };
+    private final static ThreadLocal<LoginContext> holder = ThreadLocal.withInitial(LoginContext::new);
 
     /**
      * id
