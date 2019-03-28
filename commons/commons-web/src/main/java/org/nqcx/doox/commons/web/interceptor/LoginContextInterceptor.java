@@ -49,27 +49,29 @@ public class LoginContextInterceptor extends WebContextInterceptor {
         long created = loginContext.getCreated(); //创建时间戳
         long expires = loginContext.getExpires(); //过期时间
 
-        // 如果没有设置过期时间，则使用默认的
-        long timeout = expires == 0 ? SESSION_TIMEOUT * 60 * 1000 : expires - created;
+        if (expires != -1) {
+            // 如果没有设置过期时间，则使用默认的
+            long timeout = expires == 0 ? SESSION_TIMEOUT * 60 * 1000 : expires - created;
 
-        // 如果已过期 login cookie，直接返回
-        if (current - created >= timeout) {
-            removeLoginCookie(request, response);
-            LoginContext.remove();
-            return true;
-        }
+            // 如果已过期 login cookie，直接返回
+            if (current - created >= timeout) {
+                removeLoginCookie(request, response);
+                LoginContext.remove();
+                return true;
+            }
 
-        // 如果新cookie或是更改了登录或剩下的时间只有2/3，就需要重新派发cookie
-        if ((current - created) * 3 / RATE > timeout) {
-            // 写最后一次访问的cookie
-            loginContext.setCreated(current);
-            if (expires != 0)
-                loginContext.setTimeout(timeout);
+            // 如果新cookie或是更改了登录或剩下的时间只有2/3，就需要重新派发cookie
+            if ((current - created) * 3 / RATE > timeout) {
+                // 写最后一次访问的cookie
+                loginContext.setCreated(current);
+                if (expires != 0)
+                    loginContext.setTimeout(timeout);
 
-            // 这里添加一个步骤用于应用中填充 cookie
-            this.fillLoginContext(loginContext);
+                // 这里添加一个步骤用于应用中填充 cookie
+                this.fillLoginContext(loginContext);
 
-            CookieUtils.setCookie(response, loginCookie.getName(), loginContext.toCookieValue());
+                CookieUtils.setCookie(response, loginCookie.getName(), loginContext.toCookieValue());
+            }
         }
 
         LoginContext.setLoginContext(loginContext);
