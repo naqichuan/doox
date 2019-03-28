@@ -133,9 +133,6 @@ public class UrlBuilder implements Cloneable {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-
-        if (url == null)
-            throw new RuntimeException("originalUrl 格式不匹配!");
     }
 
     /**
@@ -484,6 +481,20 @@ public class UrlBuilder implements Cloneable {
                 throw new RuntimeException(e);
             }
 
+            return build(builder);
+        }
+
+        /**
+         * 执行构建 uri
+         *
+         * @return String
+         */
+        public String buildUri() {
+            String path = prefixPath(baseUrl.getPath(), this.path);
+            return build(new StringBuilder(path));
+        }
+
+        private String build(final StringBuilder builder) {
             StringBuilder query = new StringBuilder();
             // 添加原始参数表
             appendQueryString(query, this.queryMap, false);
@@ -670,7 +681,7 @@ public class UrlBuilder implements Cloneable {
 //        UrlBuilder ub = new UrlBuilder("//yun.$baseUrl$/{0}?param1={1}&param2={2}&callback=?");
         UrlBuilder ub = new UrlBuilder();
         ub.setProtocol("https");
-        ub.setBaseUrl("nqcx.org");
+//        ub.setBaseUrl("nqcx.org");
         ub.setValue(0, "i/x");
         ub.setValue(1, "0");
         ub.setValue(2, UrlBuilder.encodeValue("黄保光"));
@@ -678,6 +689,7 @@ public class UrlBuilder implements Cloneable {
         ub.setValue(4, "wq");
 
         System.out.println(ub.forPath("/{3}").add("account", "{4}").build());
+        System.out.println(ub.forPath("/abce/{3}").add("account", "{4}").buildUri());
 
         System.out.println(containProtocol("https://a"));
     }

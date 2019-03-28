@@ -10,6 +10,7 @@ package org.nqcx.doox.commons.web.login;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author naqichuan 2014年8月14日 上午11:50:15
@@ -138,15 +139,15 @@ public class LoginTicket implements Serializable {
             return false;
         if (_version != ticket._version)
             return false;
-        if (_appPath != null ? !_appPath.equals(ticket._appPath) : ticket._appPath != null)
+        if (!Objects.equals(_appPath, ticket._appPath))
             return false;
-        if (_expires != null ? !_expires.equals(ticket._expires) : ticket._expires != null)
+        if (!Objects.equals(_expires, ticket._expires))
             return false;
-        if (_issueDate != null ? !_issueDate.equals(ticket._issueDate) : ticket._issueDate != null)
+        if (!Objects.equals(_issueDate, ticket._issueDate))
             return false;
-        if (_userData != null ? !_userData.equals(ticket._userData) : ticket._userData != null)
+        if (!Objects.equals(_userData, ticket._userData))
             return false;
-        if (_account != null ? !_account.equals(ticket._account) : ticket._account != null)
+        if (!Objects.equals(_account, ticket._account))
             return false;
 
         return true;

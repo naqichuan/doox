@@ -125,7 +125,7 @@ public class LoginRequiredInterceptor extends WebContextInterceptor {
      * <p/>
      * 该方法用于子类扩展和重构 redirectUrl
      *
-     * @param currentUrlBuilder
+     * @param currentUrlBuilder currentUrlBuilder
      * @return
      */
     protected String generateRedirectUrl(UrlBuilder.Builder currentUrlBuilder) {
