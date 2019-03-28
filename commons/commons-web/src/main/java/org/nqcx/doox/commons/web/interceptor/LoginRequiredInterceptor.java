@@ -101,7 +101,7 @@ public class LoginRequiredInterceptor extends WebContextInterceptor {
     protected String buildInternalAuthorizeUrl(HttpServletRequest request, boolean containContextPath) {
         return new UrlBuilder().forPath(authorizeUri(containContextPath ? request.getContextPath() : ""))
                 .put("redirectUrl", buildInternalRedirectUrl(request.getServletPath(), request.getParameterMap()))
-                .build();
+                .buildUri();
     }
 
     /**
