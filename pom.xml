@@ -51,6 +51,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <doox.commons.version>1.0.0-SNAPSHOT</doox.commons.version>
         <commons-lang3.version>3.7</commons-lang3.version>
+        <commons-io.version>2.6</commons-io.version>
         <beanutils.version>1.9.3</beanutils.version>
         <orika.version>1.5.2</orika.version>
         <spring.version>5.0.7.RELEASE</spring.version>
@@ -124,6 +125,11 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-beanutils</groupId>
