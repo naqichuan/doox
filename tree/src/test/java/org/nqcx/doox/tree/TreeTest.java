@@ -8,6 +8,7 @@
 
 package org.nqcx.doox.tree;
 
+import java.io.IOException;
 import java.util.StringJoiner;
 
 /**
@@ -17,41 +18,52 @@ public class TreeTest {
 
     public static void main(String[] args) {
 
-        TreeBuilder<Integer, MyO> t = new TreeBuilder<>();
+//        TreeBuilder<Integer, MyO> t = new TreeBuilder<>();
+//
+//        MyO n1 = new MyO();
+//        n1.setId(1);
+//        n1.setPid(0);
+//        n1.setJxx("ni hao kcd1");
+//
+//        t.put(n1);
+//
+//        MyO n2 = new MyO();
+//        n2.setId(2);
+//        n2.setPid(1);
+//        n2.setJxx("ni hao kcd2");
+//
+//        t.put(n2);
+//
+//        MyO n3 = new MyO();
+//        n3.setId(3);
+//        n3.setPid(2);
+//        n3.setJxx("ni hao kcd3");
+//
+//        t.put(n3);
+//
+//        System.out.println(t.get(1));//
+//        System.out.println(t.get(1).get().getJxx());//
+//
+//        System.out.println(t.getNode(2));
+//        System.out.println(t.getNode(2).get().getObject());
+//        System.out.println(t.getNode(2).get().getObject().get().getJxx());
+//        System.out.println(t.getNode(2).get().hasParent());
+//        System.out.println(t.getNode(2).get().getParent());
+//        System.out.println(t.getNode(2).get().getParent().get().getJxx());
+//        System.out.println(t.getNode(2).get().hasChilds());
+//        System.out.println(t.getNode(2).get().getChilds());
+//        System.out.println(t.getNode(2).get().getChilds().size());
 
-        MyO n1 = new MyO();
-        n1.setId(1);
-        n1.setPid(0);
-        n1.setJxx("ni hao kcd1");
 
-        t.put(n1);
+        try {
+//            Process p = Runtime.getRuntime().exec("open -a /Applications/Sublime\\ Text.app /Users/nqcx/Data/CA/resources接口测试.txt");
+            String cmd = "/Applications/QQ.app";
+//            String cmd = ("/Applications/Sublime Text.app".replaceAll(" ", "\\\" \\\"");
 
-        MyO n2 = new MyO();
-        n2.setId(2);
-        n2.setPid(1);
-        n2.setJxx("ni hao kcd2");
-
-        t.put(n2);
-
-        MyO n3 = new MyO();
-        n3.setId(3);
-        n3.setPid(2);
-        n3.setJxx("ni hao kcd3");
-
-        t.put(n3);
-
-        System.out.println(t.get(1));//
-        System.out.println(t.get(1).get().getJxx());//
-
-        System.out.println(t.getNode(2));
-        System.out.println(t.getNode(2).get().getObject());
-        System.out.println(t.getNode(2).get().getObject().get().getJxx());
-        System.out.println(t.getNode(2).get().hasParent());
-        System.out.println(t.getNode(2).get().getParent());
-        System.out.println(t.getNode(2).get().getParent().get().getJxx());
-        System.out.println(t.getNode(2).get().hasChilds());
-        System.out.println(t.getNode(2).get().getChilds());
-        System.out.println(t.getNode(2).get().getChilds().size());
+            Process p = Runtime.getRuntime().exec(new String[]{"/bin/sh","-c", "open /Applications/QQ.app"});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     static class MyO implements INode<Integer> {

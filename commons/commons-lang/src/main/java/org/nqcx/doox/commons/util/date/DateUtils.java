@@ -33,11 +33,20 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return new Date();
     }
 
+    /**
+     * 当前日期 增加/减少 amount 天后的日期
+     *
+     * @param amount 增加/减少 天数
+     * @return java Date
+     */
+    public static Date date(int amount) {
+        return addDays(date(), amount);
+    }
 
     public static Date dayBegin(Date date) {
         try {
             if (date != null)
-                return DateFormatUtils.NQCX_TIME_FORMAT.parse(DateFormatUtils.NQCX_DAY_BEGIN_FORMAT.format(date));
+                return DateFormatUtils.TIME.parse(DateFormatUtils.DAY_BEGIN.format(date));
         } catch (ParseException e) {
             logger.error("", e);
         }
@@ -47,7 +56,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     public static Date dayEnd(Date date) {
         try {
             if (date != null)
-                return DateFormatUtils.NQCX_TIME_FORMAT.parse(DateFormatUtils.NQCX_DAY_END_FORMAT.format(date));
+                return DateFormatUtils.TIME.parse(DateFormatUtils.DAY_END.format(date));
         } catch (ParseException e) {
             logger.error("", e);
         }
