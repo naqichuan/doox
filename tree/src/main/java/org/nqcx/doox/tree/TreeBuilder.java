@@ -122,7 +122,6 @@ public class TreeBuilder<ID, O extends INode<ID>> implements Serializable {
                 if (nodeId.equals(v.getParentNodeId())) {
                     list.add(v);
                 }
-
             });
         }
         return list;
