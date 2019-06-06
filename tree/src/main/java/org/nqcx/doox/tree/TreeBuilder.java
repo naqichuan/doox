@@ -124,6 +124,16 @@ public class TreeBuilder<ID, O extends INode<ID>> implements Serializable {
                 }
             });
         }
-        return list;
+        return Collections.unmodifiableList(list);
+    }
+
+    public List<NodeFacade<ID, O>> listAllNodes() {
+        List<NodeFacade<ID, O>> list = new ArrayList<>();
+
+        nodeMap.forEach((k, v) -> {
+            list.add(v);
+        });
+
+        return Collections.unmodifiableList(list);
     }
 }
