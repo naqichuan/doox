@@ -46,6 +46,7 @@
                     <include>**/application*.properties</include>
                 </includes>
                 <excludes>
+                    <exclude>assets/**/*.*</exclude>
                     <exclude>templates/**/*.*</exclude>
                     <exclude>resources/**/*.*</exclude>
                     <exclude>static/**/*.*</exclude>
