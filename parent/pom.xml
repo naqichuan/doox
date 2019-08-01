@@ -45,6 +45,12 @@
                     <include>**/application*.yaml</include>
                     <include>**/application*.properties</include>
                 </includes>
+                <excludes>
+                    <exclude>templates/**/*.*</exclude>
+                    <exclude>resources/**/*.*</exclude>
+                    <exclude>static/**/*.*</exclude>
+                    <exclude>public/**/*.*</exclude>
+                </excludes>
             </resource>
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
@@ -53,11 +59,18 @@
                     <include>gmsg/*.properties</include>
                     <include>spring/*.xml</include>
                     <include>mybatis/*.xml</include>
+                    <include>mybatis/*.xml</include>
+                    <include>assets/**/*.*</include>
+                    <include>templates/**/*.*</include>
+                    <include>resources/**/*.*</include>
+                    <include>static/**/*.*</include>
+                    <include>public/**/*.*</include>
                 </includes>
                 <excludes>
                     <exclude>**/application*.yml</exclude>
                     <exclude>**/application*.yaml</exclude>
                     <exclude>**/application*.properties</exclude>
+                    <exclude>assets/tools/**</exclude>
                 </excludes>
             </resource>
         </resources>
