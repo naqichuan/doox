@@ -199,42 +199,49 @@ public abstract class WebSupport {
      * @return
      */
     protected String getScheme() {
-        return getWebContext() == null ? null : getWebContext().getScheme();
+        return getWebContext().getScheme();
     }
 
     /**
      * @return
      */
     protected String getServerName() {
-        return getWebContext() == null ? null : getWebContext().getServerName();
+        return getWebContext().getServerName();
     }
 
     /**
      * @return
      */
     protected String getRemoteAddr() {
-        return getWebContext() == null ? null : getWebContext().getRemoteAddr();
+        return getWebContext().getRemoteAddr();
     }
 
     /**
      * @return
      */
     protected String getContextPath() {
-        return getWebContext() == null ? null : getWebContext().getContextPath();
+        return getWebContext().getContextPath();
+    }
+
+    /**
+     * @return
+     */
+    protected String getServletPath() {
+        return getWebContext().getServletPath();
     }
 
     /**
      * @return
      */
     protected boolean isAjax() {
-        return getWebContext() != null && getWebContext().isAjax();
+        return getWebContext().isAjax();
     }
 
     /**
      * @return
      */
     protected Locale getLocale() {
-        return getWebContext() == null ? null : getWebContext().getLocale();
+        return getWebContext().getLocale();
     }
 
     // ========================================================================
