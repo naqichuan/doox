@@ -10,33 +10,18 @@ package org.nqcx.doox.commons.service;
 
 import org.nqcx.doox.commons.dao.IDAO;
 import org.nqcx.doox.commons.lang.o.DTO;
-import org.nqcx.doox.commons.util.orika.Orika;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author naqichuan 2014年8月14日 上午10:48:24
  */
-public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, DO, PO, ID> implements IService<DO, PO, ID> {
-
-    protected final Class<DO> classdo;
-    protected final Class<PO> classpo;
+public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, PO, ID> implements IService<PO, ID> {
 
     protected final DAO dao;
 
     public ServiceSupport(DAO dao) {
-        Type t = getClass().getGenericSuperclass();
-        if (t instanceof ParameterizedType) {
-            Type[] types = ((ParameterizedType) t).getActualTypeArguments();
-
-            this.classdo = (Class<DO>) types[1];
-            this.classpo = (Class<PO>) types[2];
-        } else
-            throw new RuntimeException("Class not found");
-
         this.dao = dao;
     }
 
@@ -139,24 +124,18 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, DO, PO, ID> imple
     }
 
     @Override
-    public DO findById(ID id) {
+    public PO findById(ID id) {
         try {
-            PO po = dao.findById(id);
-            if (classdo == classpo)
-                return afterFoud((DO) po);
-            return afterFoud(Orika.o2o(dao.findById(id), classdo));
+            return afterFoud(dao.findById(id));
         } catch (Exception e) {
             throw new ServiceException("ServiceSupport findById error", e);
         }
     }
 
     @Override
-    public List<DO> findAllByIds(List<ID> ids) {
+    public List<PO> findAllByIds(List<ID> ids) {
         try {
-            List<PO> list = dao.findAllByIds(ids);
-            if (classdo == classpo)
-                return (List<DO>) list;
-            return afterFoud(Orika.l2l(list, classdo));
+            return afterFoud(dao.findAllByIds(ids));
         } catch (Exception e) {
             throw new ServiceException("ServiceSupport findAllByIds error", e);
         }
@@ -164,7 +143,7 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, DO, PO, ID> imple
 
     @Override
     @SafeVarargs
-    public final List<DO> findAllByIds(ID... ids) {
+    public final List<PO> findAllByIds(ID... ids) {
         if (ids == null)
             return null;
 
@@ -177,19 +156,16 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, DO, PO, ID> imple
      * @param pos pos
      * @return pos
      */
-    protected List<DO> afterFoud(List<DO> pos) {
+    protected List<PO> afterFoud(List<PO> pos) {
         if (pos != null && pos.size() > 0)
             pos.forEach(this::afterFoud);
         return pos;
     }
 
     @Override
-    public List<DO> listAll(DTO dto) {
+    public List<PO> listAll(DTO dto) {
         try {
-            List<PO> list = dao.listAll(dto);
-            if (classdo == classpo)
-                return (List<DO>) list;
-            return afterFoud(Orika.l2l(list, classdo));
+            return afterFoud(dao.listAll(dto));
         } catch (Exception e) {
             throw new ServiceException("ServiceSupport listAll error", e);
         }
@@ -205,9 +181,6 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, DO, PO, ID> imple
             if (result == null)
                 result = new DTO();
 
-            if (result.isSuccess() && result.getList().size() > 0 && classdo != classpo)
-                result.setList(Orika.l2l(result.getList(), classdo));
-
             return result.setSuccess(true).setList(afterFoud(result.getList()));
         } catch (Exception e) {
             throw new ServiceException("ServiceSupport findAll error", e);
@@ -217,11 +190,11 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, DO, PO, ID> imple
     /**
      * 查询一条数据后处理
      *
-     * @param do_ do_
-     * @return DO
+     * @param po po
+     * @return PO
      */
-    protected DO afterFoud(DO do_) {
-        return do_;
+    protected PO afterFoud(PO po) {
+        return po;
     }
 
     @Override

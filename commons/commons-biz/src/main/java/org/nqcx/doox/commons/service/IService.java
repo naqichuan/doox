@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author naqichuan 2014年8月14日 上午10:52:21
  */
-public interface IService<DO, PO, ID> {
+public interface IService<PO, ID> {
 
     /**
      * 保存数据
@@ -71,7 +71,7 @@ public interface IService<DO, PO, ID> {
      * @param id id
      * @return t
      */
-    DO findById(ID id);
+    PO findById(ID id);
 
     /**
      * Return all by ids
@@ -79,7 +79,7 @@ public interface IService<DO, PO, ID> {
      * @param ids id
      * @return t
      */
-    List<DO> findAllByIds(List<ID> ids);
+    List<PO> findAllByIds(List<ID> ids);
 
     /**
      * Return all by ids
@@ -87,7 +87,7 @@ public interface IService<DO, PO, ID> {
      * @param ids id
      * @return t
      */
-    List<DO> findAllByIds(ID... ids);
+    List<PO> findAllByIds(ID... ids);
 
 
     /**
@@ -96,7 +96,7 @@ public interface IService<DO, PO, ID> {
      * @param dto dto
      * @return List
      */
-    List<DO> listAll(DTO dto);
+    List<PO> listAll(DTO dto);
 
     /**
      * 执行查询

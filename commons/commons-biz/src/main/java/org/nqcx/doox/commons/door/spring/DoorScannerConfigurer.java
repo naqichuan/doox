@@ -141,6 +141,8 @@ public class DoorScannerConfigurer implements BeanDefinitionRegistryPostProcesso
             bdb.addPropertyValue("etherName", etherName);
             bdb.addPropertyValue("etherOpen", method);
 
+            assert getRegistry() != null;
+
             getRegistry().registerBeanDefinition(etherName + "." + ehterOpenName, bdb.getBeanDefinition());
         }
 
