@@ -164,6 +164,9 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, PO, ID> implement
 
     @Override
     public List<PO> listAll(DTO dto) {
+        if (dto == null)
+            throw new ServiceException("Parameter dto can't be null");
+
         try {
             return afterFoud(dao.listAll(dto));
         } catch (Exception e) {
