@@ -34,11 +34,11 @@ public enum GenderEO {
     /**
      * 判断自身是否与参数里的枚举相等
      *
-     * @param genderEO genderEO
+     * @param eo eo
      * @return boolean
      */
-    public boolean is(GenderEO genderEO) {
-        return this == genderEO;
+    public boolean is(GenderEO eo) {
+        return this == eo;
     }
 
 
