@@ -9,6 +9,7 @@
 package org.nqcx.doox.commons.web;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.nqcx.doox.commons.lang.o.DTO;
 import org.nqcx.doox.commons.lang.o.INPage;
 import org.nqcx.doox.commons.util.MapBuilder;
@@ -249,11 +250,20 @@ public abstract class WebSupport {
     /**
      * 构建返回结果，返回 String 类型
      *
-     * @param dto
-     * @return
+     * @param dto dto
+     * @return String
      */
     protected String buildJsonResult(DTO dto) {
         return JSON.toJSONString(buildResult(dto));
+    }
+
+    /**
+     * @param dto      dto
+     * @param features features
+     * @return String
+     */
+    protected String buildJsonResult(DTO dto, SerializerFeature... features) {
+        return JSON.toJSONString(buildResult(dto), features);
     }
 
     /**
