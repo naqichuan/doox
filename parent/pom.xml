@@ -39,6 +39,7 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>beans-special.xml</include>
+                    <include>config/*.xml</include>
                     <include>config/*.properties</include>
                     <include>log4j2.xml</include>
                     <include>**/application*.yml</include>
