@@ -708,4 +708,28 @@ public abstract class WebSupport {
 
         paramMap.put(key, newKeyValue);
     }
+
+    // ========================================================================
+
+    /**
+     * 跳转到错误页
+     *
+     * @param response response
+     * @param dto      dto
+     */
+    protected void sendRedirectErrorPage(HttpServletResponse response, DTO dto) {
+        String errorCode = "1";
+        Map<String, Object> errorMap;
+
+        if (dto != null && dto.isSuccess())
+            return;
+        else if (dto != null && (errorMap = dto.getResultMap()) != null && errorMap.size() > 0)
+            errorCode = errorMap.entrySet().iterator().next().getKey();
+
+        try {
+            response.sendRedirect(getContextPath() + "/r/e/" + errorCode);
+        } catch (IOException e) {
+            logger.warn(e.getMessage());
+        }
+    }
 }
