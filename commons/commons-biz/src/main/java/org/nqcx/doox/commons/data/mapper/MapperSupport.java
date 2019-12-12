@@ -49,9 +49,9 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
         if (po == null)
             return null;
 
-        mapper.save(po);
+        mapper.save(beforeSave(po));
 
-        return po;
+        return afterSave(po);
     }
 
     @Override
@@ -59,9 +59,9 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
         if (po == null)
             return null;
 
-        mapper.update(po);
+        mapper.update(beforeModify(po));
 
-        return po;
+        return afterModify(po);
     }
 
     @Override

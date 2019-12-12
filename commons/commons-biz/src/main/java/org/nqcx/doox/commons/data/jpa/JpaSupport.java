@@ -19,6 +19,7 @@ import org.springframework.util.Assert;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author naqichuan 2018/12/3 10:17
@@ -43,26 +44,32 @@ public abstract class JpaSupport<JPA extends IJpa<PO, ID>, PO, ID> implements ID
 
     @Override
     public PO save(PO po) {
-        Assert.notNull(po, "pos must be not null.");
+        Assert.notNull(po, "po must be not null.");
 
-        return jpa.save(po);
+        return afterSave(jpa.save(beforeSave(po)));
     }
 
     @Override
     public PO modify(PO po) {
-        return save(po);
+        Assert.notNull(po, "po must be not null.");
+
+        return afterModify(jpa.save(beforeModify(po)));
     }
 
     @Override
     public List<PO> saveAll(List<PO> pos) {
         Assert.notNull(pos, "pos must be not null.");
 
-        return jpa.saveAll(pos);
+        return jpa.saveAll(pos.stream().map(this::beforeSave).collect(Collectors.toList()))
+                .stream().map(this::afterSave).collect(Collectors.toList());
     }
 
     @Override
     public List<PO> modifyAll(List<PO> pos) {
-        return saveAll(pos);
+        Assert.notNull(pos, "pos must be not null.");
+
+        return jpa.saveAll(pos.stream().map(this::beforeModify).collect(Collectors.toList()))
+                .stream().map(this::afterModify).collect(Collectors.toList());
     }
 
     @Override

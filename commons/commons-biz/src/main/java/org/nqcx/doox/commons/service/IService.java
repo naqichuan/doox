@@ -18,12 +18,45 @@ import java.util.List;
 public interface IService<PO, ID> {
 
     /**
+     * 保存之前处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default PO beforeSave(PO po) {
+        return po;
+    }
+
+    /**
      * 保存数据
      *
      * @param po po
      * @return t
      */
     PO save(PO po);
+
+
+    /**
+     * 保存之后处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default PO afterSave(PO po) {
+        return po;
+    }
+
+    /**
+     * 保存之前处理
+     *
+     * @param pos pos
+     * @return List
+     */
+    default List<PO> beforeSave(List<PO> pos) {
+        if (pos != null && pos.size() > 0)
+            pos.forEach(this::beforeSave);
+        return pos;
+    }
 
     /**
      * 保存多条数据
@@ -42,12 +75,56 @@ public interface IService<PO, ID> {
     List<PO> saveAll(PO... pos);
 
     /**
+     * 保存之后处理
+     *
+     * @param pos pos
+     * @return List
+     */
+    default List<PO> afterSave(List<PO> pos) {
+        if (pos != null && pos.size() > 0)
+            pos.forEach(this::afterSave);
+        return pos;
+    }
+
+    /**
+     * 修改之前处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default PO beforeModify(PO po) {
+        return po;
+    }
+
+    /**
      * 修改数据
      *
      * @param po po
      * @return po
      */
     PO modify(PO po);
+
+    /**
+     * 修改之后处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default PO afterModify(PO po) {
+        return po;
+    }
+
+    /**
+     * 修改之前处理
+     *
+     * @param pos pos
+     * @return List
+     */
+    default List<PO> beforeModify(List<PO> pos) {
+        if (pos != null && pos.size() > 0)
+            pos.forEach(this::beforeModify);
+        return pos;
+    }
 
     /**
      * 修改多条数据
@@ -58,12 +135,24 @@ public interface IService<PO, ID> {
     List<PO> modifyAll(List<PO> pos);
 
     /**
-     * 保存多条数据
+     * 修改多条数据
      *
      * @param pos pos
      * @return list
      */
     List<PO> modifyAll(PO... pos);
+
+    /**
+     * 修改之后处理
+     *
+     * @param pos pos
+     * @return List
+     */
+    default List<PO> afterModify(List<PO> pos) {
+        if (pos != null && pos.size() > 0)
+            pos.forEach(this::afterModify);
+        return pos;
+    }
 
     /**
      * Retrieves an po by its id
@@ -72,6 +161,16 @@ public interface IService<PO, ID> {
      * @return t
      */
     PO findById(ID id);
+
+    /**
+     * 查询一条数据后处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default PO afterFoud(PO po) {
+        return po;
+    }
 
     /**
      * Return all by ids
@@ -105,6 +204,18 @@ public interface IService<PO, ID> {
      * @return DTO
      */
     DTO findAll(DTO dto);
+
+    /**
+     * 查询数据列表后处理
+     *
+     * @param pos pos
+     * @return pos
+     */
+    default List<PO> afterFoud(List<PO> pos) {
+        if (pos != null && pos.size() > 0)
+            pos.forEach(this::afterFoud);
+        return pos;
+    }
 
     /**
      * 取得 count

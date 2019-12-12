@@ -18,12 +18,32 @@ import java.util.List;
 public interface IDAO<PO, ID> {
 
     /**
+     * 保存之前处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default PO beforeSave(PO po) {
+        return po;
+    }
+
+    /**
      * 保存数据
      *
      * @param po po
      * @return PO
      */
     PO save(PO po);
+
+    /**
+     * 保存之后处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default PO afterSave(PO po) {
+        return po;
+    }
 
     /**
      * 保存多条数据
@@ -34,12 +54,32 @@ public interface IDAO<PO, ID> {
     List<PO> saveAll(List<PO> pos);
 
     /**
+     * 修改之前处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default PO beforeModify(PO po) {
+        return po;
+    }
+
+    /**
      * 修改数据
      *
      * @param po po
      * @return PO
      */
     PO modify(PO po);
+
+    /**
+     * 修改之后处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default PO afterModify(PO po) {
+        return po;
+    }
 
     /**
      * 修改多条数据

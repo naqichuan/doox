@@ -28,7 +28,7 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, PO, ID> implement
     @Override
     public PO save(PO po) {
         try {
-            return dao.save(beforeSave(po));
+            return afterSave(dao.save(beforeSave(po)));
         } catch (Exception e) {
             throw new ServiceException("ServiceSupport save error", e);
         }
@@ -37,7 +37,7 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, PO, ID> implement
     @Override
     public List<PO> saveAll(List<PO> pos) {
         try {
-            return dao.saveAll(beforeSave(pos));
+            return afterSave(dao.saveAll(beforeSave(pos)));
         } catch (Exception e) {
             throw new ServiceException("ServiceSupport saveAll error", e);
         }
@@ -52,32 +52,10 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, PO, ID> implement
         return saveAll(Arrays.asList(pos));
     }
 
-    /**
-     * 保存之前处理
-     *
-     * @param po po
-     * @return PO
-     */
-    protected PO beforeSave(PO po) {
-        return po;
-    }
-
-    /**
-     * 保存之前处理
-     *
-     * @param pos pos
-     * @return List
-     */
-    protected List<PO> beforeSave(List<PO> pos) {
-        if (pos != null && pos.size() > 0)
-            pos.forEach(this::beforeSave);
-        return pos;
-    }
-
     @Override
     public PO modify(PO po) {
         try {
-            return dao.modify(beforeModify(po));
+            return afterModify(dao.modify(beforeModify(po)));
         } catch (Exception e) {
             throw new ServiceException("ServiceSupport save error", e);
         }
@@ -86,7 +64,7 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, PO, ID> implement
     @Override
     public List<PO> modifyAll(List<PO> pos) {
         try {
-            return dao.modifyAll(beforeModify(pos));
+            return afterModify(dao.modifyAll(beforeModify(pos)));
         } catch (Exception e) {
             throw new ServiceException("ServiceSupport modifyAll error", e);
         }
@@ -99,28 +77,6 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, PO, ID> implement
             return null;
 
         return modifyAll(Arrays.asList(pos));
-    }
-
-    /**
-     * 保存之前处理
-     *
-     * @param po po
-     * @return PO
-     */
-    protected PO beforeModify(PO po) {
-        return po;
-    }
-
-    /**
-     * 保存之前处理
-     *
-     * @param pos pos
-     * @return List
-     */
-    protected List<PO> beforeModify(List<PO> pos) {
-        if (pos != null && pos.size() > 0)
-            pos.forEach(this::beforeModify);
-        return pos;
     }
 
     @Override
@@ -150,18 +106,6 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, PO, ID> implement
         return findAllByIds(Arrays.asList(ids));
     }
 
-    /**
-     * 查询数据列表后处理
-     *
-     * @param pos pos
-     * @return pos
-     */
-    protected List<PO> afterFoud(List<PO> pos) {
-        if (pos != null && pos.size() > 0)
-            pos.forEach(this::afterFoud);
-        return pos;
-    }
-
     @Override
     public List<PO> listAll(DTO dto) {
         if (dto == null)
@@ -188,16 +132,6 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, PO, ID> implement
         } catch (Exception e) {
             throw new ServiceException("ServiceSupport findAll error", e);
         }
-    }
-
-    /**
-     * 查询一条数据后处理
-     *
-     * @param po po
-     * @return PO
-     */
-    protected PO afterFoud(PO po) {
-        return po;
     }
 
     @Override
