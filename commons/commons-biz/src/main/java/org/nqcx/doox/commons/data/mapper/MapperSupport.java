@@ -131,7 +131,8 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
 
     @Override
     public void deleteByIds(List<ID> ids) {
-        List<PO> pos = mapper.findByIds(ids);
+        List<PO> pos = Optional.ofNullable(mapper.findByIds(ids))
+                .orElse(Collections.emptyList());
 
         pos.forEach(this::beforeDelete);
         mapper.deleteByIds(ids);
