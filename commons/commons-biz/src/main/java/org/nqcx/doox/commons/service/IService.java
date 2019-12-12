@@ -35,7 +35,6 @@ public interface IService<PO, ID> {
      */
     PO save(PO po);
 
-
     /**
      * 保存之后处理
      *
