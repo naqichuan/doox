@@ -130,11 +130,31 @@ public interface IDAO<PO, ID> {
     long getCount(DTO dto);
 
     /**
+     * 删除之前处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default void beforeDelete(PO po) {
+        // nothing to do
+    }
+
+    /**
      * 删除数据
      *
      * @param id id
      */
     void deleteById(ID id);
+
+    /**
+     * 删除之后处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default void afterDelete(PO po) {
+        // nothing to do
+    }
 
     /**
      * 删除多条数据

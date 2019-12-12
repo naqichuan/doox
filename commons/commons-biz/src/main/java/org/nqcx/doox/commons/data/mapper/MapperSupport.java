@@ -122,12 +122,20 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
 
     @Override
     public void deleteById(ID id) {
+        Optional<PO> po = Optional.ofNullable(mapper.findById(id));
+
+        po.ifPresent(this::beforeDelete);
         mapper.deleteById(id);
+        po.ifPresent(this::afterDelete);
     }
 
     @Override
     public void deleteByIds(List<ID> ids) {
+        List<PO> pos = mapper.findByIds(ids);
+
+        pos.forEach(this::beforeDelete);
         mapper.deleteByIds(ids);
+        pos.forEach(this::afterDelete);
     }
 
     /**
