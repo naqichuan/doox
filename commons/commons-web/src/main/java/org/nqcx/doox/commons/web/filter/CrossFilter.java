@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * Created by xiaola on 19/1/20.
  */
-public class CROSFilter implements Filter {
+public class CrossFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
