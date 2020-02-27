@@ -56,23 +56,30 @@ public class NqcxCookie {
     private boolean encrypt;
 
     public Cookie newCookie(String value) {
-        return newCookie(value, expiry);
+        return newCookie(name, value, expiry, httpOnly);
+    }
+
+    public Cookie newCookie(String value, boolean httpOnly) {
+        return newCookie(name, value, expiry, httpOnly);
     }
 
     public Cookie newCookie(String value, int expiry) {
-        return newCookie(name, value, expiry);
+        return newCookie(name, value, expiry, httpOnly);
     }
 
+    public Cookie newCookie(String value, int expiry, boolean httpOnly) {
+        return newCookie(name, value, expiry, httpOnly);
+    }
 
     public Cookie newCookie(String name, String value) {
-        return newCookie(name, value, expiry);
-    }
-
-    public Cookie newCookie(String name, String value, int expiry) {
         return newCookie(name, value, expiry, httpOnly);
     }
 
     public Cookie newCookie(String name, String value, boolean httpOnly) {
+        return newCookie(name, value, expiry, httpOnly);
+    }
+
+    public Cookie newCookie(String name, String value, int expiry) {
         return newCookie(name, value, expiry, httpOnly);
     }
 
