@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.nqcx.doox</groupId>
         <artifactId>doox</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
 
     <artifactId>parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>parent</name>
@@ -19,6 +19,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <resource.delimiter>@</resource.delimiter>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
@@ -34,22 +35,45 @@
                 </includes>
             </resource>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>${basedir}/src/main/resources</directory>
                 <filtering>true</filtering>
                 <includes>
                     <include>beans-special.xml</include>
+                    <include>config/*.xml</include>
                     <include>config/*.properties</include>
                     <include>log4j2.xml</include>
+                    <include>**/application*.yml</include>
+                    <include>**/application*.yaml</include>
+                    <include>**/application*.properties</include>
                 </includes>
+                <excludes>
+                    <exclude>assets/**/*.*</exclude>
+                    <exclude>templates/**/*.*</exclude>
+                    <exclude>resources/**/*.*</exclude>
+                    <exclude>static/**/*.*</exclude>
+                    <exclude>public/**/*.*</exclude>
+                </excludes>
             </resource>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>${basedir}/src/main/resources</directory>
                 <includes>
                     <include>beans.xml</include>
                     <include>gmsg/*.properties</include>
                     <include>spring/*.xml</include>
                     <include>mybatis/*.xml</include>
+                    <include>mybatis/*.xml</include>
+                    <include>assets/**/*.*</include>
+                    <include>templates/**/*.*</include>
+                    <include>resources/**/*.*</include>
+                    <include>static/**/*.*</include>
+                    <include>public/**/*.*</include>
                 </includes>
+                <excludes>
+                    <exclude>**/application*.yml</exclude>
+                    <exclude>**/application*.yaml</exclude>
+                    <exclude>**/application*.properties</exclude>
+                    <exclude>assets/tools/**</exclude>
+                </excludes>
             </resource>
         </resources>
         <pluginManagement>

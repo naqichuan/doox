@@ -42,11 +42,11 @@ public enum BoolEO {
     /**
      * 判断自身是否与参数里的枚举相等
      *
-     * @param boolEO BoolEO
+     * @param eo BoolEO
      * @return boolean
      */
-    public boolean is(BoolEO boolEO) {
-        return this == boolEO;
+    public boolean is(BoolEO eo) {
+        return this == eo;
     }
 
     /**

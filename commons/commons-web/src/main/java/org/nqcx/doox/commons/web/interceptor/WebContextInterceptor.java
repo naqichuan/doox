@@ -125,9 +125,56 @@ public class WebContextInterceptor extends WebSupport implements HandlerIntercep
                     wc.getStart(), wc.getPost(), wc.getEnd(), wc.getRemoteAddr(),
                     wc.getServerName(), wc.getMethod(), wc.getScheme(), wc.isSecure(),
                     wc.isAjax(), wc.getRequestURI(), wc.getLocale(), StringUtils.trimToEmpty(wc.getSessionId()),
-                    wc.getUrl(), StringUtils.trimToEmpty(wc.getReferer()), StringUtils.trimToEmpty(wc.getParams()),
-                    StringUtils.trimToEmpty(wc.getData()), StringUtils.trimToEmpty(wc.getUserAgent()));
+                    wc.getUrl(), StringUtils.trimToEmpty(wc.getReferer()), StringUtils.trimToEmpty(string2Json(wc.getParams())),
+                    StringUtils.trimToEmpty(string2Json(wc.getData())), StringUtils.trimToEmpty(string2Json(wc.getUserAgent())));
         }
+    }
+
+    /**
+     * 处理 特殊字符
+     *
+     * @param input input
+     * @return String
+     */
+    private static String string2Json(String input) {
+        if (input == null)
+            return null;
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < input.length(); i++) {
+
+            char c = input.charAt(i);
+            switch (c) {
+                case '\"':
+                    sb.append("\\\"");
+                    break;
+                case '\\':
+                    sb.append("\\\\");
+                    break;
+                case '/':
+                    sb.append("\\/");
+                    break;
+                case '\b':
+                    sb.append("\\b");
+                    break;
+                case '\f':
+                    sb.append("\\f");
+                    break;
+                case '\n':
+                    sb.append("\\n");
+                    break;
+                case '\r':
+                    sb.append("\\r");
+                    break;
+                case '\t':
+                    sb.append("\\t");
+                    break;
+                default:
+                    sb.append(c);
+            }
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -239,7 +286,8 @@ public class WebContextInterceptor extends WebSupport implements HandlerIntercep
      * @param ignoreEmpty 忽略空值（""）
      * @param isEncode    是否进行编码
      */
-    protected void appendParamsString(StringBuilder query, Map<String, String[]> map, boolean ignoreEmpty, boolean isEncode) {
+    protected void appendParamsString(StringBuilder query, Map<String, String[]> map, boolean ignoreEmpty,
+                                      boolean isEncode) {
         if (map == null || query == null)
             return;
 
@@ -264,7 +312,8 @@ public class WebContextInterceptor extends WebSupport implements HandlerIntercep
      * @param ignoreEmpty 忽略空值（""）
      * @param isEncode    是否进行编码
      */
-    protected void appendParamsString(StringBuilder query, String key, String value, boolean ignoreEmpty, boolean isEncode) {
+    protected void appendParamsString(StringBuilder query, String key, String value, boolean ignoreEmpty,
+                                      boolean isEncode) {
         if (value == null)
             return;
 

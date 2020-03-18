@@ -11,12 +11,21 @@ package org.nqcx.doox.commons.dao;
 import org.nqcx.doox.commons.lang.o.DTO;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author naqichuan 2014年8月14日 上午10:41:33
  */
 public interface IDAO<PO, ID> {
+
+    /**
+     * 保存之前处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default PO beforeSave(PO po) {
+        return po;
+    }
 
     /**
      * 保存数据
@@ -27,6 +36,16 @@ public interface IDAO<PO, ID> {
     PO save(PO po);
 
     /**
+     * 保存之后处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default PO afterSave(PO po) {
+        return po;
+    }
+
+    /**
      * 保存多条数据
      *
      * @param pos pos
@@ -35,12 +54,32 @@ public interface IDAO<PO, ID> {
     List<PO> saveAll(List<PO> pos);
 
     /**
+     * 修改之前处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default PO beforeModify(PO po) {
+        return po;
+    }
+
+    /**
      * 修改数据
      *
      * @param po po
      * @return PO
      */
     PO modify(PO po);
+
+    /**
+     * 修改之后处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default PO afterModify(PO po) {
+        return po;
+    }
 
     /**
      * 修改多条数据
@@ -56,7 +95,7 @@ public interface IDAO<PO, ID> {
      * @param id id
      * @return t
      */
-    Optional<PO> findById(ID id);
+    PO findById(ID id);
 
     /**
      * Return all by ids
@@ -91,11 +130,31 @@ public interface IDAO<PO, ID> {
     long getCount(DTO dto);
 
     /**
+     * 删除之前处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default void beforeDelete(PO po) {
+        // nothing to do
+    }
+
+    /**
      * 删除数据
      *
      * @param id id
      */
     void deleteById(ID id);
+
+    /**
+     * 删除之后处理
+     *
+     * @param po po
+     * @return PO
+     */
+    default void afterDelete(PO po) {
+        // nothing to do
+    }
 
     /**
      * 删除多条数据

@@ -19,6 +19,7 @@ public class DateFormatUtils extends org.apache.commons.lang3.time.DateFormatUti
     public static final String MONTH_FORMAT = "yyyy-MM";
     public static final String MONTHONLY_FORMAT = "MM";
     public static final String DATE_FORMAT = "yyyy-MM-dd";
+    public static final String MONTH_DAY_FORMAT = "MM-dd";
     public static final String DAY_FORMAT = "dd";
     public static final String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String TIMEONLY_FORMAT = "HH:mm:ss";
@@ -29,38 +30,63 @@ public class DateFormatUtils extends org.apache.commons.lang3.time.DateFormatUti
     /**
      * Nqcx formatter for year without time zone. The format used is <tt>yyyy</tt>.
      */
-    public static final FastDateFormat NQCX_YEAR_FORMAT = FastDateFormat.getInstance(YEAR_FORMAT);
+    public static final FastDateFormat YEAR = FastDateFormat.getInstance(YEAR_FORMAT);
+    @Deprecated
+    public static final FastDateFormat NQCX_YEAR_FORMAT = YEAR;
 
     /**
      * Nqcx formatter for year-moth without time zone. The format used is <tt>yyyy-MM</tt>.
      */
-    public static final FastDateFormat NQCX_MONTH_FORMAT = FastDateFormat.getInstance(MONTH_FORMAT);
+    public static final FastDateFormat MONTH = FastDateFormat.getInstance(MONTH_FORMAT);
+    @Deprecated
+    public static final FastDateFormat NQCX_MONTH_FORMAT = MONTH;
 
     /**
      * Nqcx formatter for moth only without time zone. The format used is <tt>MM</tt>.
      */
-    public static final FastDateFormat NQCX_MONTHONLY_FORMAT = FastDateFormat.getInstance(MONTHONLY_FORMAT);
+    public static final FastDateFormat MONTHONLY = FastDateFormat.getInstance(MONTHONLY_FORMAT);
+    @Deprecated
+    public static final FastDateFormat NQCX_MONTHONLY_FORMAT = MONTHONLY;
     /**
      * Nqcx formatter for date without time zone. The format used is <tt>yyyy-MM-dd</tt>.
      */
-    public static final FastDateFormat NQCX_DATE_FORMAT = FastDateFormat.getInstance(DATE_FORMAT);
+    public static final FastDateFormat DATE = FastDateFormat.getInstance(DATE_FORMAT);
+    @Deprecated
+    public static final FastDateFormat NQCX_DATE_FORMAT = DATE;
+    /**
+     * Nqcx formatter for date without time zone. The format used is <tt>MM-dd</tt>.
+     */
+    public static final FastDateFormat MONTH_DAY = FastDateFormat.getInstance(MONTH_DAY_FORMAT);
+    @Deprecated
+    public static final FastDateFormat NQCX_MONTH_DAY_FORMAT = MONTH_DAY;
 
     /**
      * Nqcx formatter for day without time zone. The format used is <tt>dd</tt>.
      */
-    public static final FastDateFormat NQCX_DAT_FORMAT = FastDateFormat.getInstance(DAY_FORMAT);
+    public static final FastDateFormat DAY = FastDateFormat.getInstance(DAY_FORMAT);
+    @Deprecated
+    public static final FastDateFormat NQCX_DAY_FORMAT = DAY;
 
     /**
      * Nqcx formatter for time without time zone. The format used is <tt>yyyy-MM-dd HH:mm:ss</tt>.
      */
-    public static final FastDateFormat NQCX_TIME_FORMAT = FastDateFormat.getInstance(TIME_FORMAT);
+    public static final FastDateFormat TIME = FastDateFormat.getInstance(TIME_FORMAT);
+    @Deprecated
+    public static final FastDateFormat NQCX_TIME_FORMAT = TIME;
 
     /**
      * Nqcx formatter for time only without time zone. The format used is <tt>HH:mm:ss</tt>.
      */
-    public static final FastDateFormat NQCX_TIMEONLY_FORMAT = FastDateFormat.getInstance(TIMEONLY_FORMAT);
+    public static final FastDateFormat TIMEONLY = FastDateFormat.getInstance(TIMEONLY_FORMAT);
+    @Deprecated
+    public static final FastDateFormat NQCX_TIMEONLY_FORMAT = TIMEONLY;
 
 
-    public static final FastDateFormat NQCX_DAY_BEGIN_FORMAT = FastDateFormat.getInstance(DAY_BEGIN_FORMAT);
-    public static final FastDateFormat NQCX_DAY_END_FORMAT = FastDateFormat.getInstance(DAY_END_FORMAT);
+    public static final FastDateFormat DAY_BEGIN = FastDateFormat.getInstance(DAY_BEGIN_FORMAT);
+    @Deprecated
+    public static final FastDateFormat NQCX_DAY_BEGIN_FORMAT = DAY_BEGIN;
+
+    public static final FastDateFormat DAY_END = FastDateFormat.getInstance(DAY_END_FORMAT);
+    @Deprecated
+    public static final FastDateFormat NQCX_DAY_END_FORMAT = DAY_END;
 }

@@ -6,43 +6,68 @@
 
 package org.nqcx.doox.commons.data.mapper;
 
+import org.apache.ibatis.reflection.property.PropertyNamer;
 import org.nqcx.doox.commons.dao.IDAO;
 import org.nqcx.doox.commons.lang.o.DTO;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import javax.persistence.Column;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
 
 /**
  * @author naqichuan 2018/12/3 10:13
  */
 public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> implements IDAO<PO, ID> {
 
+    protected final Map<String, String> fieldMapping = new LinkedHashMap<>();
     protected final Mapper mapper;
 
     public MapperSupport(Mapper mapper) {
+        Type t = getClass().getGenericSuperclass();
+        if (t instanceof ParameterizedType) {
+            Type[] types = ((ParameterizedType) t).getActualTypeArguments();
+            Class<PO> classpo = (Class<PO>) types[1];
+            Method[] methods;
+            if (classpo != null && (methods = classpo.getMethods()) != null) {
+                for (Method m : methods) {
+                    Column c = m.getAnnotation(Column.class);
+                    if (c == null)
+                        continue;
+
+                    fieldMapping.put(PropertyNamer.methodToProperty(m.getName()), c.name().trim());
+                }
+            }
+        }
+
         this.mapper = mapper;
     }
 
     @Override
     public PO save(PO po) {
-        mapper.save(po);
+        if (po == null)
+            return null;
 
-        return po;
+        mapper.save(beforeSave(po));
+
+        return afterSave(po);
     }
 
     @Override
     public PO modify(PO po) {
-        mapper.update(po);
+        if (po == null)
+            return null;
 
-        return po;
+        mapper.update(beforeModify(po));
+
+        return afterModify(po);
     }
 
     @Override
     public List<PO> saveAll(List<PO> pos) {
         if (pos == null)
-            return null;
+            return new ArrayList<>(0);
 
         pos.forEach(this::save);
 
@@ -52,7 +77,7 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
     @Override
     public List<PO> modifyAll(List<PO> pos) {
         if (pos == null)
-            return null;
+            return new ArrayList<>(0);
 
         pos.forEach(this::modify);
 
@@ -60,18 +85,20 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
     }
 
     @Override
-    public Optional<PO> findById(ID id) {
-        return Optional.ofNullable(mapper.findById(id));
+    public PO findById(ID id) {
+        return mapper.findById(id);
     }
 
     @Override
     public List<PO> findAllByIds(List<ID> ids) {
-        return mapper.findByIds(ids);
+        List<PO> list;
+        return (list = mapper.findByIds(ids)) == null ? new ArrayList<>(0) : list;
     }
 
     @Override
     public List<PO> listAll(DTO dto) {
-        return mapper.findAll(parseParams(dto == null ? new DTO() : dto));
+        List<PO> list;
+        return (list = mapper.findAll(parseParams(dto == null ? new DTO() : dto, fieldMapping))) == null ? new ArrayList<>(0) : list;
     }
 
     @Override
@@ -82,24 +109,34 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
         if (dto.getPage() != null)
             dto.getPage().setTotalCount(this.getCount(dto));
 
-        dto.setList(mapper.findAll(parseParams(dto)));
+        List<PO> list;
+        dto.setList((list = mapper.findAll(parseParams(dto, fieldMapping))) == null ? new ArrayList<>(0) : list);
 
         return dto.setSuccess(true);
     }
 
     @Override
     public long getCount(DTO dto) {
-        return mapper.getCount(parseParams(dto == null ? new DTO() : dto));
+        return mapper.getCount(parseParams(dto == null ? new DTO() : dto, fieldMapping));
     }
 
     @Override
     public void deleteById(ID id) {
+        Optional<PO> po = Optional.ofNullable(mapper.findById(id));
+
+        po.ifPresent(this::beforeDelete);
         mapper.deleteById(id);
+        po.ifPresent(this::afterDelete);
     }
 
     @Override
     public void deleteByIds(List<ID> ids) {
+        List<PO> pos = Optional.ofNullable(mapper.findByIds(ids))
+                .orElse(Collections.emptyList());
+
+        pos.forEach(this::beforeDelete);
         mapper.deleteByIds(ids);
+        pos.forEach(this::afterDelete);
     }
 
     /**
@@ -109,12 +146,24 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
      * @return map
      */
     public static Map<String, Object> parseParams(DTO dto) {
+        return parseParams(dto, null);
+    }
+
+    /**
+     * 解析参数，返回 mapper 需要的参数
+     *
+     * @param dto          dto
+     * @param fieldMapping field mapping
+     * @return map
+     */
+    public static Map<String, Object> parseParams(DTO dto, Map<String, String> fieldMapping) {
         Map<String, Object> map = new HashMap<>();
 
         if (dto != null && dto.getParamsMap() != null)
-            map.putAll(dto.getParamsMap());
+            dto.getParamsMap().forEach(map::put);
+
         if (dto != null && dto.getSort() != null)
-            map.put("_order_", "ORDER BY " + dto.getSort().orderString());
+            map.put("_order_", "ORDER BY " + dto.getSort().orderString(fieldMapping));
 
         if (dto != null && dto.getPage() != null)
             map.put("_page_", "LIMIT " + dto.getPage().getStartIndex() + ", " + dto.getPage().getPageSize());

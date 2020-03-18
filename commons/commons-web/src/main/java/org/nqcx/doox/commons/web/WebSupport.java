@@ -9,8 +9,10 @@
 package org.nqcx.doox.commons.web;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.nqcx.doox.commons.lang.o.DTO;
 import org.nqcx.doox.commons.lang.o.INPage;
+import org.nqcx.doox.commons.lang.url.UrlBuilder;
 import org.nqcx.doox.commons.util.MapBuilder;
 import org.nqcx.doox.commons.util.StringUtils;
 import org.nqcx.doox.commons.web.result.NqcxResult;
@@ -31,7 +33,7 @@ import java.util.*;
  */
 public abstract class WebSupport {
 
-    private final static Logger logger = LoggerFactory.getLogger(WebSupport.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(WebSupport.class);
 
     protected final static String SUCCESS = "success";
     protected final static String ERROR_CODE = "errorCode";
@@ -117,7 +119,7 @@ public abstract class WebSupport {
 
             rv = messageSource == null ? null : messageSource.getMessage(code, arguments, locale);
         } catch (NoSuchMessageException e) {
-            logger.warn("WebSupport.getPropertyValue ," + e.getMessage());
+            LOGGER.warn("WebSupport.getPropertyValue ," + e.getMessage());
         }
         return rv == null ? code : rv;
     }
@@ -199,42 +201,49 @@ public abstract class WebSupport {
      * @return
      */
     protected String getScheme() {
-        return getWebContext() == null ? null : getWebContext().getScheme();
+        return getWebContext().getScheme();
     }
 
     /**
      * @return
      */
     protected String getServerName() {
-        return getWebContext() == null ? null : getWebContext().getServerName();
+        return getWebContext().getServerName();
     }
 
     /**
      * @return
      */
     protected String getRemoteAddr() {
-        return getWebContext() == null ? null : getWebContext().getRemoteAddr();
+        return getWebContext().getRemoteAddr();
     }
 
     /**
      * @return
      */
     protected String getContextPath() {
-        return getWebContext() == null ? null : getWebContext().getContextPath();
+        return getWebContext().getContextPath();
+    }
+
+    /**
+     * @return
+     */
+    protected String getServletPath() {
+        return getWebContext().getServletPath();
     }
 
     /**
      * @return
      */
     protected boolean isAjax() {
-        return getWebContext() != null && getWebContext().isAjax();
+        return getWebContext().isAjax();
     }
 
     /**
      * @return
      */
     protected Locale getLocale() {
-        return getWebContext() == null ? null : getWebContext().getLocale();
+        return getWebContext().getLocale();
     }
 
     // ========================================================================
@@ -242,11 +251,20 @@ public abstract class WebSupport {
     /**
      * 构建返回结果，返回 String 类型
      *
-     * @param dto
-     * @return
+     * @param dto dto
+     * @return String
      */
     protected String buildJsonResult(DTO dto) {
         return JSON.toJSONString(buildResult(dto));
+    }
+
+    /**
+     * @param dto      dto
+     * @param features features
+     * @return String
+     */
+    protected String buildJsonResult(DTO dto, SerializerFeature... features) {
+        return JSON.toJSONString(buildResult(dto), features);
     }
 
     /**
@@ -528,7 +546,7 @@ public abstract class WebSupport {
             out = response.getWriter();
             out.append(result);
         } catch (IOException e) {
-            logger.warn("WebSupport.responseResult, " + e.getMessage());
+            LOGGER.warn("WebSupport.responseResult, " + e.getMessage());
         } finally {
             if (out != null) {
                 out.close();
@@ -565,7 +583,7 @@ public abstract class WebSupport {
             while ((s = br.readLine()) != null)
                 sb.append(s);
         } catch (IOException e) {
-            logger.warn("requestBody error, {}", e.getMessage());
+            LOGGER.warn("requestBody error, {}", e.getMessage());
         }
 
         return sb.toString();
@@ -700,10 +718,9 @@ public abstract class WebSupport {
      * @param response response
      * @param dto      dto
      */
-    @Deprecated
-    protected void sendRedirectErrorResult(HttpServletResponse response, DTO dto) {
+    protected void sendRedirectErrorPage(HttpServletResponse response, DTO dto) {
         String errorCode = "1";
-        Map<String, Object> errorMap = null;
+        Map<String, Object> errorMap;
 
         if (dto != null && dto.isSuccess())
             return;
@@ -713,7 +730,27 @@ public abstract class WebSupport {
         try {
             response.sendRedirect(getContextPath() + "/r/e/" + errorCode);
         } catch (IOException e) {
-            logger.warn(e.getMessage());
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * 跳转到普通页
+     *
+     * @param response response
+     * @param uri      uri
+     */
+    protected void sendRedirectNormalPage(HttpServletResponse response, String uri) {
+        if (uri == null)
+            uri = "";
+
+        try {
+            if (UrlBuilder.containProtocol(uri))
+                response.sendRedirect(uri);
+            else
+                response.sendRedirect((getContextPath() == null ? "" : getContextPath()) + (uri.startsWith("/") ? uri : "/" + uri));
+        } catch (IOException e) {
+            LOGGER.warn(e.getMessage());
         }
     }
 }

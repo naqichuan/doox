@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author naqichuan 2014年8月14日 上午11:50:15
@@ -23,13 +22,7 @@ public class LoginContext implements Serializable {
 
     private final static Logger logger = LoggerFactory.getLogger(LoginContext.class);
 
-    private final static ThreadLocal<LoginContext> holder = new ThreadLocal<LoginContext>() {
-
-        @Override
-        protected LoginContext initialValue() {
-            return new LoginContext();
-        }
-    };
+    private final static ThreadLocal<LoginContext> holder = ThreadLocal.withInitial(LoginContext::new);
 
     /**
      * id
@@ -56,9 +49,11 @@ public class LoginContext implements Serializable {
     private long created = System.currentTimeMillis();
 
     /**
+     * 默认-1：不过期，与 cookie 同在；0：由程序自行决定；>0：为具体过期时间，小于 created 时立即过期
+     * <p>
      * 过期时间 如果没有指定，就使用拦截器默认的
      */
-    private long expires;
+    private long expires = -1;
 
     public long getId() {
         return id;
@@ -133,12 +128,10 @@ public class LoginContext implements Serializable {
     }
 
     /**
-     * 创建日期
-     *
-     * @return 创建日期
+     * 设置创建时间等于当前日期
      */
-    public Date getCreatedDate() {
-        return new Date(created);
+    public void setCreated() {
+        this.created = System.currentTimeMillis();
     }
 
     /**
@@ -153,22 +146,6 @@ public class LoginContext implements Serializable {
     }
 
     /**
-     * Method setCreatedDate sets the createdDate of this LoginContext object.
-     *
-     * @param created the createdDate of this LoginContext object.
-     */
-    public void setCreatedDate(Date created) {
-        this.created = created.getTime();
-    }
-
-    /**
-     * 设置创建时间等于当前日期
-     */
-    public void setCreated() {
-        this.created = System.currentTimeMillis();
-    }
-
-    /**
      * Method getExpires returns the expires of this LoginContext object.
      * <p/>
      * 过期时间
@@ -180,15 +157,6 @@ public class LoginContext implements Serializable {
     }
 
     /**
-     * Method getExpiresDate returns the expiresDate of this LoginContext object.
-     *
-     * @return the expiresDate (type Date) of this LoginContext object.
-     */
-    public Date getExpiresDate() {
-        return new Date(expires);
-    }
-
-    /**
      * Method setExpires sets the expires of this LoginContext object.
      * <p/>
      * 过期时间
@@ -197,15 +165,6 @@ public class LoginContext implements Serializable {
      */
     public void setExpires(long expires) {
         this.expires = expires;
-    }
-
-    /**
-     * Method setExpiresDate sets the expiresDate of this LoginContext object.
-     *
-     * @param expires the expiresDate of this LoginContext object.
-     */
-    public void setExpiresDate(Date expires) {
-        this.expires = expires.getTime();
     }
 
     /**

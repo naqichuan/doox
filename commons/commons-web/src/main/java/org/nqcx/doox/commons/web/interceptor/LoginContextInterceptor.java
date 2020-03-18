@@ -45,9 +45,14 @@ public class LoginContextInterceptor extends WebContextInterceptor {
             return true;
         }
 
-        long current = System.currentTimeMillis(); //当前时间戳
-        long created = loginContext.getCreated(); //创建时间戳
+        LoginContext.setLoginContext(loginContext);
+
         long expires = loginContext.getExpires(); //过期时间
+        if (expires == -1)
+            return true;
+
+        long created = loginContext.getCreated(); //创建时间戳
+        long current = System.currentTimeMillis(); //当前时间戳
 
         // 如果没有设置过期时间，则使用默认的
         long timeout = expires == 0 ? SESSION_TIMEOUT * 60 * 1000 : expires - created;
@@ -72,7 +77,6 @@ public class LoginContextInterceptor extends WebContextInterceptor {
             CookieUtils.setCookie(response, loginCookie.getName(), loginContext.toCookieValue());
         }
 
-        LoginContext.setLoginContext(loginContext);
         return true;
     }
 

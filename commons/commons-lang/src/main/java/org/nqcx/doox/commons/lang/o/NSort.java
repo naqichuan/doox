@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -34,6 +35,10 @@ public class NSort implements Serializable {
     }
 
     public String orderString() {
+        return orderString(null);
+    }
+
+    public String orderString(Map<String, String> fieldMapping) {
         StringBuilder s = new StringBuilder();
         for (Iterator<NOrder> it = iterator(); it != null && it.hasNext(); ) {
             NOrder o = it.next();
@@ -43,7 +48,7 @@ public class NSort implements Serializable {
             if (s.length() > 0)
                 s.append(", ");
 
-            s.append(o.field).append(" ").append(o.getDirection());
+            s.append(fieldMapping == null ? o.field : fieldMapping.getOrDefault(o.field, o.field)).append(" ").append(o.getDirection());
         }
         return s.toString();
     }
