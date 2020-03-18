@@ -83,6 +83,7 @@ public class FlatDTO implements Serializable {
         this.success = success;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T getObject() {
         return (T) object;
     }
@@ -91,6 +92,7 @@ public class FlatDTO implements Serializable {
         this.object = object;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> List<T> getList() {
         return (List<T>) list;
     }
