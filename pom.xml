@@ -56,7 +56,7 @@
         <orika.version>1.5.2</orika.version>
         <spring.version>5.2.3.RELEASE</spring.version>
         <spring-data-jpa.version>2.2.5.RELEASE</spring-data-jpa.version>
-        <spring-data-commons.version>2.0.7.RELEASE</spring-data-commons.version>
+        <spring-data-commons.version>2.2.5.RELEASE</spring-data-commons.version>
         <mysql.version>5.1.46</mysql.version>
         <druid.version>1.0.27</druid.version>
         <fastjson.version>1.2.29</fastjson.version>
