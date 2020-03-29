@@ -6,14 +6,13 @@
 
 package org.nqcx.doox.commons.data.mapper;
 
+import org.apache.ibatis.reflection.invoker.Invoker;
 import org.apache.ibatis.reflection.property.PropertyNamer;
 import org.nqcx.doox.commons.dao.IDAO;
 import org.nqcx.doox.commons.lang.o.DTO;
 
 import javax.persistence.Column;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -24,7 +23,8 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
     // Po field 与 table column 对应关系
     protected final Map<String, String> fieldMapping = new LinkedHashMap<>();
     // Po filed 与 method 对应关系
-    protected  final Map<String, Method> methodMapping = new HashMap<>();
+    protected final Map<String, Method> setMethodMapping = new HashMap<>();
+    protected final Map<String, Method> getMethodMapping = new HashMap<>();
     protected final Mapper mapper;
 
     public MapperSupport(Mapper mapper) {
@@ -36,16 +36,34 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
             if (classpo != null && (methods = classpo.getMethods()) != null) {
                 for (Method m : methods) {
                     Column c = m.getAnnotation(Column.class);
-                    if (c == null)
-                        continue;
+                    if (c != null)
+                        fieldMapping.put(PropertyNamer.methodToProperty(m.getName()), c.name().trim());
 
-                    fieldMapping.put(PropertyNamer.methodToProperty(m.getName()), c.name().trim());
-                    methodMapping.put(PropertyNamer.methodToProperty(m.getName()), m);
+                    if(PropertyNamer.isGetter(m.getName()))
+                        getMethodMapping.put(PropertyNamer.methodToProperty(m.getName()), m);
+                     else if(PropertyNamer.isSetter(m.getName()))
+                        setMethodMapping.put(PropertyNamer.methodToProperty(m.getName()), m);
                 }
             }
         }
 
         this.mapper = mapper;
+    }
+
+    private static boolean isValidPropertyName(String name) {
+        return !(name.startsWith("$") || "serialVersionUID".equals(name) || "class".equals(name));
+    }
+
+    private static boolean canAccessPrivateMethods() {
+        try {
+            SecurityManager securityManager = System.getSecurityManager();
+            if (null != securityManager) {
+                securityManager.checkPermission(new ReflectPermission("suppressAccessChecks"));
+            }
+        } catch (SecurityException e) {
+            return false;
+        }
+        return true;
     }
 
     @Override
