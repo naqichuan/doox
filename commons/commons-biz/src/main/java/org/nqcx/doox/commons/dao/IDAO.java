@@ -162,24 +162,4 @@ public interface IDAO<PO, ID> {
      * @param ids ids
      */
     void deleteByIds(List<ID> ids);
-
-    /**
-     * 放缓存
-     *
-     * @param po po
-     * @return po
-     */
-    default PO putCache(PO po) {
-        return po;
-    }
-
-    /**
-     * 删除缓存
-     *
-     * @param po po
-     * @return po
-     */
-    default void delCache(PO po) {
-        // nothing to do
-    }
 }
