@@ -146,8 +146,8 @@ public interface IAspect<PO, ID> {
      *
      * @param po po
      */
-    default void afterDelete(PO po) {
-        // nothing to do
+    default PO afterDelete(PO po) {
+        return po;
     }
 
     /**
@@ -155,8 +155,10 @@ public interface IAspect<PO, ID> {
      *
      * @param pos pos
      */
-    default void afterDelete(List<PO> pos) {
+    default List<PO> afterDelete(List<PO> pos) {
         if (pos != null && pos.size() > 0)
             pos.forEach(this::afterDelete);
+
+        return pos;
     }
 }
