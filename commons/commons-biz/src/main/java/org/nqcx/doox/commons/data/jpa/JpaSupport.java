@@ -16,9 +16,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.util.Assert;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -46,30 +49,34 @@ public abstract class JpaSupport<JPA extends IJpa<PO, ID>, PO, ID> implements ID
     public PO save(PO po) {
         Assert.notNull(po, "po must be not null.");
 
-        return afterSave(jpa.save(beforeSave(po)));
+//        return afterSave(jpa.save(beforeSave(po)));
+        return jpa.save(po);
     }
 
     @Override
     public PO modify(PO po) {
         Assert.notNull(po, "po must be not null.");
 
-        return afterModify(jpa.save(beforeModify(po)));
+//        return afterModify(jpa.save(beforeModify(po)));
+        return jpa.save(po);
     }
 
     @Override
     public List<PO> saveAll(List<PO> pos) {
         Assert.notNull(pos, "pos must be not null.");
 
-        return jpa.saveAll(pos.stream().map(this::beforeSave).collect(Collectors.toList()))
-                .stream().map(this::afterSave).collect(Collectors.toList());
+//        return jpa.saveAll(pos.stream().map(this::beforeSave).collect(Collectors.toList()))
+//                .stream().map(this::afterSave).collect(Collectors.toList());
+        return jpa.saveAll(pos);
     }
 
     @Override
     public List<PO> modifyAll(List<PO> pos) {
         Assert.notNull(pos, "pos must be not null.");
 
-        return jpa.saveAll(pos.stream().map(this::beforeModify).collect(Collectors.toList()))
-                .stream().map(this::afterModify).collect(Collectors.toList());
+//        return jpa.saveAll(pos.stream().map(this::beforeModify).collect(Collectors.toList()))
+//                .stream().map(this::afterModify).collect(Collectors.toList());
+        return jpa.saveAll(pos);
     }
 
     @Override
@@ -125,21 +132,31 @@ public abstract class JpaSupport<JPA extends IJpa<PO, ID>, PO, ID> implements ID
      * @param id id
      */
     @Override
-    public void deleteById(ID id) {
+    public PO deleteById(ID id) {
         Assert.notNull(id, "ID must be not null.");
 
+        Optional<PO> po = jpa.findById(id);
+
+//        po.ifPresent(this::beforeDelete);
         jpa.deleteById(id);
+//        po.ifPresent(this::afterDelete);
+
+        return po.orElse(null);
     }
 
     /**
      * @param ids ids
      */
     @Override
-    public void deleteByIds(List<ID> ids) {
-        Assert.notNull(ids, "ID must be not null.");
+    public List<PO> deleteByIds(List<ID> ids) {
+        Assert.notNull(ids, "IDS must be not null.");
+
+        List<PO> list = new ArrayList<>();
 
         for (ID id : ids)
-            jpa.deleteById(id);
+            list.add(this.deleteById(id));
+
+        return list;
     }
 
     /**

@@ -53,9 +53,12 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
         if (po == null)
             return null;
 
-        mapper.save(beforeSave(po));
+//        mapper.save(beforeSave(po));
+//
+//        return afterSave(po);
+        mapper.save(po);
 
-        return afterSave(po);
+        return po;
     }
 
     @Override
@@ -63,9 +66,13 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
         if (po == null)
             return null;
 
-        mapper.update(beforeModify(po));
+//        mapper.update(beforeModify(po));
+//
+//        return afterModify(po);
 
-        return afterModify(po);
+        mapper.update(po);
+
+        return po;
     }
 
     @Override
@@ -125,22 +132,26 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
     }
 
     @Override
-    public void deleteById(ID id) {
+    public PO deleteById(ID id) {
         Optional<PO> po = Optional.ofNullable(mapper.findById(id));
 
-        po.ifPresent(this::beforeDelete);
+//        po.ifPresent(this::beforeDelete);
         mapper.deleteById(id);
-        po.ifPresent(this::afterDelete);
+//        po.ifPresent(this::afterDelete);
+
+        return po.orElse(null);
     }
 
     @Override
-    public void deleteByIds(List<ID> ids) {
+    public List<PO> deleteByIds(List<ID> ids) {
         List<PO> pos = Optional.ofNullable(mapper.findByIds(ids))
                 .orElse(Collections.emptyList());
 
-        pos.forEach(this::beforeDelete);
+//        pos.forEach(this::beforeDelete);
         mapper.deleteByIds(ids);
-        pos.forEach(this::afterDelete);
+//        pos.forEach(this::afterDelete);
+
+        return pos;
     }
 
     /**
