@@ -101,28 +101,6 @@ public interface IAspect<PO, ID> {
     }
 
     /**
-     * 查询一条数据前处理
-     *
-     * @param po po
-     * @return PO
-     */
-    default PO beforeFoud(PO po) {
-        return po;
-    }
-
-    /**
-     * 查询数据列表前处理
-     *
-     * @param pos pos
-     * @return pos
-     */
-    default List<PO> beforeFoud(List<PO> pos) {
-        if (pos != null && pos.size() > 0)
-            pos.forEach(this::beforeFoud);
-        return pos;
-    }
-
-    /**
      * 查询一条数据后处理
      *
      * @param po po
