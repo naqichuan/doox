@@ -21,7 +21,10 @@ import java.util.*;
  */
 public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> implements IDAO<PO, ID> {
 
+    // Po field 与 table column 对应关系
     protected final Map<String, String> fieldMapping = new LinkedHashMap<>();
+    // Po filed 与 method 对应关系
+    protected  final Map<String, Method> methodMapping = new HashMap<>();
     protected final Mapper mapper;
 
     public MapperSupport(Mapper mapper) {
@@ -37,6 +40,7 @@ public abstract class MapperSupport<Mapper extends IMapper<PO, ID>, PO, ID> impl
                         continue;
 
                     fieldMapping.put(PropertyNamer.methodToProperty(m.getName()), c.name().trim());
+                    methodMapping.put(PropertyNamer.methodToProperty(m.getName()), m);
                 }
             }
         }
