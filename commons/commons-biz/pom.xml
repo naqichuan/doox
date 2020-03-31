@@ -97,9 +97,16 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- for cache -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
