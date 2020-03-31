@@ -340,7 +340,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
      * @return String
      */
     protected String fromCache(String key) {
-        return fromString(jedis, key);
+        return getfromCache(jedis, key);
     }
 
     /**
@@ -348,7 +348,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
      * @param key   key
      * @return String
      */
-    public static String fromString(JedisCommands jedis, String key) {
+    public static String getfromCache(JedisCommands jedis, String key) {
         if (jedis == null || key == null)
             return null;
 
