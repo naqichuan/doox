@@ -338,7 +338,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     protected PO delCache(PO po) {
         Optional.ofNullable(po).ifPresent(p -> KOS.values().forEach(ko -> {
                     try {
-                        delCache(ko.key((String) poFieldGetters.get(ko.field()).invoke(p)));
+                        delCache(ko.key((String.valueOf(poFieldGetters.get(ko.field()).invoke(p)))));
                     } catch (Exception e) {
                         LOGGER.error("Del cache fail", e);
                     }
