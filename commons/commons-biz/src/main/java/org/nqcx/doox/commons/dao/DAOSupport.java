@@ -14,7 +14,6 @@ import org.nqcx.doox.commons.lang.consts.PeriodConst;
 import org.nqcx.doox.commons.lang.o.DTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCommands;
 
 import javax.persistence.Column;
@@ -120,6 +119,29 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         pos.forEach(this::modify);
 
         return pos;
+    }
+
+    @Override
+    public PO beforeModify(PO po) {
+        Optional.ofNullable(KOS.get(idField())).map(ko -> {
+            try {
+                return mapper.findById((ID) poFieldGetters.get(ko.field()).invoke(po));
+            } catch (Exception e) {
+                LOGGER.error("beforeModify fail", e);
+            }
+            return null;
+        }).ifPresent(p -> KOS.values().forEach(ko -> {
+                    // 从对象里找值
+                    try {
+                        // 设置一个 5 秒缓存，防止，有做为缓存 key 的值有变更
+                        expireCache(ko.key(String.valueOf(poFieldGetters.get(ko.field()).invoke(p))), 5);
+                    } catch (Exception e) {
+                        LOGGER.error("beforeModify fail", e);
+                    }
+                })
+        );
+
+        return po;
     }
 
     @Override
@@ -300,6 +322,15 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
                 }
         );
     }
+
+    /**
+     * @param key    key
+     * @param expire expire
+     */
+    protected void expireCache(String key, int expire) {
+        Optional.ofNullable(jedis).ifPresent(c -> c.expire(key, expire));
+    }
+
 
     /**
      * @param po po
