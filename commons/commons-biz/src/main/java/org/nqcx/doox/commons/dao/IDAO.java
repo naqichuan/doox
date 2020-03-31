@@ -17,7 +17,6 @@ import java.util.List;
  */
 public interface IDAO<PO, ID> {
 
-
     /**
      * 保存数据
      *
