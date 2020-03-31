@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * @author naqichuan 2020/03/31 10:13
  */
-public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> implements IDAO<PO, ID>, IAspect<PO, ID> {
+public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> implements IDAO<PO, ID>, IAspect<PO> {
 
     public final static Logger CACHE_LOGGER = LoggerFactory.getLogger(LoggerConst.LOGGER_CACHE_NAME);
 
