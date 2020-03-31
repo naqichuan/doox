@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author naqichuan 2020/3/29 22:37
  */
-public interface IAspect<PO, ID> {
+public interface IAspect<PO> {
     /**
      * 保存之前处理
      *
