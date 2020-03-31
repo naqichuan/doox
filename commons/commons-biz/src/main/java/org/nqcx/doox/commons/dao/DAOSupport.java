@@ -180,7 +180,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         AtomicReference<String> value = new AtomicReference<>(null);
         Optional.ofNullable(KOS.get(idField())).ifPresent(ko -> {
             try {
-                value.set(fromCache(String.valueOf(poFieldGetters.get(ko.field()).invoke(id))));
+                value.set(fromCache(ko.key(String.valueOf((id)))));
             } catch (Exception e) {
                 LOGGER.error("findById fail", e);
             }
@@ -338,7 +338,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     protected PO delCache(PO po) {
         Optional.ofNullable(po).ifPresent(p -> KOS.values().forEach(ko -> {
                     try {
-                        delCache(ko.key((String) poFieldGetters.get(ko.field()).invoke(p, new Object[0])));
+                        delCache(ko.key((String) poFieldGetters.get(ko.field()).invoke(p)));
                     } catch (Exception e) {
                         LOGGER.error("Del cache fail", e);
                     }
