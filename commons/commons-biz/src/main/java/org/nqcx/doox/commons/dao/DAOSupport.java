@@ -36,9 +36,9 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     // Po filed 与 method 对应关系
     protected final Map<String, Method> setMethodMapping = new HashMap<>();
     protected final Map<String, Method> getMethodMapping = new HashMap<>();
-
+    // Key Object s
     protected final Map<String, KO> KOS = new HashMap<>();
-
+    // PO class
     protected final Class<PO> clazz;
     // mapper
     protected final Mapper mapper;
@@ -67,31 +67,13 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         this.mapper = mapper;
     }
 
-    @Override
-    public PO save(PO po) {
-        if (po == null)
-            return null;
-
-        mapper.save(beforeSave(po));
-
-        return afterSave(po);
-//        mapper.save(po);
-//
-//        return po;
-    }
-
-    @Override
-    public PO modify(PO po) {
-        if (po == null)
-            return null;
-
-        mapper.update(beforeModify(po));
-
-        return afterModify(po);
-
-//        mapper.update(po);
-//
-//        return po;
+    /**
+     * id field name of po
+     *
+     * @return String
+     */
+    protected String idField() {
+        return "id";
     }
 
     @Override
@@ -105,6 +87,21 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     }
 
     @Override
+    public PO save(PO po) {
+        if (po == null)
+            return null;
+
+        mapper.save(beforeSave(po));
+
+        return afterSave(po);
+    }
+
+    @Override
+    public PO afterSave(PO po) {
+        return pubSaveAndModifyCache(po);
+    }
+
+    @Override
     public List<PO> modifyAll(List<PO> pos) {
         if (pos == null)
             return new ArrayList<>(0);
@@ -112,6 +109,37 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         pos.forEach(this::modify);
 
         return pos;
+    }
+
+    @Override
+    public PO modify(PO po) {
+        if (po == null)
+            return null;
+
+        mapper.update(beforeModify(po));
+
+        return afterModify(po);
+    }
+
+
+    @Override
+    public PO afterModify(PO po) {
+        return pubSaveAndModifyCache(po);
+    }
+
+    /**
+     * @param po po
+     * @return PO
+     */
+    private PO pubSaveAndModifyCache(PO po) {
+        return putCache(Optional.ofNullable(KOS.get(idField())).map(ko -> {
+            try {
+                return mapper.findById((ID) getMethodMapping.get(ko.field()).invoke(po));
+            } catch (Exception e) {
+                LOGGER.error("Put cache fail", e);
+            }
+            return null;
+        }).orElse(po), false);
     }
 
     @Override
@@ -123,6 +151,11 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     public List<PO> findAllByIds(List<ID> ids) {
         List<PO> list;
         return afterFoud((list = mapper.findByIds(ids)) == null ? new ArrayList<>(0) : list);
+    }
+
+    @Override
+    public PO afterFoud(PO po) {
+        return putCache(po, false);
     }
 
     @Override
@@ -151,6 +184,17 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     }
 
     @Override
+    public List<PO> deleteByIds(List<ID> ids) {
+        List<PO> pos = Optional.ofNullable(mapper.findByIds(ids))
+                .orElse(Collections.emptyList());
+
+        this.beforeDelete(pos);
+        mapper.deleteByIds(ids);
+
+        return this.afterDelete(pos);
+    }
+
+    @Override
     public PO deleteById(ID id) {
         PO po = mapper.findById(id);
 
@@ -161,14 +205,8 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     }
 
     @Override
-    public List<PO> deleteByIds(List<ID> ids) {
-        List<PO> pos = Optional.ofNullable(mapper.findByIds(ids))
-                .orElse(Collections.emptyList());
-
-        this.beforeDelete(pos);
-        mapper.deleteByIds(ids);
-
-        return this.afterDelete(pos);
+    public PO afterDelete(PO po) {
+        return delCache(po);
     }
 
     // =========================================================================
@@ -213,7 +251,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     protected abstract void putCache(String key, String value, int expire);
 
     /**
-     * @param po dooxPO
+     * @param po po
      */
     protected PO delCache(PO po) {
         Optional.ofNullable(po).ifPresent(p -> KOS.values().forEach(ko -> {
