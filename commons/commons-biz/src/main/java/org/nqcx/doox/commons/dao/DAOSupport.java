@@ -9,10 +9,13 @@ package org.nqcx.doox.commons.dao;
 import com.alibaba.fastjson.JSON;
 import org.apache.ibatis.reflection.property.PropertyNamer;
 import org.nqcx.doox.commons.data.mapper.IMapper;
+import org.nqcx.doox.commons.lang.consts.LoggerConst;
 import org.nqcx.doox.commons.lang.consts.PeriodConst;
 import org.nqcx.doox.commons.lang.o.DTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisCommands;
 
 import javax.persistence.Column;
 import java.lang.reflect.Method;
@@ -28,6 +31,8 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> implements IDAO<PO, ID>, IAspect<PO, ID> {
 
+    public final static Logger CACHE_LOGGER = LoggerFactory.getLogger(LoggerConst.LOGGER_CACHE_NAME);
+
     private final static Logger LOGGER = LoggerFactory.getLogger(DAOSupport.class.getName());
 
     // Po field 与 table column 对应关系
@@ -41,8 +46,14 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     protected final Class<PO> clazz;
     // mapper
     protected final Mapper mapper;
+    // jedis
+    protected final JedisCommands jedis;
 
     public DAOSupport(Mapper mapper) {
+        this(mapper, null);
+    }
+
+    public DAOSupport(Mapper mapper, JedisCommands jedis) {
         Type t = getClass().getGenericSuperclass();
         if (t instanceof ParameterizedType) {
             Type[] types = ((ParameterizedType) t).getActualTypeArguments();
@@ -64,6 +75,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
             throw new RuntimeException("Class not found");
 
         this.mapper = mapper;
+        this.jedis = jedis;
     }
 
     /**
@@ -282,7 +294,11 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
      * @param expire expire
      */
     protected void putCache(String key, String value, int expire) {
-        //
+        Optional.ofNullable(jedis).ifPresent(c -> {
+                    c.set(key, value);
+                    c.expire(key, expire);
+                }
+        );
     }
 
     /**
@@ -301,11 +317,12 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         return po;
     }
 
+
     /**
      * @param key key
      */
     protected void delCache(String key) {
-        //
+        Optional.ofNullable(jedis).ifPresent(c -> c.del(key));
     }
 
     /**
@@ -318,8 +335,28 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         return null;
     }
 
+    /**
+     * @param key key
+     * @return String
+     */
     protected String fromCache(String key) {
-        return null;
+        return fromString(jedis, key);
+    }
+
+    /**
+     * @param jedis JedisCluster
+     * @param key   key
+     * @return String
+     */
+    public static String fromString(JedisCommands jedis, String key) {
+        if (jedis == null || key == null)
+            return null;
+
+        String value = jedis.get(key);
+
+        CACHE_LOGGER.info("From String, KEY: {}, HIT: {}", key, value != null && value.length() > 0);
+
+        return value;
     }
 
     // =========================================================================
@@ -358,6 +395,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
             return this.expire;
         }
     }
+
 
     // =========================================================================
 
