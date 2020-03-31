@@ -6,15 +6,21 @@
 
 package org.nqcx.doox.commons.dao;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.ibatis.reflection.property.PropertyNamer;
 import org.nqcx.doox.commons.data.mapper.IMapper;
+import org.nqcx.doox.commons.lang.consts.PeriodConst;
 import org.nqcx.doox.commons.lang.o.DTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.Column;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 默认使用 mybatis
@@ -23,11 +29,17 @@ import java.util.*;
  */
 public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> implements IDAO<PO, ID>, IAspect<PO, ID> {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(DAOSupport.class.getName());
+
     // Po field 与 table column 对应关系
     protected final Map<String, String> fieldMapping = new LinkedHashMap<>();
     // Po filed 与 method 对应关系
     protected final Map<String, Method> setMethodMapping = new HashMap<>();
     protected final Map<String, Method> getMethodMapping = new HashMap<>();
+
+    protected final Map<String, KO> KOS = new HashMap<>();
+
+    protected final Class<PO> clazz;
     // mapper
     protected final Mapper mapper;
 
@@ -35,9 +47,9 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         Type t = getClass().getGenericSuperclass();
         if (t instanceof ParameterizedType) {
             Type[] types = ((ParameterizedType) t).getActualTypeArguments();
-            Class<PO> classpo = (Class<PO>) types[1];
+            clazz = (Class<PO>) types[1];
             Method[] methods;
-            if (classpo != null && (methods = classpo.getMethods()) != null) {
+            if (clazz != null && (methods = clazz.getMethods()) != null) {
                 for (Method m : methods) {
                     Column c = m.getAnnotation(Column.class);
                     if (c != null)
@@ -49,7 +61,8 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
                         setMethodMapping.put(PropertyNamer.methodToProperty(m.getName()), m);
                 }
             }
-        }
+        } else
+            throw new RuntimeException("Class not found");
 
         this.mapper = mapper;
     }
@@ -157,6 +170,115 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
 
         return this.afterDelete(pos);
     }
+
+    // =========================================================================
+
+    /**
+     * @param po           po
+     * @param isEmptyCache boolean
+     * @return PO
+     */
+    protected PO putCache(PO po, boolean isEmptyCache) {
+        if (po == null)
+            return null;
+
+        AtomicReference<PO> npo = new AtomicReference<>(po);
+
+        KOS.values().forEach(ko -> {
+            // 从对象里找值
+            try {
+                String fieldValue = String.valueOf(getMethodMapping.get(ko.field()).invoke(po));
+                if (isEmptyCache) {
+                    if (!fieldValue.equals("null") && !fieldValue.equals("")) {
+                        // 设置空缓存，防止缓存穿透
+                        putCache(ko.key(fieldValue), "", PeriodConst.ONE_MINUTES);
+                        npo.set(null);
+                    }
+                } else
+                    // 从对象里找值
+                    putCache(ko.key(fieldValue), JSON.toJSONString(po), ko.expire());
+            } catch (Exception e) {
+                LOGGER.error("Put cache fail", e);
+            }
+        });
+
+        return npo.get();
+    }
+
+    /**
+     * @param key    key
+     * @param value  value
+     * @param expire expire
+     */
+    abstract void putCache(String key, String value, int expire);
+
+    /**
+     * @param po dooxPO
+     */
+    protected PO delCache(PO po) {
+        Optional.ofNullable(po).ifPresent(p -> KOS.values().forEach(ko -> {
+                    try {
+                        delCache(ko.key((String) getMethodMapping.get(ko.field()).invoke(p, new Object[0])));
+                    } catch (Exception e) {
+                        LOGGER.error("Del cache fail", e);
+                    }
+                })
+        );
+
+        return po;
+    }
+
+    /**
+     * @param key key
+     */
+    abstract void delCache(String key);
+
+    /**
+     * @param value value
+     * @return String
+     */
+    protected PO fromCache(String value) {
+        if (value != null && value.length() > 0)
+            return JSON.parseObject(value, clazz);
+        return null;
+    }
+
+    /**
+     * key object 类
+     */
+    public static class KO {
+        private final String schema;
+        private final String po;
+        private final String field;
+        private final int expire;
+
+        public KO(String schema, String po, String field, int expire) {
+            this.schema = schema;
+            this.po = po;
+            this.field = field;
+            this.expire = expire;
+        }
+
+        /**
+         * 生成 key String
+         *
+         * @param value value
+         * @return String
+         */
+        public String key(String value) {
+            return (this.schema + ":" + this.po + ":" + this.field + ":").toUpperCase() + value;
+        }
+
+        public String field() {
+            return this.field;
+        }
+
+        public int expire() {
+            return this.expire;
+        }
+    }
+
+    // =========================================================================
 
     /**
      * 解析参数，返回 mapper 需要的参数
