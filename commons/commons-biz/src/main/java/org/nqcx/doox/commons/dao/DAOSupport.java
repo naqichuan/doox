@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.Column;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -34,8 +33,8 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     // Po field 与 table column 对应关系
     protected final Map<String, String> fieldMapping = new LinkedHashMap<>();
     // Po filed 与 method 对应关系
-    protected final Map<String, Method> setMethodMapping = new HashMap<>();
-    protected final Map<String, Method> getMethodMapping = new HashMap<>();
+    protected final Map<String, Method> poFieldSetters = new HashMap<>();
+    protected final Map<String, Method> poFieldGetters = new HashMap<>();
     // Key Object s
     protected final Map<String, KO> KOS = new HashMap<>();
     // PO class
@@ -56,9 +55,9 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
                         fieldMapping.put(PropertyNamer.methodToProperty(m.getName()), c.name().trim());
 
                     if (PropertyNamer.isGetter(m.getName()))
-                        getMethodMapping.put(PropertyNamer.methodToProperty(m.getName()), m);
+                        poFieldGetters.put(PropertyNamer.methodToProperty(m.getName()), m);
                     else if (PropertyNamer.isSetter(m.getName()))
-                        setMethodMapping.put(PropertyNamer.methodToProperty(m.getName()), m);
+                        poFieldSetters.put(PropertyNamer.methodToProperty(m.getName()), m);
                 }
             }
         } else
@@ -134,9 +133,9 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     private PO pubSaveAndModifyCache(PO po) {
         return putCache(Optional.ofNullable(KOS.get(idField())).map(ko -> {
             try {
-                return mapper.findById((ID) getMethodMapping.get(ko.field()).invoke(po));
+                return mapper.findById((ID) poFieldGetters.get(ko.field()).invoke(po));
             } catch (Exception e) {
-                LOGGER.error("Put cache fail", e);
+                LOGGER.error("Put save and modify cache fail", e);
             }
             return null;
         }).orElse(po), false);
@@ -144,7 +143,41 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
 
     @Override
     public PO findById(ID id) {
-        return afterFoud(mapper.findById(id));
+        AtomicReference<String> value = new AtomicReference<>(null);
+        Optional.ofNullable(KOS.get(idField())).ifPresent(ko -> {
+            try {
+                value.set(fromCache(String.valueOf(poFieldGetters.get(ko.field()).invoke(id))));
+            } catch (Exception e) {
+                LOGGER.error("findById fail", e);
+            }
+        });
+
+        if ("".equals(value.get()))
+            return null;
+
+        PO po;
+        if (value.get() != null && (po = cache2po(value.get())) != null)
+            return po;
+
+        if ((po = mapper.findById(id)) != null)
+            return afterFoud(po);
+
+        try {
+            PO finalPo = clazz.newInstance();
+            Optional.ofNullable(KOS.get(idField())).ifPresent(ko -> {
+                try {
+                    poFieldSetters.get(ko.field()).invoke(finalPo, id);
+                } catch (Exception e) {
+                    LOGGER.error("findById fail", e);
+                }
+            });
+
+            return putCache(finalPo, true);
+        } catch (Exception e) {
+            LOGGER.error("findById fail", e);
+        }
+
+        return null;
     }
 
     @Override
@@ -225,7 +258,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         KOS.values().forEach(ko -> {
             // 从对象里找值
             try {
-                String fieldValue = String.valueOf(getMethodMapping.get(ko.field()).invoke(po));
+                String fieldValue = String.valueOf(poFieldGetters.get(ko.field()).invoke(po));
                 if (isEmptyCache) {
                     if (!fieldValue.equals("null") && !fieldValue.equals("")) {
                         // 设置空缓存，防止缓存穿透
@@ -256,7 +289,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     protected PO delCache(PO po) {
         Optional.ofNullable(po).ifPresent(p -> KOS.values().forEach(ko -> {
                     try {
-                        delCache(ko.key((String) getMethodMapping.get(ko.field()).invoke(p, new Object[0])));
+                        delCache(ko.key((String) poFieldGetters.get(ko.field()).invoke(p, new Object[0])));
                     } catch (Exception e) {
                         LOGGER.error("Del cache fail", e);
                     }
@@ -275,11 +308,15 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
      * @param value value
      * @return String
      */
-    protected PO fromCache(String value) {
+    protected PO cache2po(String value) {
         if (value != null && value.length() > 0)
             return JSON.parseObject(value, clazz);
         return null;
     }
+
+    protected abstract String fromCache(String key);
+
+    // =========================================================================
 
     /**
      * key object 类

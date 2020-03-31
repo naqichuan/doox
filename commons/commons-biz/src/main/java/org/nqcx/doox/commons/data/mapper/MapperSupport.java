@@ -24,8 +24,8 @@
 //    // Po field 与 table column 对应关系
 //    protected final Map<String, String> fieldMapping = new LinkedHashMap<>();
 //    // Po filed 与 method 对应关系
-//    protected final Map<String, Method> setMethodMapping = new HashMap<>();
-//    protected final Map<String, Method> getMethodMapping = new HashMap<>();
+//    protected final Map<String, Method> poFieldSetters = new HashMap<>();
+//    protected final Map<String, Method> poFieldGetters = new HashMap<>();
 //    // mapper
 //    protected final Mapper mapper;
 //
@@ -42,9 +42,9 @@
 //                        fieldMapping.put(PropertyNamer.methodToProperty(m.getName()), c.name().trim());
 //
 //                    if (PropertyNamer.isGetter(m.getName()))
-//                        getMethodMapping.put(PropertyNamer.methodToProperty(m.getName()), m);
+//                        poFieldGetters.put(PropertyNamer.methodToProperty(m.getName()), m);
 //                    else if (PropertyNamer.isSetter(m.getName()))
-//                        setMethodMapping.put(PropertyNamer.methodToProperty(m.getName()), m);
+//                        poFieldSetters.put(PropertyNamer.methodToProperty(m.getName()), m);
 //                }
 //            }
 //        }
