@@ -4,7 +4,7 @@
  * it only in accordance with the terms of the license agreement you entered into with nqcx.org.
  */
 
-package org.nqcx.doox.commons;
+package org.nqcx.doox.commons.dao;
 
 import java.util.List;
 
@@ -22,17 +22,17 @@ public interface IAspect<PO, ID> {
         return po;
     }
 
-    /**
-     * 保存之前处理
-     *
-     * @param pos pos
-     * @return List
-     */
-    default List<PO> beforeSave(List<PO> pos) {
-        if (pos != null && pos.size() > 0)
-            pos.forEach(this::beforeSave);
-        return pos;
-    }
+//    /**
+//     * 保存之前处理
+//     *
+//     * @param pos pos
+//     * @return List
+//     */
+//    default List<PO> beforeSave(List<PO> pos) {
+//        if (pos != null && pos.size() > 0)
+//            pos.forEach(this::beforeSave);
+//        return pos;
+//    }
 
     /**
      * 保存之后处理
@@ -44,17 +44,17 @@ public interface IAspect<PO, ID> {
         return po;
     }
 
-    /**
-     * 保存之后处理
-     *
-     * @param pos pos
-     * @return List
-     */
-    default List<PO> afterSave(List<PO> pos) {
-        if (pos != null && pos.size() > 0)
-            pos.forEach(this::afterSave);
-        return pos;
-    }
+//    /**
+//     * 保存之后处理
+//     *
+//     * @param pos pos
+//     * @return List
+//     */
+//    default List<PO> afterSave(List<PO> pos) {
+//        if (pos != null && pos.size() > 0)
+//            pos.forEach(this::afterSave);
+//        return pos;
+//    }
 
     /**
      * 修改之前处理
@@ -66,17 +66,17 @@ public interface IAspect<PO, ID> {
         return po;
     }
 
-    /**
-     * 修改之前处理
-     *
-     * @param pos pos
-     * @return List
-     */
-    default List<PO> beforeModify(List<PO> pos) {
-        if (pos != null && pos.size() > 0)
-            pos.forEach(this::beforeModify);
-        return pos;
-    }
+//    /**
+//     * 修改之前处理
+//     *
+//     * @param pos pos
+//     * @return List
+//     */
+//    default List<PO> beforeModify(List<PO> pos) {
+//        if (pos != null && pos.size() > 0)
+//            pos.forEach(this::beforeModify);
+//        return pos;
+//    }
 
     /**
      * 修改之后处理
@@ -88,17 +88,17 @@ public interface IAspect<PO, ID> {
         return po;
     }
 
-    /**
-     * 修改之后处理
-     *
-     * @param pos pos
-     * @return List
-     */
-    default List<PO> afterModify(List<PO> pos) {
-        if (pos != null && pos.size() > 0)
-            pos.forEach(this::afterModify);
-        return pos;
-    }
+//    /**
+//     * 修改之后处理
+//     *
+//     * @param pos pos
+//     * @return List
+//     */
+//    default List<PO> afterModify(List<PO> pos) {
+//        if (pos != null && pos.size() > 0)
+//            pos.forEach(this::afterModify);
+//        return pos;
+//    }
 
     /**
      * 查询一条数据后处理
