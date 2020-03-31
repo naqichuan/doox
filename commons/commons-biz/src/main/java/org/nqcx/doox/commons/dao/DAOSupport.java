@@ -210,7 +210,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
      * @param value  value
      * @param expire expire
      */
-    abstract void putCache(String key, String value, int expire);
+    protected abstract void putCache(String key, String value, int expire);
 
     /**
      * @param po dooxPO
@@ -231,7 +231,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     /**
      * @param key key
      */
-    abstract void delCache(String key);
+    protected abstract void delCache(String key);
 
     /**
      * @param value value
