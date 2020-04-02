@@ -12,11 +12,13 @@ import org.nqcx.doox.commons.data.mapper.IMapper;
 import org.nqcx.doox.commons.lang.consts.LoggerConst;
 import org.nqcx.doox.commons.lang.consts.PeriodConst;
 import org.nqcx.doox.commons.lang.o.DTO;
+import org.nqcx.doox.commons.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.JedisCommands;
 
 import javax.persistence.Column;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -125,7 +127,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     public PO beforeModify(PO po) {
         Optional.ofNullable(KOS.get(idField())).map(ko -> {
             try {
-                return mapper.findById((ID) poFieldGetters.get(ko.field()).invoke(po));
+                return mapper.findById((ID) poFieldGetters.get(ko.fields()[0]).invoke(po));
             } catch (Exception e) {
                 LOGGER.error("beforeModify fail", e);
             }
@@ -133,8 +135,17 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         }).ifPresent(p -> KOS.values().forEach(ko -> {
                     // 从对象里找值
                     try {
+                        String fieldValue = StringUtils.join(Arrays.stream(ko.fields).map(x -> {
+                            try {
+                                return poFieldGetters.get(x).invoke(po);
+                            } catch (Exception e) {
+                                LOGGER.error("Delete cache fail", e);
+                            }
+                            return null;
+                        }).toArray(), "-");
+
                         // 设置一个 5 秒缓存，防止，有做为缓存 key 的值有变更
-                        expireCache(ko.key(String.valueOf(poFieldGetters.get(ko.field()).invoke(p))), 5);
+                        expireCache(ko.key(fieldValue), 5);
                     } catch (Exception e) {
                         LOGGER.error("beforeModify fail", e);
                     }
@@ -167,7 +178,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     private PO pubSaveAndModifyCache(PO po) {
         return putCache(Optional.ofNullable(KOS.get(idField())).map(ko -> {
             try {
-                return mapper.findById((ID) poFieldGetters.get(ko.field()).invoke(po));
+                return mapper.findById((ID) poFieldGetters.get(ko.fields()[0]).invoke(po));
             } catch (Exception e) {
                 LOGGER.error("Put save and modify cache fail", e);
             }
@@ -200,7 +211,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
             PO finalPo = clazz.newInstance();
             Optional.ofNullable(KOS.get(idField())).ifPresent(ko -> {
                 try {
-                    poFieldSetters.get(ko.field()).invoke(finalPo, id);
+                    poFieldSetters.get(ko.fields()[0]).invoke(finalPo, id);
                 } catch (Exception e) {
                     LOGGER.error("findById fail", e);
                 }
@@ -273,7 +284,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
                 PO finalPo = clazz.newInstance();
                 Optional.ofNullable(KOS.get(idField())).ifPresent(ko -> {
                     try {
-                        poFieldSetters.get(ko.field()).invoke(finalPo, id);
+                        poFieldSetters.get(ko.fields()[0]).invoke(finalPo, id);
                     } catch (Exception e) {
                         LOGGER.error("deleteById fail", e);
                     }
@@ -308,7 +319,15 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         KOS.values().forEach(ko -> {
             // 从对象里找值
             try {
-                String fieldValue = String.valueOf(poFieldGetters.get(ko.field()).invoke(po));
+                String fieldValue = StringUtils.join(Arrays.stream(ko.fields).map(x -> {
+                    try {
+                        return poFieldGetters.get(x).invoke(po);
+                    } catch (Exception e) {
+                        LOGGER.error("Put cache fail", e);
+                    }
+                    return null;
+                }).toArray(), "-");
+
                 if (isEmptyCache) {
                     if (!fieldValue.equals("null") && !fieldValue.equals("")) {
                         // 设置空缓存，防止缓存穿透
@@ -354,7 +373,16 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     protected PO delCache(PO po) {
         Optional.ofNullable(po).ifPresent(p -> KOS.values().forEach(ko -> {
                     try {
-                        delCache(ko.key((String.valueOf(poFieldGetters.get(ko.field()).invoke(p)))));
+                        String fieldValue = StringUtils.join(Arrays.stream(ko.fields).map(x -> {
+                            try {
+                                return poFieldGetters.get(x).invoke(po);
+                            } catch (Exception e) {
+                                LOGGER.error("Delete cache fail", e);
+                            }
+                            return null;
+                        }).toArray(), "-");
+
+                        delCache(ko.key(fieldValue));
                     } catch (Exception e) {
                         LOGGER.error("Del cache fail", e);
                     }
@@ -414,28 +442,36 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     public static class KO {
         private final String schema;
         private final String po;
-        private final String field;
+        private final String[] fields;
         private final int expire;
 
-        public KO(String schema, String po, String field, int expire) {
+        public KO(String schema, String po, int expire, String... fields) {
             this.schema = schema;
             this.po = po;
-            this.field = field;
             this.expire = expire;
+
+            if (fields == null)
+                throw new RuntimeException("The fields can't be null!");
+
+            this.fields = fields;
         }
 
         /**
          * 生成 key String
          *
-         * @param value value
+         * @param values values
          * @return String
          */
-        public String key(String value) {
-            return (this.schema + ":" + this.po + ":" + this.field + ":").toUpperCase() + value;
+        public String key(String... values) {
+            if (values == null || values.length != fields.length)
+                throw new RuntimeException("The values can't be null or the length must equal to fields length!");
+
+            return (this.schema + ":" + this.po + ":" + StringUtils.join(this.fields, "-") + ":").toUpperCase()
+                    + StringUtils.join(values, "-");
         }
 
-        public String field() {
-            return this.field;
+        public String[] fields() {
+            return this.fields;
         }
 
         public int expire() {
