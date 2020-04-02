@@ -127,7 +127,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     public PO beforeModify(PO po) {
         Optional.ofNullable(KOS.get(idField())).map(ko -> {
             try {
-                return mapper.findById((ID) poFieldGetters.get(ko.fields()[0]).invoke(po));
+                return mapper.findById((ID) poFieldGetters.get(ko.fieldStr()).invoke(po));
             } catch (Exception e) {
                 LOGGER.error("beforeModify fail", e);
             }
@@ -178,7 +178,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     private PO pubSaveAndModifyCache(PO po) {
         return putCache(Optional.ofNullable(KOS.get(idField())).map(ko -> {
             try {
-                return mapper.findById((ID) poFieldGetters.get(ko.fields()[0]).invoke(po));
+                return mapper.findById((ID) poFieldGetters.get(ko.fieldStr()).invoke(po));
             } catch (Exception e) {
                 LOGGER.error("Put save and modify cache fail", e);
             }
@@ -211,7 +211,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
             PO finalPo = clazz.newInstance();
             Optional.ofNullable(KOS.get(idField())).ifPresent(ko -> {
                 try {
-                    poFieldSetters.get(ko.fields()[0]).invoke(finalPo, id);
+                    poFieldSetters.get(ko.fieldStr()).invoke(finalPo, id);
                 } catch (Exception e) {
                     LOGGER.error("findById fail", e);
                 }
@@ -284,7 +284,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
                 PO finalPo = clazz.newInstance();
                 Optional.ofNullable(KOS.get(idField())).ifPresent(ko -> {
                     try {
-                        poFieldSetters.get(ko.fields()[0]).invoke(finalPo, id);
+                        poFieldSetters.get(ko.fieldStr()).invoke(finalPo, id);
                     } catch (Exception e) {
                         LOGGER.error("deleteById fail", e);
                     }
@@ -466,12 +466,16 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
             if (values == null || values.length != fields.length)
                 throw new RuntimeException("The values can't be null or the length must equal to fields length!");
 
-            return (this.schema + ":" + this.po + ":" + StringUtils.join(this.fields, "-") + ":").toUpperCase()
+            return (this.schema + ":" + this.po + ":" + fieldStr() + ":").toUpperCase()
                     + StringUtils.join(values, "-");
         }
 
         public String[] fields() {
             return this.fields;
+        }
+
+        public String fieldStr() {
+            return StringUtils.join(this.fields, "-");
         }
 
         public int expire() {
