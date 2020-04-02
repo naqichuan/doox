@@ -34,7 +34,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
 
     public final static Logger CACHE_LOGGER = LoggerFactory.getLogger(LoggerConst.LOGGER_CACHE_NAME);
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(DAOSupport.class.getName());
+    private final static Logger LOGGER = LoggerFactory.getLogger(DAOSupport.class);
 
     // Po field 与 table column 对应关系
     protected final Map<String, String> fieldMapping = new LinkedHashMap<>();
