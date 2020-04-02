@@ -320,7 +320,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
             try {
                 String[] fieldValues = Arrays.stream(ko.fields).map(x -> {
                     try {
-                        return poFieldGetters.get(x).invoke(po);
+                        return String.valueOf(poFieldGetters.get(x).invoke(po));
                     } catch (Exception e) {
                         LOGGER.error("Put cache fail", e);
                     }
