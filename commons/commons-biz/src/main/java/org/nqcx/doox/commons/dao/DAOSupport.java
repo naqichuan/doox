@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.JedisCommands;
 
 import javax.persistence.Column;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -319,24 +318,25 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         KOS.values().forEach(ko -> {
             // 从对象里找值
             try {
-                String fieldValue = StringUtils.join(Arrays.stream(ko.fields).map(x -> {
+                String[] fieldValues = Arrays.stream(ko.fields).map(x -> {
                     try {
                         return poFieldGetters.get(x).invoke(po);
                     } catch (Exception e) {
                         LOGGER.error("Put cache fail", e);
                     }
                     return null;
-                }).toArray(), "-");
+                }).filter(Objects::nonNull).toArray(String[]::new);
 
                 if (isEmptyCache) {
-                    if (!fieldValue.equals("null") && !fieldValue.equals("")) {
+                    if (ko.fields.length == fieldValues.length) {
                         // 设置空缓存，防止缓存穿透
-                        putCache(ko.key(fieldValue), "", PeriodConst.ONE_MINUTES);
+                        putCache(ko.key(fieldValues), "", PeriodConst.ONE_MINUTES);
                         npo.set(null);
                     }
-                } else
+                } else if (ko.fields.length == fieldValues.length) {
                     // 从对象里找值
-                    putCache(ko.key(fieldValue), JSON.toJSONString(po), ko.expire());
+                    putCache(ko.key(fieldValues), JSON.toJSONString(po), ko.expire());
+                }
             } catch (Exception e) {
                 LOGGER.error("Put cache fail", e);
             }
