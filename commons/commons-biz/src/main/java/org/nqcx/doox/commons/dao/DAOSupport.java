@@ -51,11 +51,11 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     // jedis
     protected final JedisCommands jedis;
 
-    public DAOSupport(Mapper mapper, Supplier<JedisCommands> jedisSupplier) {
-        this(mapper, jedisSupplier.get());
+    public DAOSupport(Mapper mapper) {
+        this(mapper, null);
     }
 
-    public DAOSupport(Mapper mapper, JedisCommands jedis) {
+    public DAOSupport(Mapper mapper, Supplier<JedisCommands> jedisSupplier) {
         Type t = getClass().getGenericSuperclass();
         if (t instanceof ParameterizedType) {
             Type[] types = ((ParameterizedType) t).getActualTypeArguments();
@@ -77,9 +77,8 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
             throw new RuntimeException("Class not found");
 
         this.mapper = mapper;
-        this.jedis = jedis;
+        this.jedis = jedisSupplier == null ? null : jedisSupplier.get();
     }
-
 
     /**
      * id field name of po
