@@ -23,6 +23,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * 默认使用 mybatis
@@ -49,8 +51,8 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     // jedis
     protected final JedisCommands jedis;
 
-    public DAOSupport(Mapper mapper) {
-        this(mapper, null);
+    public DAOSupport(Mapper mapper, Supplier<JedisCommands> jedisSupplier) {
+        this(mapper, jedisSupplier.get());
     }
 
     public DAOSupport(Mapper mapper, JedisCommands jedis) {
@@ -77,6 +79,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         this.mapper = mapper;
         this.jedis = jedis;
     }
+
 
     /**
      * id field name of po
