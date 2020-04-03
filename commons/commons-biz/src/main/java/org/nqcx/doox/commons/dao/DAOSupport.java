@@ -15,16 +15,15 @@ import org.nqcx.doox.commons.lang.o.DTO;
 import org.nqcx.doox.commons.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.JedisCommands;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.persistence.Column;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * 默认使用 mybatis
@@ -48,14 +47,14 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     protected final Class<PO> clazz;
     // mapper
     protected final Mapper mapper;
-    // jedis
-    protected final JedisCommands jedis;
+    // redisTemplate
+    protected final RedisTemplate<String, String> redisTemplate;
 
     public DAOSupport(Mapper mapper) {
         this(mapper, null);
     }
 
-    public DAOSupport(Mapper mapper, Supplier<JedisCommands> jedisSupplier) {
+    public DAOSupport(Mapper mapper, RedisTemplate<String, String> redisTemplate) {
         Type t = getClass().getGenericSuperclass();
         if (t instanceof ParameterizedType) {
             Type[] types = ((ParameterizedType) t).getActualTypeArguments();
@@ -77,7 +76,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
             throw new RuntimeException("Class not found");
 
         this.mapper = mapper;
-        this.jedis = jedisSupplier == null ? null : jedisSupplier.get();
+        this.redisTemplate = redisTemplate;
     }
 
     /**
@@ -353,9 +352,9 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
      * @param expire expire
      */
     protected void putCache(String key, String value, int expire) {
-        Optional.ofNullable(jedis).ifPresent(c -> {
-                    c.set(key, value);
-                    c.expire(key, expire);
+        Optional.ofNullable(redisTemplate).ifPresent(c -> {
+                    c.opsForValue().set(key, value);
+                    c.expire(key, expire, TimeUnit.SECONDS);
                 }
         );
     }
@@ -365,7 +364,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
      * @param expire expire
      */
     protected void expireCache(String key, int expire) {
-        Optional.ofNullable(jedis).ifPresent(c -> c.expire(key, expire));
+        Optional.ofNullable(redisTemplate).ifPresent(c -> c.expire(key, expire, TimeUnit.SECONDS));
     }
 
 
@@ -399,7 +398,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
      * @param key key
      */
     protected void delCache(String key) {
-        Optional.ofNullable(jedis).ifPresent(c -> c.del(key));
+        Optional.ofNullable(redisTemplate).ifPresent(c -> c.delete(key));
     }
 
     /**
@@ -417,19 +416,19 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
      * @return String
      */
     protected String fromCache(String key) {
-        return getFromCache(jedis, key);
+        return getFromCache(redisTemplate, key);
     }
 
     /**
-     * @param jedis JedisCluster
-     * @param key   key
+     * @param redisTemplate JedisCluster
+     * @param key           key
      * @return String
      */
-    public static String getFromCache(JedisCommands jedis, String key) {
-        if (jedis == null || key == null)
+    public static String getFromCache(RedisTemplate<String, String> redisTemplate, String key) {
+        if (redisTemplate == null || key == null)
             return null;
 
-        String value = jedis.get(key);
+        String value = redisTemplate.opsForValue().get(key);
 
         CACHE_LOGGER.info("From String, KEY: {}, HIT: {}", key, value != null && value.length() > 0);
 
