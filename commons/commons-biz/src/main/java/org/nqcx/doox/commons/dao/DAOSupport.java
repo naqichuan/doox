@@ -175,7 +175,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
      * @param po po
      * @return PO
      */
-    private PO pubSaveAndModifyCache(PO po) {
+    protected PO pubSaveAndModifyCache(PO po) {
         return putCache(Optional.ofNullable(KOS.get(idField())).map(ko -> {
             try {
                 return mapper.findById((ID) poFieldGetters.get(ko.fieldStr()).invoke(po));
