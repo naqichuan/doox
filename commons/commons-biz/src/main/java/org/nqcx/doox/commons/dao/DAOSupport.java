@@ -281,15 +281,14 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
 
         if (po != null) {
             try {
-                PO finalPo = clazz.newInstance();
                 Optional.ofNullable(KOS.get(idField())).ifPresent(ko -> {
                     try {
-                        poFieldSetters.get(ko.fieldStr()).invoke(finalPo, id);
+                        poFieldSetters.get(ko.fieldStr()).invoke(po, id);
                     } catch (Exception e) {
                         LOGGER.error("deleteById fail", e);
                     }
                 });
-                this.delCache(finalPo);
+                this.delCache(po);
             } catch (Exception e) {
                 LOGGER.error("deleteById fail", e);
             }
