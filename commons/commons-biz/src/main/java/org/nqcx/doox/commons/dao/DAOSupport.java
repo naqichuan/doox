@@ -135,17 +135,17 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         }).ifPresent(p -> KOS.values().forEach(ko -> {
                     // 从对象里找值
                     try {
-                        String fieldValue = StringUtils.join(Arrays.stream(ko.fields).map(x -> {
+                        String[] fieldValues = Arrays.stream(ko.fields).map(x -> {
                             try {
                                 return poFieldGetters.get(x).invoke(po);
                             } catch (Exception e) {
                                 LOGGER.error("Delete cache fail", e);
                             }
                             return null;
-                        }).toArray(), "-");
+                        }).filter(Objects::nonNull).toArray(String[]::new);
 
                         // 设置一个 5 秒缓存，防止，有做为缓存 key 的值有变更
-                        expireCache(ko.key(fieldValue), 5);
+                        expireCache(ko.key(fieldValues), 5);
                     } catch (Exception e) {
                         LOGGER.error("beforeModify fail", e);
                     }
@@ -279,16 +279,17 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         this.beforeDelete(po);
         mapper.deleteById(id);
 
-        if (po != null) {
+        if (po == null) {
             try {
+                PO finalPo = clazz.newInstance();
                 Optional.ofNullable(KOS.get(idField())).ifPresent(ko -> {
                     try {
-                        poFieldSetters.get(ko.fieldStr()).invoke(po, id);
+                        poFieldSetters.get(ko.fieldStr()).invoke(finalPo, id);
                     } catch (Exception e) {
                         LOGGER.error("deleteById fail", e);
                     }
                 });
-                this.delCache(po);
+                this.delCache(finalPo);
             } catch (Exception e) {
                 LOGGER.error("deleteById fail", e);
             }
@@ -373,16 +374,16 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     protected PO delCache(PO po) {
         Optional.ofNullable(po).ifPresent(p -> KOS.values().forEach(ko -> {
                     try {
-                        String fieldValue = StringUtils.join(Arrays.stream(ko.fields).map(x -> {
+                        String[] fieldValues = Arrays.stream(ko.fields).map(x -> {
                             try {
                                 return poFieldGetters.get(x).invoke(po);
                             } catch (Exception e) {
                                 LOGGER.error("Delete cache fail", e);
                             }
                             return null;
-                        }).toArray(), "-");
+                        }).filter(Objects::nonNull).toArray(String[]::new);
 
-                        delCache(ko.key(fieldValue));
+                        delCache(ko.key(fieldValues));
                     } catch (Exception e) {
                         LOGGER.error("Del cache fail", e);
                     }
