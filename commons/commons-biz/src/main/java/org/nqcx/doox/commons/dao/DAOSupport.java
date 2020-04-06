@@ -279,7 +279,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         this.beforeDelete(po);
         mapper.deleteById(id);
 
-        if (po == null) {
+        if (po != null) {
             try {
                 PO finalPo = clazz.newInstance();
                 Optional.ofNullable(KOS.get(idField())).ifPresent(ko -> {
