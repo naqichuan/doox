@@ -198,7 +198,7 @@
             <dependency>
                 <groupId>io.lettuce</groupId>
                 <artifactId>lettuce-core</artifactId>
-                <version>${lettuce}</version>
+                <version>${lettuce.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.redisson</groupId>
