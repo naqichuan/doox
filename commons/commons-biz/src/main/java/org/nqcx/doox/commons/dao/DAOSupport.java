@@ -442,13 +442,13 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
      */
     public static class KO {
         private final String schema;
-        private final String po;
+        private final String biz;
         private final String[] fields;
         private final int expire;
 
-        public KO(String schema, String po, int expire, String... fields) {
+        public KO(String schema, String biz, int expire, String... fields) {
             this.schema = schema;
-            this.po = po;
+            this.biz = biz;
             this.expire = expire;
 
             if (fields == null)
@@ -464,11 +464,17 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
          * @return String
          */
         public String key(String... values) {
-            if (values == null || values.length != fields.length)
+            if (values != null && values.length != fields.length)
                 throw new RuntimeException("The values can't be null or the length must equal to fields length!");
 
-            return (this.schema + ":" + this.po + ":" + fieldStr() + ":").toUpperCase()
-                    + StringUtils.join(values, "-");
+            StringBuilder kb = new StringBuilder((this.schema + ":" + this.biz + ":" + fieldStr()).toUpperCase());
+
+            if (values != null && values.length > 0) {
+                kb.append(":");
+                kb.append(StringUtils.join(values, "-"));
+            }
+
+            return kb.toString();
         }
 
         public String[] fields() {
