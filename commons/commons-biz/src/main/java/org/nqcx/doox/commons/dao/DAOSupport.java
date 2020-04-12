@@ -464,7 +464,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
          * @return String
          */
         public String key(String... values) {
-            if (values != null && values.length != fields.length)
+            if (values != null && values.length > 0 && values.length != fields.length)
                 throw new RuntimeException("The values can't be null or the length must equal to fields length!");
 
             StringBuilder kb = new StringBuilder((this.schema + ":" + this.biz + ":" + fieldStr()).toUpperCase());
