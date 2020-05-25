@@ -124,7 +124,7 @@ public class WebContextInterceptor extends WebSupport implements HandlerIntercep
                             "\"data\":\"{}\",\"User-Agent\":\"{}\"",
                     wc.getStart(), wc.getPost(), wc.getEnd(), wc.getRemoteAddr(),
                     wc.getServerName(), wc.getMethod(), wc.getScheme(), wc.isSecure(),
-                    wc.isAjax(), wc.getRequestURI(), wc.getLocale(), StringUtils.trimToEmpty(wc.getSessionId()),
+                    wc.isAjax(), wc.getRequestURI(), StringUtils.trimToEmpty(wc.getLocale().toString()), StringUtils.trimToEmpty(wc.getSessionId()),
                     wc.getUrl(), StringUtils.trimToEmpty(wc.getReferer()), StringUtils.trimToEmpty(string2Json(wc.getParams())),
                     StringUtils.trimToEmpty(string2Json(wc.getData())), StringUtils.trimToEmpty(string2Json(wc.getUserAgent())));
         }
