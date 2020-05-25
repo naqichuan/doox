@@ -18,7 +18,7 @@ public class TreeTest {
 
     public static void main(String[] args) {
 
-//        TreeBuilder<Integer, MyO> t = new TreeBuilder<>();
+        TreeBuilder<Integer, MyO> t = new TreeBuilder<>();
 //
 //        MyO n1 = new MyO();
 //        n1.setId(1);

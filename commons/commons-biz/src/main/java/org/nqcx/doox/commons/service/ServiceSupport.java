@@ -44,8 +44,7 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, PO, ID> implement
     }
 
     @Override
-    @SafeVarargs
-    public final List<PO> saveAll(PO... pos) {
+    public List<PO> saveAll(PO... pos) {
         if (pos == null)
             return null;
 
@@ -71,8 +70,7 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, PO, ID> implement
     }
 
     @Override
-    @SafeVarargs
-    public final List<PO> modifyAll(PO... pos) {
+    public List<PO> modifyAll(PO... pos) {
         if (pos == null)
             return null;
 
@@ -98,8 +96,7 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, PO, ID> implement
     }
 
     @Override
-    @SafeVarargs
-    public final List<PO> findAllByIds(ID... ids) {
+    public List<PO> findAllByIds(ID... ids) {
         if (ids == null)
             return null;
 
@@ -165,8 +162,7 @@ public abstract class ServiceSupport<DAO extends IDAO<PO, ID>, PO, ID> implement
     }
 
     @Override
-    @SafeVarargs
-    public final void deleteByIds(ID... ids) {
+    public void deleteByIds(ID... ids) {
         if (ids == null)
             return;
 
