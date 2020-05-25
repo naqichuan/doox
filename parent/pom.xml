@@ -41,7 +41,13 @@
                     <include>beans-special.xml</include>
                     <include>config/*.xml</include>
                     <include>config/*.properties</include>
+                    <include>logging.properties</include>
                     <include>log4j2.xml</include>
+                    <include>log4j2-spring.xml</include>
+                    <include>logback.xml</include>
+                    <include>logback-spring.xml</include>
+                    <include>logback.groovy</include>
+                    <include>logback-spring.groovy</include>
                     <include>**/application*.yml</include>
                     <include>**/application*.yaml</include>
                     <include>**/application*.properties</include>
