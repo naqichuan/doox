@@ -73,7 +73,8 @@
         <slf4j.version>1.7.25</slf4j.version>
         <commons-logging.version>1.2</commons-logging.version>
         <disruptor.version>3.3.7</disruptor.version>
-        <log4j2.version>2.11.1</log4j2.version>
+        <log4j2.version>2.12.1</log4j2.version>
+        <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
         <javax-mail.version>1.6.1</javax-mail.version>
         <servlet-api.version>3.1.0</servlet-api.version>
@@ -339,6 +340,21 @@
                 <groupId>com.lmax</groupId>
                 <artifactId>disruptor</artifactId>
                 <version>${disruptor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-access</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-logging</groupId>
