@@ -117,11 +117,11 @@ public class WebContextInterceptor extends WebSupport implements HandlerIntercep
                                 Object handler, Exception ex) {
         WebContext wc = getWebContext().end();
         if (requireAccessLog(wc)) {
-            ACCESS_LOGGER.info("\"start\": \"{}\", \"post\": \"{}\",  \"end\": \"{}\", \"remoteAddr\": \"{}\"," +
-                            " \"serverName\": \"{}\", \"method\": \"{}\", \"scheme\": \"{}\", \"secure\": \"{}\"," +
-                            " \"isAjax\": \"{}\", \"uri\": \"{}\", \"locale\": \"{}\", \"sessionId\": \"{}\"," +
-                            " \"url\": \"{}\", \"referer\": \"{}\", \"params\": \"{}\"," +
-                            " \"data\": \"{}\", \"User-Agent\": \"{}\"",
+            ACCESS_LOGGER.info("\"start\":\"{}\",\"post\":\"{}\",\"end\":\"{}\",\"remoteAddr\":\"{}\"," +
+                            "\"serverName\":\"{}\",\"method\":\"{}\",\"scheme\":\"{}\",\"secure\":\"{}\"," +
+                            "\"isAjax\":\"{}\",\"uri\":\"{}\",\"locale\":\"{}\",\"sessionId\":\"{}\"," +
+                            "\"url\":\"{}\",\"referer\":\"{}\",\"params\":\"{}\"," +
+                            "\"data\":\"{}\",\"User-Agent\":\"{}\"",
                     wc.getStart(), wc.getPost(), wc.getEnd(), wc.getRemoteAddr(),
                     wc.getServerName(), wc.getMethod(), wc.getScheme(), wc.isSecure(),
                     wc.isAjax(), wc.getRequestURI(), wc.getLocale(), StringUtils.trimToEmpty(wc.getSessionId()),
