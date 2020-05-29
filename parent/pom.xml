@@ -58,6 +58,7 @@
                     <exclude>resources/**/*.*</exclude>
                     <exclude>static/**/*.*</exclude>
                     <exclude>public/**/*.*</exclude>
+                    <exclude>META-INF/**/*.*</exclude>
                 </excludes>
             </resource>
             <resource>
@@ -73,6 +74,7 @@
                     <include>resources/**/*.*</include>
                     <include>static/**/*.*</include>
                     <include>public/**/*.*</include>
+                    <include>META-INF/**/*.*</include>
                 </includes>
                 <excludes>
                     <exclude>**/application*.yml</exclude>
