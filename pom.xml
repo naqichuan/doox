@@ -57,7 +57,7 @@
         <spring.version>5.2.3.RELEASE</spring.version>
         <spring-data-jpa.version>2.1.0.RELEASE</spring-data-jpa.version>
         <spring-data-commons.version>2.0.7.RELEASE</spring-data-commons.version>
-        <mysql.version>5.1.46</mysql.version>
+        <mysql.version>8.0.16</mysql.version>
         <druid.version>1.0.27</druid.version>
         <fastjson.version>1.2.29</fastjson.version>
         <hibernate.version>5.2.17.Final</hibernate.version>
