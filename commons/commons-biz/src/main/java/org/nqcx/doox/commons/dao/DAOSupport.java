@@ -110,7 +110,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
 
     @Override
     public PO afterSave(PO po) {
-        return pubSaveAndModifyCache(po);
+        return putSaveAndModifyCache(po);
     }
 
     @Override
@@ -168,14 +168,14 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
 
     @Override
     public PO afterModify(PO po) {
-        return pubSaveAndModifyCache(po);
+        return putSaveAndModifyCache(po);
     }
 
     /**
      * @param po po
      * @return PO
      */
-    protected PO pubSaveAndModifyCache(PO po) {
+    protected PO putSaveAndModifyCache(PO po) {
         return putCache(Optional.ofNullable(KOS.get(idField())).map(ko -> {
             try {
                 return mapper.findById((ID) poFieldGetters.get(ko.fieldStr()).invoke(po));
