@@ -100,7 +100,7 @@ public class LoginRequiredInterceptor extends WebContextInterceptor {
      */
     protected String buildInternalAuthorizeUrl(HttpServletRequest request, boolean containContextPath) {
         return new UrlBuilder().forPath(authorizeUri(containContextPath ? request.getContextPath() : ""))
-                .put("redirectUrl", buildInternalRedirectUrl(request.getServletPath(), request.getParameterMap()))
+                .put("redirectUri", buildInternalRedirectUri(request.getServletPath(), request.getParameterMap()))
                 .buildUri();
     }
 
@@ -120,7 +120,7 @@ public class LoginRequiredInterceptor extends WebContextInterceptor {
     }
 
     /**
-     * 生成符合预期的 redirectUrl，该 url 不包含 contextPath
+     * 生成符合预期的 redirectUri，该 url 不包含 contextPath
      * <p/>
      * 如果其它需求，子类扩展和重载
      *
@@ -128,7 +128,7 @@ public class LoginRequiredInterceptor extends WebContextInterceptor {
      * @param params      params
      * @return 生成不包含 contextPath 的 url
      */
-    protected String buildInternalRedirectUrl(String servletPath, Map<String, ?> params) {
+    protected String buildInternalRedirectUri(String servletPath, Map<String, ?> params) {
         return new UrlBuilder().forPath(servletPath)
                 .put(params)
                 .buildUri();
