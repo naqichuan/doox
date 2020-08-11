@@ -124,7 +124,7 @@ public class TreeBuilder<ID, O extends INode<ID>> implements Serializable {
                 }
             });
         }
-        return Collections.unmodifiableList(list);
+        return list;
     }
 
     /**
@@ -142,16 +142,14 @@ public class TreeBuilder<ID, O extends INode<ID>> implements Serializable {
                 }
             });
         }
-        return Collections.unmodifiableList(list);
+        return list;
     }
 
     public List<NodeFacade<ID, O>> listAllNodes() {
         List<NodeFacade<ID, O>> list = new ArrayList<>();
 
-        nodeMap.forEach((k, v) -> {
-            list.add(v);
-        });
+        nodeMap.forEach((k, v) -> list.add(v));
 
-        return Collections.unmodifiableList(list);
+        return list;
     }
 }
