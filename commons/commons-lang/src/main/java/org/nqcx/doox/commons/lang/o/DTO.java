@@ -12,6 +12,8 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * Data transfer object
@@ -118,6 +120,13 @@ public class DTO implements Serializable {
         return this;
     }
 
+    public <T> DTO putParamWith(String key, T value, Predicate<T> predicate) {
+        if (predicate == null || predicate.test(value))
+            return putParam(key, value);
+
+        return this;
+    }
+
     @SuppressWarnings("unchecked")
     public <T> T getParam(String key) {
         return this.paramsMap == null ? null : (T) this.paramsMap.get(key);
@@ -141,6 +150,12 @@ public class DTO implements Serializable {
         if (this.resultMap == null)
             this.resultMap = new LinkedHashMap<String, Object>();
         this.resultMap.put(key, value);
+        return this;
+    }
+
+    public <T> DTO putResultWith(String key, T value, Predicate<T> predicate) {
+        if(predicate == null || predicate.test(value))
+            return this.putParam(key, value);
         return this;
     }
 

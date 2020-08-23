@@ -9,10 +9,7 @@
 package org.nqcx.doox.commons.lang.o;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -69,6 +66,27 @@ public class NSort implements Serializable {
         return NSort.by(Arrays.stream(fields)//
                 .map(it -> new NOrder(direction, it))//
                 .collect(Collectors.toList()));
+    }
+
+    public static NSort parse(String sorts) {
+        if (sorts == null)
+            return unsorted();
+
+        List<NOrder> orders = new ArrayList<>();
+        for (String o : sorts.split(";")) {
+            String[] os;
+            if (o.length() == 0 || (os = o.split(",")).length == 0)
+                continue;
+
+            String field = os[0].trim();
+            NDirection direction = NDirection.ASC;
+            if (os.length > 1)
+                direction = NDirection.of(os[1].trim());
+
+            orders.add(new NOrder(direction, field));
+        }
+
+        return by(orders);
     }
 
     public static NSort unsorted() {
@@ -144,7 +162,5 @@ public class NSort implements Serializable {
         }
 
         System.out.println(nSort.orderString());
-
-//        System.out.println(new NSort().putField("0", "id").putField("1", "id1").putField("2", "id2").setSort("-1,-2").getOrder());
     }
 }
