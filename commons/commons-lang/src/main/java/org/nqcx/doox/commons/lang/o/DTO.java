@@ -12,7 +12,6 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -121,7 +120,7 @@ public class DTO implements Serializable {
     }
 
     public <T> DTO putParamWith(String key, T value, Predicate<T> predicate) {
-        if (predicate == null || predicate.test(value))
+        if (predicate != null && predicate.test(value))
             return putParam(key, value);
 
         return this;
@@ -154,7 +153,7 @@ public class DTO implements Serializable {
     }
 
     public <T> DTO putResultWith(String key, T value, Predicate<T> predicate) {
-        if(predicate == null || predicate.test(value))
+        if (predicate != null && predicate.test(value))
             return this.putParam(key, value);
         return this;
     }
@@ -178,6 +177,16 @@ public class DTO implements Serializable {
         return this;
     }
 
+    public DTO newPageWith(Long page, Long pageSize, Predicate<Long> predicate) {
+        if (page == null) {
+            this.page = null;
+        } else if (predicate != null && predicate.test(page)) {
+            this.page = new NPage(page, pageSize == null ? 0 : pageSize);
+        }
+
+        return this;
+    }
+
     public long getTotalCount() {
         return getPage() == null ? 0 : getPage().getTotalCount();
     }
@@ -188,6 +197,15 @@ public class DTO implements Serializable {
 
     public DTO setSort(NSort sort) {
         this.sort = sort;
+        return this;
+    }
+
+    public DTO newSortsWith(String sorts, Predicate<String> predicate) {
+        if (sorts == null)
+            this.sort = null;
+        else if (predicate != null && predicate.test(sorts))
+            this.sort = NSort.parse(sorts);
+
         return this;
     }
 
