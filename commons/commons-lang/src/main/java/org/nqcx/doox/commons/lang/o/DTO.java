@@ -177,10 +177,10 @@ public class DTO implements Serializable {
         return this;
     }
 
-    public DTO newPageWith(Long page, Long pageSize, Predicate<Long> predicate) {
+    public DTO newPageWith(Long page, Long pageSize) {
         if (page == null) {
             this.page = null;
-        } else if (predicate != null && predicate.test(page)) {
+        } else {
             this.page = new NPage(page, pageSize == null ? 0 : pageSize);
         }
 
@@ -200,10 +200,10 @@ public class DTO implements Serializable {
         return this;
     }
 
-    public DTO newSortsWith(String sorts, Predicate<String> predicate) {
+    public DTO newSortsWith(String sorts) {
         if (sorts == null)
             this.sort = null;
-        else if (predicate != null && predicate.test(sorts))
+        else
             this.sort = NSort.parse(sorts);
 
         return this;
