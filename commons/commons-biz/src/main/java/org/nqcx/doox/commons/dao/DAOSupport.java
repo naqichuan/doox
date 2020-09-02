@@ -77,19 +77,14 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
 
         // extend field mapping
         Optional.ofNullable(this.extendFieldMapping()).ifPresent(xs -> Arrays.asList(xs).forEach(x -> {
-            Type xt = x.getGenericSuperclass();
-            if (xt instanceof ParameterizedType) {
-                Type[] types = ((ParameterizedType) xt).getActualTypeArguments();
-                Class clazz = (Class) types[1];
-                Method[] methods;
-                if (clazz != null && (methods = clazz.getMethods()) != null) {
-                    for (Method m : methods) {
-                        Column c = m.getAnnotation(Column.class);
-                        if (c != null)
-                            continue;
+            Method[] methods;
+            if (x != null && (methods = x.getMethods()) != null) {
+                for (Method m : methods) {
+                    Column c = m.getAnnotation(Column.class);
+                    if (c == null)
+                        continue;
 
-                        fieldMapping.put(PropertyNamer.methodToProperty(clazz.getSimpleName() + "." + m.getName()), "`" + c.name().trim() + "`");
-                    }
+                    fieldMapping.put(PropertyNamer.methodToProperty(x.getSimpleName() + "." + m.getName()), "`" + c.name().trim() + "`");
                 }
             }
         }));
