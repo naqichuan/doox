@@ -64,7 +64,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
                 for (Method m : methods) {
                     Column c = m.getAnnotation(Column.class);
                     if (c != null)
-                        fieldMapping.put(PropertyNamer.methodToProperty(m.getName()), c.name().trim());
+                        fieldMapping.put(PropertyNamer.methodToProperty(m.getName()), "`" + c.name().trim() + "`");
 
                     if (PropertyNamer.isGetter(m.getName()))
                         poFieldGetters.put(PropertyNamer.methodToProperty(m.getName()), m);
@@ -84,9 +84,10 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
                 if (clazz != null && (methods = clazz.getMethods()) != null) {
                     for (Method m : methods) {
                         Column c = m.getAnnotation(Column.class);
-                        if (c == null)
+                        if (c != null)
                             continue;
-                        fieldMapping.put(PropertyNamer.methodToProperty(clazz.getSimpleName() + "." + m.getName()), c.name().trim());
+
+                        fieldMapping.put(PropertyNamer.methodToProperty(clazz.getSimpleName() + "." + m.getName()), "`" + c.name().trim() + "`");
                     }
                 }
             }
