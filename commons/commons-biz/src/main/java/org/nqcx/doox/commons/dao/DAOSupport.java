@@ -75,6 +75,23 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         } else
             throw new RuntimeException("Class not found");
 
+        // extend field mapping
+        Optional.ofNullable(this.extendFieldMapping()).ifPresent(xs -> Arrays.asList(xs).forEach(x -> {
+            if (x instanceof ParameterizedType) {
+                Type[] types = ((ParameterizedType) x).getActualTypeArguments();
+                Class clazz = (Class) types[1];
+                Method[] methods;
+                if (clazz != null && (methods = clazz.getMethods()) != null) {
+                    for (Method m : methods) {
+                        Column c = m.getAnnotation(Column.class);
+                        if (c == null)
+                            continue;
+                        fieldMapping.put(PropertyNamer.methodToProperty(m.getName()), c.name().trim());
+                    }
+                }
+            }
+        }));
+
         this.mapper = mapper;
         this.redisTemplate = redisTemplate;
     }
@@ -86,6 +103,15 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
      */
     protected String idField() {
         return "id";
+    }
+
+    /**
+     * exend fileld mapping
+     *
+     * @return mapping
+     */
+    protected Type[] extendFieldMapping() {
+        return new Type[0];
     }
 
     @Override
