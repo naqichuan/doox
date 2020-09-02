@@ -86,7 +86,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
                         Column c = m.getAnnotation(Column.class);
                         if (c == null)
                             continue;
-                        fieldMapping.put(PropertyNamer.methodToProperty(m.getName()), c.name().trim());
+                        fieldMapping.put(PropertyNamer.methodToProperty(clazz.getSimpleName() + "." + m.getName()), c.name().trim());
                     }
                 }
             }
