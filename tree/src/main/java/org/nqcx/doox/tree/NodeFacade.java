@@ -69,6 +69,10 @@ public class NodeFacade<ID, O extends INode<ID>> implements INode<ID>, Serializa
         return Optional.ofNullable(object);
     }
 
+    public O getRawObject() {
+        return object;
+    }
+
     /**
      * 取得父节点的具体对象
      *
