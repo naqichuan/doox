@@ -200,6 +200,12 @@ public class DTO implements Serializable {
         return this;
     }
 
+    /**
+     * Sort fields and directions, e.g. field1,asc;field2,desc;...
+     *
+     * @param sorts
+     * @return DTO
+     */
     public DTO newSortsWith(String sorts) {
         if (sorts == null)
             this.sort = null;
