@@ -17,7 +17,7 @@ import java.util.Map;
  *
  * @author nqcx 2013-10-24 下午2:22:56
  */
-public class FlatDTO implements Serializable {
+public class FlatDTO<T> implements Serializable {
 
     /**
      * 对应接口返回值的success字段
@@ -28,12 +28,12 @@ public class FlatDTO implements Serializable {
      * 对应接
      * 口返回值的object字段
      */
-    private Object object;
+    private T object;
 
     /**
      * 对应接口返回值的list字段
      */
-    private List<Object> list;
+    private List<T> list;
 
     /**
      * 对应接口返回值的result字段
@@ -83,21 +83,19 @@ public class FlatDTO implements Serializable {
         this.success = success;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T getObject() {
+    public T getObject() {
         return (T) object;
     }
 
-    public void setObject(Object object) {
+    public void setObject(T object) {
         this.object = object;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> List<T> getList() {
+    public List<T> getList() {
         return (List<T>) list;
     }
 
-    public void setList(List<Object> list) {
+    public void setList(List<T> list) {
         this.list = list;
     }
 
@@ -165,7 +163,7 @@ public class FlatDTO implements Serializable {
         this.multipleErrors = multipleErrors;
     }
 
-    public static class MultipleError {
+    static class MultipleError {
 
         private String multipleErrorCode;
         private String multipleErrorText;
