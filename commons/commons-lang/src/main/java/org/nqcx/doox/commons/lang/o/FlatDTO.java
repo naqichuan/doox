@@ -43,22 +43,22 @@ public class FlatDTO<T> implements Serializable {
     /**
      * 对应接口返回值的page字段
      */
-    private int page = 0;
+    private Long page = 0L;
 
     /**
      * 对应接口返回值的pageSize字段
      */
-    private int pageSize = 0;
+    private Long pageSize = 0L;
 
     /**
      * 对应接口返回值的totalPage字段
      */
-    private int totalPage = 0;
+    private Long totalPage = 0L;
 
     /**
      * 对应接口返回值的totalCount字段
      */
-    private int totalCount = 0;
+    private Long totalCount = 0L;
 
     /**
      * 对应接口返回值的errorText字段
@@ -107,35 +107,35 @@ public class FlatDTO<T> implements Serializable {
         this.result = result;
     }
 
-    public int getPage() {
+    public Long getPage() {
         return page;
     }
 
-    public void setPage(int page) {
+    public void setPage(Long page) {
         this.page = page;
     }
 
-    public int getPageSize() {
+    public Long getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(int pageSize) {
+    public void setPageSize(Long pageSize) {
         this.pageSize = pageSize;
     }
 
-    public int getTotalPage() {
+    public Long getTotalPage() {
         return totalPage;
     }
 
-    public void setTotalPage(int totalPage) {
+    public void setTotalPage(Long totalPage) {
         this.totalPage = totalPage;
     }
 
-    public int getTotalCount() {
+    public Long getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(int totalCount) {
+    public void setTotalCount(Long totalCount) {
         this.totalCount = totalCount;
     }
 
