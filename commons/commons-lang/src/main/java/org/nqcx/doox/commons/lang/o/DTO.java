@@ -181,16 +181,25 @@ public class DTO implements Serializable {
         return getPage() == null ? 0 : getPage().getTotalCount();
     }
 
+    public DTO newPageWith(Long page) {
+        return newPageWith(page, null);
+    }
+
     public DTO newPageWith(Long page, Long pageSize) {
+        return newPageWith(page, null, null);
+    }
+
+    public DTO newPageWith(Long page, Long pageSize, Long totalCount) {
         if (page == null) {
             this.page = null;
-        } else {
-            this.page = new NPage(page, pageSize == null ? 0 : pageSize);
+            return this;
         }
+
+        this.page = new NPage(page, pageSize == null ? 0 : pageSize)
+                .setTotalCount(totalCount == null ? -1 : totalCount);
 
         return this;
     }
-
 
     public NSort getSort() {
         return sort;
