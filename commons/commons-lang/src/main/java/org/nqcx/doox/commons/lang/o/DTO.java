@@ -177,6 +177,10 @@ public class DTO implements Serializable {
         return this;
     }
 
+    public long getTotalCount() {
+        return getPage() == null ? 0 : getPage().getTotalCount();
+    }
+
     public DTO newPageWith(Long page, Long pageSize) {
         if (page == null) {
             this.page = null;
@@ -187,9 +191,6 @@ public class DTO implements Serializable {
         return this;
     }
 
-    public long getTotalCount() {
-        return getPage() == null ? 0 : getPage().getTotalCount();
-    }
 
     public NSort getSort() {
         return sort;
@@ -201,14 +202,17 @@ public class DTO implements Serializable {
     }
 
     /**
-     * Sort fields and directions, e.g. field1,asc;field2,desc;...
+     * Sort fields and directions array, e.g. ["field1,asc", "field2,desc", ...]
+     * When array length equals 1, can sort more than one with expressions "field1,asc;field2,desc;..."
      *
-     * @param sorts
+     * @param sorts array
      * @return DTO
      */
-    public DTO newSortsWith(String sorts) {
-        if (sorts == null)
+    public DTO newSortsWith(String... sorts) {
+        if (sorts == null || sorts.length == 0)
             this.sort = null;
+        else if (sorts.length == 1)
+            this.sort = NSort.parse(sorts[0]);
         else
             this.sort = NSort.parse(sorts);
 
