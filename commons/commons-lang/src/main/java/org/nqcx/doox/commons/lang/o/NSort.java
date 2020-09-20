@@ -71,24 +71,18 @@ public class NSort implements Serializable {
     public static NSort parse(String... sorts) {
         if (sorts == null || sorts.length == 0)
             return unsorted();
-        else if (sorts.length == 1)
-            sorts = sorts[0].split(";");
 
-        List<NOrder> orders = new ArrayList<>();
-        for (String o : sorts) {
-            String[] os;
-            if (o.length() == 0 || (os = o.split(",")).length == 0)
-                continue;
+        return by(Arrays.stream(sorts).filter(Objects::nonNull)
+                .flatMap(x -> Arrays.stream(x.split(";"))).filter(Objects::nonNull)
+                .map(x -> x.split(",")).filter(x -> x.length > 0)
+                .map(os -> {
+                    String field = os[0].trim();
+                    NDirection direction = NDirection.ASC;
+                    if (os.length > 1)
+                        direction = NDirection.of(os[1].trim());
 
-            String field = os[0].trim();
-            NDirection direction = NDirection.ASC;
-            if (os.length > 1)
-                direction = NDirection.of(os[1].trim());
-
-            orders.add(new NOrder(direction, field));
-        }
-
-        return by(orders);
+                    return new NOrder(direction, field);
+                }).collect(Collectors.toList()));
     }
 
     public static NSort unsorted() {

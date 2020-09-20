@@ -220,8 +220,6 @@ public class DTO implements Serializable {
     public DTO newSortsWith(String... sorts) {
         if (sorts == null || sorts.length == 0)
             this.sort = null;
-        else if (sorts.length == 1)
-            this.sort = NSort.parse(sorts[0]);
         else
             this.sort = NSort.parse(sorts);
 
