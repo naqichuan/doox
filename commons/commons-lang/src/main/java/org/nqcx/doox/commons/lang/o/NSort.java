@@ -68,12 +68,14 @@ public class NSort implements Serializable {
                 .collect(Collectors.toList()));
     }
 
-    public static NSort parse(String sorts) {
-        if (sorts == null)
+    public static NSort parse(String... sorts) {
+        if (sorts == null || sorts.length == 0)
             return unsorted();
+        else if (sorts.length == 1)
+            sorts = sorts[0].split(";");
 
         List<NOrder> orders = new ArrayList<>();
-        for (String o : sorts.split(";")) {
+        for (String o : sorts) {
             String[] os;
             if (o.length() == 0 || (os = o.split(",")).length == 0)
                 continue;
