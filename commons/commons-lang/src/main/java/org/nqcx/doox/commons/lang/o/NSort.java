@@ -74,11 +74,12 @@ public class NSort implements Serializable {
 
         return by(Arrays.stream(sorts).filter(Objects::nonNull)
                 .flatMap(x -> Arrays.stream(x.split(";"))).filter(Objects::nonNull)
-                .map(x -> x.split(",")).filter(x -> x.length > 0)
+                .map(x -> x.split(",")).filter(x -> x.length > 0 && x[0] != null && x[0].trim().length() > 0)
                 .map(os -> {
                     String field = os[0].trim();
                     NDirection direction = NDirection.ASC;
-                    if (os.length > 1)
+                    if (os.length > 1 && (NDirection.ASC.toString().equalsIgnoreCase(os[1].trim())
+                            || NDirection.DESC.toString().equalsIgnoreCase(os[1].trim())))
                         direction = NDirection.of(os[1].trim());
 
                     return new NOrder(direction, field);
