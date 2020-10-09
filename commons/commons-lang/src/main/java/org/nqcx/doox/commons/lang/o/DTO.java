@@ -186,7 +186,7 @@ public class DTO implements Serializable {
     }
 
     public DTO newPageWith(Long page, Long pageSize) {
-        return newPageWith(page, null, null);
+        return newPageWith(page, pageSize, null);
     }
 
     public DTO newPageWith(Long page, Long pageSize, Long totalCount) {
