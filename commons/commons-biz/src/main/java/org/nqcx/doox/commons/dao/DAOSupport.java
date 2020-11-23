@@ -231,6 +231,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
             return afterFoud(po);
 
         try {
+            // 缓存和数据源中都找不到相应数据时，生成一个只有缓存项的对象用于设置空缓存
             PO finalPo = clazz.newInstance();
             Optional.ofNullable(KOS.get(idField())).ifPresent(ko -> {
                 try {
@@ -240,7 +241,6 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
                 }
             });
 
-            // 缓存和数据源中都找不到相应数据时设置一个空缓存
             return putCache(finalPo, true);
         } catch (Exception e) {
             LOGGER.error("findById fail", e);
