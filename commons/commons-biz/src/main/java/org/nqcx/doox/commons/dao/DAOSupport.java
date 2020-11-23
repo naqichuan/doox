@@ -167,7 +167,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
                             return null;
                         }).filter(Objects::nonNull).toArray(String[]::new);
 
-                        // 设置一个 5 秒缓存，防止，有做为缓存 key 的值有变更
+                        // 设置一个 5 秒缓存，防止有做为缓存 key 的值有变更
                         expireCache(ko.key(fieldValues), 5);
                     } catch (Exception e) {
                         LOGGER.error("beforeModify fail", e);
@@ -240,6 +240,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
                 }
             });
 
+            // 缓存和数据源中都找不到相应数据时设置一个空缓存
             return putCache(finalPo, true);
         } catch (Exception e) {
             LOGGER.error("findById fail", e);
