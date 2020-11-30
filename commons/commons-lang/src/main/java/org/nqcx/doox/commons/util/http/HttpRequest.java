@@ -8,6 +8,7 @@
 
 package org.nqcx.doox.commons.util.http;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -15,6 +16,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -24,9 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author nqcx 2013-10-22 下午2:13:57
@@ -171,7 +171,7 @@ public class HttpRequest {
         try {
             http_logger.info("reqeust: post, uri:" + uri + ", params: " + nvps);
 
-            return post(uri, chareset, new UrlEncodedFormEntity(nvps, chareset),
+            return post(uri, chareset, null, new UrlEncodedFormEntity(nvps, chareset),
                     connectionTimeout, socketTimeout);
         } catch (UnsupportedEncodingException e) {
             logger.error("", e);
@@ -184,16 +184,24 @@ public class HttpRequest {
      *
      * @param uri
      * @param chareset
+     * @param headers
      * @param requestEntity
      * @param connectionTimeout
      * @param socketTimeout
      * @return
      */
-    private static String post(String uri, String chareset, HttpEntity requestEntity,
+    private static String post(String uri, String chareset, Map<String, Object> headers, HttpEntity requestEntity,
                                int connectionTimeout, int socketTimeout) {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(uri);
+        // config
         httpPost.setConfig(HttpConfig.config(connectionTimeout, socketTimeout));
+        // header
+        Optional.ofNullable(headers).ifPresent(x -> x.forEach((k, v) -> {
+            if (StringUtils.isNotBlank(k) && Objects.nonNull(v))
+                httpPost.setHeader(k, v.toString());
+        }));
+        // endity
         httpPost.setEntity(requestEntity);
 
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
@@ -202,6 +210,28 @@ public class HttpRequest {
             logger.error("response: post, error: ", e);
         }
         return null;
+    }
+
+    /**
+     * post json
+     *
+     * @param uri
+     * @param chareset
+     * @param body
+     * @param connectionTimeout
+     * @param socketTimeout
+     * @return String
+     */
+    public static String postJson(String uri, String chareset, String body,
+                                  int connectionTimeout, int socketTimeout) {
+
+        StringEntity jsonEntity = new StringEntity(body, chareset);
+        jsonEntity.setContentEncoding(chareset);
+
+        http_logger.info("reqeust: post, uri:" + uri + ", json body: " + body);
+
+        return post(uri, chareset, HttpMap.newInstance().add("Content-type", "application/json").getMap(), jsonEntity,
+                connectionTimeout, socketTimeout);
     }
 
     /**
