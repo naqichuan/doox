@@ -217,18 +217,18 @@ public class HttpRequest {
      *
      * @param uri
      * @param chareset
-     * @param body
+     * @param json
      * @param connectionTimeout
      * @param socketTimeout
      * @return String
      */
-    public static String postJson(String uri, String chareset, String body,
+    public static String postJson(String uri, String chareset, String json,
                                   int connectionTimeout, int socketTimeout) {
 
-        StringEntity jsonEntity = new StringEntity(body, chareset);
+        StringEntity jsonEntity = new StringEntity(json, chareset);
         jsonEntity.setContentEncoding(chareset);
 
-        http_logger.info("reqeust: post, uri:" + uri + ", json body: " + body);
+        http_logger.info("reqeust: post, uri:" + uri + ", json body: " + json);
 
         return post(uri, chareset, HttpMap.newInstance().add("Content-type", "application/json").getMap(), jsonEntity,
                 connectionTimeout, socketTimeout);
