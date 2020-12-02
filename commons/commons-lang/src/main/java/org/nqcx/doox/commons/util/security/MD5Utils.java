@@ -18,13 +18,12 @@ import java.security.NoSuchAlgorithmException;
  */
 public class MD5Utils {
 
-    private MD5Utils(){
+    private MD5Utils() {
     }
 
     /**
      * Returns a MessageDigest for the given <code>algorithm</code>.
      *
-     * @param algorithm The MessageDigest algorithm name.
      * @return An MD5 digest instance.
      * @throws RuntimeException when a {@link NoSuchAlgorithmException} is caught
      */
