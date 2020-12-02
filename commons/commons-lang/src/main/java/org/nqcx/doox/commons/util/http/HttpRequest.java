@@ -213,6 +213,15 @@ public class HttpRequest {
     }
 
     /**
+     * @param uri  uri
+     * @param json json
+     * @return String
+     */
+    public static String postJson(String uri, String json) {
+        return postJson(uri, Consts.UTF_8.toString(), json, HttpConfig.CONNECTION_TIMEOUT, HttpConfig.SOCKET_TIMEOUT);
+    }
+
+    /**
      * post json
      *
      * @param uri
