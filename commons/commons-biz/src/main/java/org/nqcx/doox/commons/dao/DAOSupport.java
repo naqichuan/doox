@@ -251,6 +251,11 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
 
     @Override
     public List<PO> findAllByIds(List<ID> ids) {
+        if (ids == null)
+            return null;
+        if (ids.size() == 0)
+            return Collections.emptyList();
+
         List<PO> list;
         return afterFoud((list = mapper.findByIds(ids)) == null ? new ArrayList<>(0) : list);
     }
@@ -287,6 +292,11 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
 
     @Override
     public List<PO> deleteByIds(List<ID> ids) {
+        if (ids == null)
+            return null;
+        if (ids.size() == 0)
+            return Collections.emptyList();
+
         List<PO> pos = Optional.ofNullable(mapper.findByIds(ids))
                 .orElse(Collections.emptyList());
 
