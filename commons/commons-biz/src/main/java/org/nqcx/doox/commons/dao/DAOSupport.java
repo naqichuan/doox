@@ -24,6 +24,7 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 /**
  * 默认使用 mybatis
@@ -557,5 +558,15 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
             map.put("_page_", "LIMIT " + dto.getPage().getStartIndex() + ", " + dto.getPage().getPageSize());
 
         return map;
+    }
+
+    // =========================================================================
+
+    /**
+     * @param supplier supplier
+     * @return PO
+     */
+    protected PO findFromDB(Supplier<PO> supplier) {
+        return supplier.get();
     }
 }
