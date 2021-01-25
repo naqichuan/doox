@@ -31,7 +31,7 @@ public class LoginContext implements Serializable {
     /**
      * 账号
      */
-    private String account;
+    private String acco;
 
     /**
      * 显示名称
@@ -63,12 +63,20 @@ public class LoginContext implements Serializable {
         this.id = id;
     }
 
-    public String getAccount() {
-        return account;
+    public String getAcco() {
+        return acco;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setAcco(String acco) {
+        this.acco = acco;
+    }
+
+    public String getAccount() {
+        return this.getAcco();
+    }
+
+    public void setAccount(String acco) {
+        this.setAcco(acco);
     }
 
     /**
@@ -204,7 +212,7 @@ public class LoginContext implements Serializable {
     /**
      * 反向构造上下文。
      *
-     * @param value 需要反向构造的串。形式如下：mid=123,account=yangsy,nick=杨思勇
+     * @param value 需要反向构造的串。形式如下：mid=123,acco=yangsy,nick=杨思勇
      * @return 上下文
      * @see #toCookieValue()
      */
@@ -250,8 +258,8 @@ public class LoginContext implements Serializable {
         if (id != 0)
             sb.append(",id=").append(id);
 
-        if (account != null)
-            sb.append(",account=").append(account);
+        if (acco != null)
+            sb.append(",acco=").append(acco);
 
         if (nick != null)
             sb.append(",nick=").append(nick);
@@ -269,11 +277,11 @@ public class LoginContext implements Serializable {
     }
 
     /**
-     * 判断是否登录。标准：account.trim().length() > 0
+     * 判断是否登录。标准：acco.trim().length() > 0
      *
      * @return true 已经登录 false 没有登录
      */
     public boolean isLogin() {
-        return account != null && account.trim().length() > 0;
+        return acco != null && acco.trim().length() > 0;
     }
 }
