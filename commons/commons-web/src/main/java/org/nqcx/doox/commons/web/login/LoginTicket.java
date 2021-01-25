@@ -25,9 +25,9 @@ public class LoginTicket implements Serializable {
     private int _version = 0;
 
     /**
-     * account
+     * acco
      */
-    private String _account;
+    private String _acco;
     /**
      * 用户data
      */
@@ -52,7 +52,11 @@ public class LoginTicket implements Serializable {
     }
 
     public String getAccount() {
-        return _account;
+        return this.getAcco();
+    }
+
+    public String getAcco() {
+        return _acco;
     }
 
     public String getUserData() {
@@ -84,16 +88,16 @@ public class LoginTicket implements Serializable {
         return (new Date()).after(_expires);
     }
 
-    public LoginTicket(String _account) {
-        this(_account, null, null, null, null, 0, false);
+    public LoginTicket(String _acco) {
+        this(_acco, null, null, null, null, 0, false);
     }
 
-    public LoginTicket(String account, String userdata, String appPath, Date issued, Date expires, int version,
+    public LoginTicket(String acco, String userdata, String appPath, Date issued, Date expires, int version,
                        boolean isPersistent) {
-        if (account == null || account.length() == 0)
-            throw new RuntimeException("account is empty");
+        if (acco == null || acco.length() == 0)
+            throw new RuntimeException("acco is empty");
         else
-            _account = account;
+            _acco = acco;
         if (userdata == null)
             _userData = "";
         else
@@ -121,7 +125,7 @@ public class LoginTicket implements Serializable {
     }
 
     public String toString() {
-        return "version=" + _version + "," + "account=" + _account + "," + "userData=" + _userData + "," + "appPath="
+        return "version=" + _version + "," + "acco=" + _acco + "," + "userData=" + _userData + "," + "appPath="
                 + _appPath + "," + "isPersistent=" + _isPersistent + "," + "issueDate=" + _issueDate + "," + "expires="
                 + _expires;
     }
@@ -147,7 +151,7 @@ public class LoginTicket implements Serializable {
             return false;
         if (!Objects.equals(_userData, ticket._userData))
             return false;
-        if (!Objects.equals(_account, ticket._account))
+        if (!Objects.equals(_acco, ticket._acco))
             return false;
 
         return true;
@@ -156,7 +160,7 @@ public class LoginTicket implements Serializable {
     @Override
     public int hashCode() {
         int result = _version;
-        result = 31 * result + (_account != null ? _account.hashCode() : 0);
+        result = 31 * result + (_acco != null ? _acco.hashCode() : 0);
         result = 31 * result + (_userData != null ? _userData.hashCode() : 0);
         result = 31 * result + (_appPath != null ? _appPath.hashCode() : 0);
         result = 31 * result + (_expires != null ? _expires.hashCode() : 0);
