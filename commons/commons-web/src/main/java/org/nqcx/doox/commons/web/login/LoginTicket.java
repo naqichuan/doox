@@ -51,6 +51,12 @@ public class LoginTicket implements Serializable {
         return _version;
     }
 
+    /**
+     * 用 getAcco 代替
+     *
+     * @return String
+     */
+    @Deprecated
     public String getAccount() {
         return this.getAcco();
     }

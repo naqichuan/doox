@@ -29,7 +29,7 @@ public class LoginTicketRequiredInterceptor extends LoginRequiredInterceptor {
 
         LoginTicket ticket = getLoginTicket();
 
-        if (ticket == null || ticket.getAccount() == null || ticket.getAccount().length() == 0) {
+        if (ticket == null || ticket.getAcco() == null || ticket.getAcco().length() == 0) {
             if (isAjax()) {
                 logger.info("RemoteAddr [" + request.getRemoteAddr() + "] from ajax check ticket false!");
 
@@ -43,7 +43,7 @@ public class LoginTicketRequiredInterceptor extends LoginRequiredInterceptor {
             return false;
         }
 
-        logger.info("Account [" + ticket.getAccount() + "] check ticket true!");
+        logger.info("Account [" + ticket.getAcco() + "] check ticket true!");
 
         return true;
 

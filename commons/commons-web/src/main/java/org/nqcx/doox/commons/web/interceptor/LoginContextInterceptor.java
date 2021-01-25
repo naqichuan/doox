@@ -31,27 +31,27 @@ public class LoginContextInterceptor extends WebContextInterceptor {
     protected NqcxCookie loginCookie;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         LoginContext.remove();
 
         if (loginCookie == null)
             return true;
 
-        LoginContext loginContext = getLoginContext(CookieUtils.getCookieValue(request, loginCookie.getName()), response);
-        if (loginContext == null || StringUtils.isBlank(loginContext.getAccount())) {
+        LoginContext lctx = getLoginContext(CookieUtils.getCookieValue(request, loginCookie.getName()), response);
+        if (lctx == null || StringUtils.isBlank(lctx.getAcco())) {
             // 没有 login cookie，直接返回
             removeLoginCookie(request, response);
             LoginContext.remove();
             return true;
         }
 
-        LoginContext.setLoginContext(loginContext);
+        LoginContext.setLoginContext(lctx);
 
-        long expires = loginContext.getExpires(); //过期时间
+        long expires = lctx.getExpires(); //过期时间
         if (expires == -1)
             return true;
 
-        long created = loginContext.getCreated(); //创建时间戳
+        long created = lctx.getCreated(); //创建时间戳
         long current = System.currentTimeMillis(); //当前时间戳
 
         // 如果没有设置过期时间，则使用默认的
@@ -67,14 +67,14 @@ public class LoginContextInterceptor extends WebContextInterceptor {
         // 如果新cookie或是更改了登录或剩下的时间只有2/3，就需要重新派发cookie
         if ((current - created) * 3 / RATE > timeout) {
             // 写最后一次访问的cookie
-            loginContext.setCreated(current);
+            lctx.setCreated(current);
             if (expires != 0)
-                loginContext.setTimeout(timeout);
+                lctx.setTimeout(timeout);
 
             // 这里添加一个步骤用于应用中填充 cookie
-            this.fillLoginContext(loginContext);
+            this.fillLoginContext(lctx);
 
-            CookieUtils.setCookie(response, loginCookie.getName(), loginContext.toCookieValue());
+            CookieUtils.setCookie(response, loginCookie.getName(), lctx.toCookieValue());
         }
 
         return true;
