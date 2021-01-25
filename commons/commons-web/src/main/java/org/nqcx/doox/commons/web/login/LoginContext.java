@@ -25,11 +25,11 @@ public class LoginContext implements Serializable {
     private final static ThreadLocal<LoginContext> holder = ThreadLocal.withInitial(LoginContext::new);
 
     /**
-     * id
+     * member id or 0
      */
     private long id;
     /**
-     * 账号
+     * 账户 account
      */
     private String acco;
 
@@ -71,10 +71,22 @@ public class LoginContext implements Serializable {
         this.acco = acco;
     }
 
+    /**
+     * 用 getAcco 代替
+     *
+     * @return String
+     */
+    @Deprecated
     public String getAccount() {
         return this.getAcco();
     }
 
+    /**
+     * 用 setAcco 代替
+     *
+     * @param acco acco
+     */
+    @Deprecated
     public void setAccount(String acco) {
         this.setAcco(acco);
     }

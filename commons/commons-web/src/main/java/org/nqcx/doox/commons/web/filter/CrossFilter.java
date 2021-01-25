@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by xiaola on 19/1/20.
+ * Created by naqichuan on 19/1/20.
  */
 public class CrossFilter implements Filter {
 

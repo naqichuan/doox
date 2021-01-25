@@ -36,9 +36,9 @@ public class NqcxExceptionResolver extends SimpleMappingExceptionResolver {
 
     protected void logError(HttpServletRequest request, Object handler, Exception exception) {
         LoginContext context = LoginContext.getLoginContext();
-        if (context != null && context.getAccount() != null && context.getAccount().length() > 0) {
+        if (context != null && context.getAcco() != null && context.getAcco().length() > 0) {
             logger.error(
-                    "Account [" + context.getAccount() + "] has a error for request url [" + request.getRequestURI()
+                    "Account [" + context.getAcco() + "] has a error for request url [" + request.getRequestURI()
                             + "]", exception);
         } else {
             logger.error(
