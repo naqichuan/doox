@@ -13,12 +13,12 @@ package org.nqcx.doox.commons.lang.consts;
  */
 public class PeriodConst {
 
-    public final static int THOUSAND = 1000; // 一千
+    public final static int THOUSAND = 1000; // 一千, for millisecond
 
-    public final static int ONE_MINUTES = 60; // 以秒为单位
-    public final static int TEN_MINUTES = 10 * ONE_MINUTES;
-    public final static int THIRTY_MINUTES = 30 * ONE_MINUTES;
-    public final static int ONE_HOUR = 60 * ONE_MINUTES;
-    public final static int ONE_DAY = 24 * ONE_HOUR;
-    public final static int ONE_WEEK = 7 * ONE_DAY;
+    public final static int ONE_MINUTES = 60; // Unit second
+    public final static int TEN_MINUTES = 10 * ONE_MINUTES; // Unit second
+    public final static int THIRTY_MINUTES = 30 * ONE_MINUTES; // Unit second
+    public final static int ONE_HOUR = 60 * ONE_MINUTES; // Unit second
+    public final static int ONE_DAY = 24 * ONE_HOUR; // Unit second
+    public final static int ONE_WEEK = 7 * ONE_DAY; // Unit second
 }
