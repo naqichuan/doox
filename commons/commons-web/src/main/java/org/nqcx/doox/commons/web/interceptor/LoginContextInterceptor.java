@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class LoginContextInterceptor extends WebContextInterceptor {
 
-    protected final static long SESSION_TIMEOUT = 30L;
+    protected final static long SESSION_TIMEOUT_MINUTES = 30L;
     protected final static int RATE = 2;
 
     /**
@@ -55,7 +55,7 @@ public class LoginContextInterceptor extends WebContextInterceptor {
         long current = System.currentTimeMillis(); //当前时间戳
 
         // 如果没有设置过期时间，则使用默认的
-        long timeout = expires == 0 ? SESSION_TIMEOUT * 60 * 1000 : expires - created;
+        long timeout = expires == 0 ? SESSION_TIMEOUT_MINUTES * 60 * 1000 : expires - created;
 
         // 如果已过期 login cookie，直接返回
         if (current - created >= timeout) {
