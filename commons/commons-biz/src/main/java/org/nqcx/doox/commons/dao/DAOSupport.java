@@ -582,7 +582,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-    protected PO invokeSetters(PO po, Map<String, Method> setters, String[] fields, Object[] values)
+    protected PO invokeSetters(PO po, final Map<String, Method> setters, final String[] fields, final Object[] values)
             throws InvocationTargetException, IllegalAccessException {
         if (po == null || setters == null || fields == null || values == null)
             throw new NullPointerException();
