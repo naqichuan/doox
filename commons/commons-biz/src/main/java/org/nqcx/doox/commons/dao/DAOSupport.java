@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.persistence.Column;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -568,5 +569,34 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
      */
     protected PO findFromDB(Supplier<PO> supplier) {
         return supplier.get();
+    }
+
+    /**
+     * 执行 po setter
+     *
+     * @param po      po
+     * @param setters setters
+     * @param fields  fields
+     * @param values  values
+     * @return
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
+    protected PO invokeSetters(PO po, Map<String, Method> setters, String[] fields, Object[] values)
+            throws InvocationTargetException, IllegalAccessException {
+        if (po == null || setters == null || fields == null || values == null)
+            return po;
+
+        if (values.length != fields.length)
+            return po;
+
+        for (int index = 0; index < fields.length; index++) {
+            Method m = setters.get(fields[index]);
+            if (m == null)
+                continue;
+            m.invoke(po, values[index]);
+        }
+
+        return po;
     }
 }
