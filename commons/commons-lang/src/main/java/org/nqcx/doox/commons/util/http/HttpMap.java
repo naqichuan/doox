@@ -88,8 +88,10 @@ public class HttpMap {
     }
 
     public HttpMap add(Map<String, Object> values) {
-        for (Entry<String, Object> entry : values.entrySet()) {
-            add(entry.getKey(), entry.getValue());
+        if (values != null) {
+            for (Entry<String, Object> entry : values.entrySet()) {
+                add(entry.getKey(), entry.getValue());
+            }
         }
         return this;
     }
