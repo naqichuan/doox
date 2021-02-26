@@ -88,6 +88,12 @@ public class DTO implements Serializable {
         return this;
     }
 
+    public <T> DTO setObjectWith(T t, Predicate<T> predicate) {
+        if (predicate != null && predicate.test(t))
+            this.setObject(t);
+        return this;
+    }
+
     /**
      * 取实体对象列表
      *
@@ -114,7 +120,7 @@ public class DTO implements Serializable {
 
     public DTO putParam(String key, Object value) {
         if (this.paramsMap == null)
-            this.paramsMap = new LinkedHashMap<String, Object>();
+            this.paramsMap = new LinkedHashMap<>();
         this.paramsMap.put(key, value);
         return this;
     }
@@ -147,7 +153,7 @@ public class DTO implements Serializable {
 
     public DTO putResult(String key, Object value) {
         if (this.resultMap == null)
-            this.resultMap = new LinkedHashMap<String, Object>();
+            this.resultMap = new LinkedHashMap<>();
         this.resultMap.put(key, value);
         return this;
     }
