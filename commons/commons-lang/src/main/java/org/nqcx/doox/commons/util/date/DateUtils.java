@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -43,6 +44,28 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return addDays(date(), amount);
     }
 
+
+    /**
+     * atStartOfDay
+     *
+     * @param date date
+     * @return {@link Date}
+     * @author naqichuan 2021-03-12 16:20
+     */
+    public static Date atStartOfDay(Date date) {
+        if (date == null)
+            return null;
+        return Date.from(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                .atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * 一天中的第一时间（精确到秒）
+     *
+     * @param date date
+     * @return {@link Date}
+     * @author naqichuan 2021-03-12 16:00
+     */
     public static Date dayBegin(Date date) {
         try {
             if (date != null)
@@ -53,6 +76,13 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return null;
     }
 
+    /**
+     * 一天的结果时间（精确到秒）
+     *
+     * @param date date
+     * @return {@link Date}
+     * @author naqichuan 2021-03-12 16:00
+     */
     public static Date dayEnd(Date date) {
         try {
             if (date != null)
@@ -90,9 +120,25 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     /**
+     * atStartOfYear
+     *
+     * @param date date
+     * @return {@link Date}
+     * @author naqichuan 2021-03-12 17:20
+     */
+    public static Date atStartOfYear(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.MONTH, 0);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+
+        return atStartOfDay(cal.getTime());
+    }
+
+    /**
      * 当前月份最后一天
      *
-     * @return
+     * @return String
      */
     public static String lastDayOfMonth() {
         Calendar cal = Calendar.getInstance();
@@ -293,9 +339,11 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
         System.out.println(firstDayOfMonth(2012, 2));
         System.out.println(lastDayOfMonth(2012, 2));
-        System.out.print(lastDayAndYearOfMonth());
-        System.out.print(firstDayAndYearOfMonth());
+        System.out.println(lastDayAndYearOfMonth());
+        System.out.println(firstDayAndYearOfMonth());
+
+        System.out.println(atStartOfDay(date()));
+        System.out.println(atStartOfYear(date()));
 
     }
-
 }
