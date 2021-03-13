@@ -77,7 +77,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     /**
-     * 一天的结果时间（精确到秒）
+     * 一天的结束时间（精确到秒）
      *
      * @param date date
      * @return {@link Date}
@@ -144,7 +144,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date());
         return lastDayOfMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH));
-
     }
 
     /**
