@@ -16,6 +16,8 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
+import static org.nqcx.doox.commons.util.date.DateFormatUtils.TIME;
+
 /**
  * @author naqichuan 2014年8月14日 上午11:48:35
  */
@@ -69,7 +71,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     public static Date dayBegin(Date date) {
         try {
             if (date != null)
-                return DateFormatUtils.TIME.parse(DateFormatUtils.DAY_BEGIN.format(date));
+                return TIME.parse(DateFormatUtils.DAY_BEGIN.format(date));
         } catch (ParseException e) {
             logger.error("", e);
         }
@@ -86,7 +88,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     public static Date dayEnd(Date date) {
         try {
             if (date != null)
-                return DateFormatUtils.TIME.parse(DateFormatUtils.DAY_END.format(date));
+                return TIME.parse(DateFormatUtils.DAY_END.format(date));
         } catch (ParseException e) {
             logger.error("", e);
         }
@@ -344,5 +346,84 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         System.out.println(atStartOfDay(date()));
         System.out.println(atStartOfYear(date()));
 
+//        Calendar currentCal = Calendar.getInstance();
+//        currentCal.add(Calendar.DAY_OF_MONTH, -100);
+//        for (int i = 0; i < 100; i++) {
+//            currentCal.add(Calendar.DAY_OF_MONTH, 1);
+//            Date currentDate = currentCal.getTime();
+//            // ######################################
+//
+//            Integer archiveYear = 2020; // 存档数据所在年份，为空时默认取当前日期减一个月的前一天对应日期的年份
+//
+//            Calendar cal = Calendar.getInstance();
+//            cal.setTime(currentDate);
+//            System.out.print("Current Date: [" + TIME.format(currentDate) + "]");
+//            System.out.print(", Current year: " + cal.get(Calendar.YEAR));
+//
+//            // exec year
+//            cal.add(Calendar.MONTH, -1);
+//            int execYear = cal.get(Calendar.YEAR); // 执行存档年份，默认取当前日期减一个月的当天对应日期
+//            //
+//            System.out.print(", Exec year: " + execYear);
+//
+//            // archive before this date
+//            Date archiveBeforeThisDate = atStartOfDay(cal.getTime()); // 存档数据右开区间
+//            // archive year
+//            cal.add(Calendar.DAY_OF_MONTH, -1);
+//            if (archiveYear == null || archiveYear == 0)
+//                archiveYear = cal.get(Calendar.YEAR);
+//            //
+//            System.out.print(", Archive year: " + archiveYear);
+//            //
+//            if (archiveYear > execYear) {
+//                //
+//                System.out.println();
+//                return;
+//            }
+//            // archive start at date
+//            Date archiveStartAtDate = atStartOfYear(cal.getTime()); // 存档数据左闭区间
+//            // delete start at date
+//            Calendar delCal = Calendar.getInstance();
+//            delCal.setTime(archiveBeforeThisDate);
+//            delCal.add(Calendar.MONTH, -1);
+//            int delYear = delCal.get(Calendar.YEAR);
+//            //
+//            System.out.print(", Del year: " + delYear);
+//            Date deleteStartAtDate = null;
+//            Date deleteBeforeThisDate = null;
+//            if (delYear == archiveYear) {
+//                // delete before this date
+//                deleteStartAtDate = atStartOfYear(delCal.getTime());
+//                deleteBeforeThisDate = delCal.getTime();
+//            }
+//
+//            if (archiveYear < execYear) {
+//                // 执行存档数据所在年份和执行存档年份不想同时，需要重新设置"存档数据右开区间"
+//                Calendar cal1 = Calendar.getInstance();
+//                cal1.set(Calendar.YEAR, archiveYear);
+//                cal1.add(Calendar.YEAR, 1);
+//                archiveBeforeThisDate = atStartOfYear(cal1.getTime());
+//
+//                cal1 = Calendar.getInstance();
+//                cal1.setTime(archiveBeforeThisDate);
+//                cal1.add(Calendar.DAY_OF_MONTH, -1);
+//                archiveStartAtDate = atStartOfYear(cal1.getTime());
+//
+//                // delete before this date
+//                delCal = Calendar.getInstance();
+//                delCal.setTime(archiveBeforeThisDate);
+//                delCal.add(Calendar.MONTH, -1);
+//                deleteStartAtDate = atStartOfYear(delCal.getTime());
+//                deleteBeforeThisDate = delCal.getTime();
+//            }
+//            //
+//            //
+//            System.out.print(", Archive in: [" + TIME.format(archiveStartAtDate) + ", " + TIME.format(archiveBeforeThisDate) + ")");
+//            if (deleteStartAtDate != null && deleteBeforeThisDate != null)
+//                System.out.print(", Del in: [" + TIME.format(deleteStartAtDate) + ", " + TIME.format(deleteBeforeThisDate) + ")");
+//
+//            System.out.println();
+//
+//        }
     }
 }
