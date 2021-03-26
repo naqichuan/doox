@@ -375,7 +375,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * @return {@link Date[]} [startAtDate, beforeThisDate)
      * @author naqichuan 2021-03-26 10:12
      */
-    public Date[] getDatePeriod(TimeUnitEO timeUnit, Date date) {
+    public static Date[] getDatePeriod(TimeUnitEO timeUnit, Date date) {
         Calendar cal = Calendar.getInstance();
         if (date != null)
             cal.setTime(date);
@@ -388,6 +388,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         Date startAtDate = atStartOfDay(cal.getTime()); // 日期左闭区间
 
         if (TimeUnitEO.WEEK.is(timeUnit)) {
+            cal.add(Calendar.DAY_OF_MONTH, 7);
             beforeThisDate = atStartOfDay(firstDayOfWeek(cal.getTime()));
             cal.add(Calendar.DAY_OF_MONTH, -7);
             startAtDate = atStartOfDay(firstDayOfWeek(cal.getTime()));
@@ -396,6 +397,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
             cal.add(Calendar.MONTH, -1);
             startAtDate = atStartOfDay(firstDayOfMonth(cal.getTime()));
         } else if (TimeUnitEO.YEAR.is(timeUnit)) {
+            cal.add(Calendar.YEAR, 1);
             beforeThisDate = atStartOfYear(cal.getTime());
             cal.add(Calendar.YEAR, -1);
             startAtDate = atStartOfDay(cal.getTime());
