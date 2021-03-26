@@ -214,6 +214,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      *
      * @return
      */
+    @Deprecated
     public static String firstDayAndYearOfMonth() {
         Calendar cal = Calendar.getInstance();
         String year = String.valueOf(cal.get(Calendar.YEAR));
@@ -226,8 +227,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 取得当前月份第一天
      *
-     * @return
+     * @return MM-dd
      */
+    @Deprecated
     public static String firstDayOfMonth() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date());
@@ -237,8 +239,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 取得月份第一天
      *
-     * @param year
-     * @param month
+     * @param year  year
+     * @param month month
      * @return MM-dd
      */
     public static String firstDayOfMonth(int year, int month) {
@@ -249,9 +251,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     /**
-     * 取得月份第一天
+     * 取得月份第一天（MM-dd）
      *
-     * @param calendar
+     * @param calendar calendar
      * @return MM-dd
      */
     private static String firstDayOfMonth(Calendar calendar) {
@@ -265,7 +267,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 取得日期所在周数
      *
-     * @param date
+     * @param date date
      * @return 格式 "2011-52"
      */
     public static String weekOfYear(Date date) {
@@ -282,7 +284,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 取得指定周的第一天
      *
-     * @param yearWeek
+     * @param yearWeek yearWeek
      * @return Date
      */
     public static Date firstDayOfWeek(String yearWeek) {
@@ -456,5 +458,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 //        }
 
         System.out.println(atStartOfDay(firstDayOfMonth(date(-30))));
+        System.out.println(atStartOfDay(firstDayOfWeek(date())));
     }
 }
