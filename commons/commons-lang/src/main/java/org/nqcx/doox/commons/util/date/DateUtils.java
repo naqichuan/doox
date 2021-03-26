@@ -98,8 +98,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 字符串转日期
      *
-     * @param date
-     * @return
+     * @param date date
+     * @return {@link Date}
+     * @author naqichuan 2021-03-26 09:41
      */
     public static Date parseDate(String date) {
         return parseDate(date, DateFormatUtils.DATE_FORMAT);
@@ -108,9 +109,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 字符串转日期指定格式日期
      *
-     * @param date
-     * @param pattern
-     * @return
+     * @param date    date
+     * @param pattern pattern
+     * @return {@link Date}
+     * @author naqichuan 2021-03-26 09:41
      */
     public static Date parseDate(String date, String pattern) {
         try {
@@ -165,7 +167,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 取得月份最后一天
      *
-     * @param calendar
+     * @param calendar calendar
      * @return MM-dd
      */
     private static String lastDayOfMonth(Calendar calendar) {
@@ -188,6 +190,23 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         String day = String.valueOf(cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         return (year + "-" + (month.length() == 1 ? "0" + month : month) + "-"
                 + (day.length() == 1 ? "0" + day : day));
+    }
+
+    /**
+     * 获取日期对就月分第一天
+     *
+     * @param date date
+     * @return {@link Date}
+     * @author naqichuan 2021-03-26 09:36
+     */
+    public static Date firstDayOfMonth(Date date) {
+        Calendar cal = Calendar.getInstance();
+        if (date != null)
+            cal.setTime(date);
+
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+
+        return cal.getTime();
     }
 
     /**
@@ -251,7 +270,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      */
     public static String weekOfYear(Date date) {
         Calendar cal = Calendar.getInstance();
-        cal.setFirstDayOfWeek(Calendar.MONTH);
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
         cal.setMinimalDaysInFirstWeek(7);
         cal.setTime(date);
         String week = String.valueOf(cal.get(Calendar.WEEK_OF_YEAR));
@@ -263,12 +282,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 取得指定周的第一天
      *
-     * @param yearweek
-     * @return
+     * @param yearWeek
+     * @return Date
      */
-    public static Date firstDayOfWeek(String yearweek) {
+    public static Date firstDayOfWeek(String yearWeek) {
         String[] yws;
-        if (yearweek == null || (yws = yearweek.split("-")).length != 2)
+        if (yearWeek == null || (yws = yearWeek.split("-")).length != 2)
             return null;
 
         int year = Integer.parseInt(yws[0]);
@@ -277,6 +296,14 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return firstDayOfWeek(year, week);
     }
 
+    /**
+     * firstDayOfWeek
+     *
+     * @param year year
+     * @param week week
+     * @return {@link Date}
+     * @author naqichuan 2021-03-26 09:40
+     */
     private static Date firstDayOfWeek(int year, int week) {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
@@ -292,8 +319,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 取得指定日期所在周的第一天
      *
-     * @param date
-     * @return
+     * @param date date
+     * @return {@link Date}
+     * @author naqichuan 2021-03-26 09:40
      */
     public static Date firstDayOfWeek(Date date) {
         Calendar c = Calendar.getInstance();
@@ -306,11 +334,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 取得指定周的最后一天
      *
-     * @param yearweek
-     * @return
+     * @param yearWeek yearWeek
+     * @return {@link Date}
+     * @author naqichuan 2021-03-26 09:41
      */
-    public static Date lastDayOfWeek(String yearweek) {
-        return addDays(firstDayOfWeek(yearweek), 6);
+    public static Date lastDayOfWeek(String yearWeek) {
+        return addDays(firstDayOfWeek(yearWeek), 6);
     }
 
     /**
@@ -335,17 +364,17 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(firstDayOfWeek("2012-10"));
-        System.out.println(lastDayOfWeek("2012-10"));
-
-        System.out.println(firstDayOfMonth(2012, 2));
-        System.out.println(lastDayOfMonth(2012, 2));
-        System.out.println(lastDayAndYearOfMonth());
-        System.out.println(firstDayAndYearOfMonth());
-
-        System.out.println(atStartOfDay(date()));
-        System.out.println(atStartOfYear(date()));
-
+//        System.out.println(firstDayOfWeek("2012-10"));
+//        System.out.println(lastDayOfWeek("2012-10"));
+//
+//        System.out.println(firstDayOfMonth(2012, 2));
+//        System.out.println(lastDayOfMonth(2012, 2));
+//        System.out.println(lastDayAndYearOfMonth());
+//        System.out.println(firstDayAndYearOfMonth());
+//
+//        System.out.println(atStartOfDay(date()));
+//        System.out.println(atStartOfYear(date()));
+//
 //        Calendar currentCal = Calendar.getInstance();
 //        currentCal.add(Calendar.DAY_OF_MONTH, -100);
 //        for (int i = 0; i < 100; i++) {
@@ -425,5 +454,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 //            System.out.println();
 //
 //        }
+
+        System.out.println(atStartOfDay(firstDayOfMonth(date(-30))));
     }
 }
