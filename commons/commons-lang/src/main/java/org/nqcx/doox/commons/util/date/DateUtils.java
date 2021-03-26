@@ -8,6 +8,7 @@
 
 package org.nqcx.doox.commons.util.date;
 
+import org.nqcx.doox.commons.lang.enums.TimeUnitEO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -348,9 +349,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 取得指定周的最后一天
      *
-     * @param year
-     * @param week
-     * @return
+     * @param year year
+     * @param week week
+     * @return Date
      */
     public static Date lastDayOfWeek(int year, int week) {
         return addDays(firstDayOfWeek(year, week), 6);
@@ -359,12 +360,50 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 取得指定日期所在周的最后一天
      *
-     * @param date
-     * @return
+     * @param date date
+     * @return Date
      */
     public static Date lastDayOfWeek(Date date) {
         return addDays(firstDayOfWeek(date), 6);
     }
+
+    /**
+     * 根据时间单位和给定时间，取得给定时间在时间单位内的起止时间，[startAtDate, beforeThisDate)，左闭区间，右开区间
+     *
+     * @param timeUnit timeUnit
+     * @param date     date
+     * @return {@link Date[]} [startAtDate, beforeThisDate)
+     * @author naqichuan 2021-03-26 10:12
+     */
+    public Date[] getDatePeriod(TimeUnitEO timeUnit, Date date) {
+        Calendar cal = Calendar.getInstance();
+        if (date != null)
+            cal.setTime(date);
+
+        // before this date
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        Date beforeThisDate = atStartOfDay(cal.getTime()); // 日期右开区间
+        // start at this date
+        cal.add(Calendar.DAY_OF_MONTH, -1);
+        Date startAtDate = atStartOfDay(cal.getTime()); // 日期左闭区间
+
+        if (TimeUnitEO.WEEK.is(timeUnit)) {
+            beforeThisDate = atStartOfDay(firstDayOfWeek(cal.getTime()));
+            cal.add(Calendar.DAY_OF_MONTH, -7);
+            startAtDate = atStartOfDay(firstDayOfWeek(cal.getTime()));
+        } else if (TimeUnitEO.MONTH.is(timeUnit)) {
+            beforeThisDate = atStartOfDay(firstDayOfMonth(cal.getTime()));
+            cal.add(Calendar.MONTH, -1);
+            startAtDate = atStartOfDay(firstDayOfMonth(cal.getTime()));
+        } else if (TimeUnitEO.YEAR.is(timeUnit)) {
+            beforeThisDate = atStartOfYear(cal.getTime());
+            cal.add(Calendar.YEAR, -1);
+            startAtDate = atStartOfDay(cal.getTime());
+        }
+
+        return new Date[]{startAtDate, beforeThisDate};
+    }
+
 
     public static void main(String[] args) {
 //        System.out.println(firstDayOfWeek("2012-10"));
