@@ -181,8 +181,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 获取月份最后一天 (YYYY-MM-dd)
      *
-     * @return
+     * @return YYYY-MM-dd
      */
+    @Deprecated
     public static String lastDayAndYearOfMonth() {
         Calendar cal = Calendar.getInstance();
         String year = String.valueOf(cal.get(Calendar.YEAR));
