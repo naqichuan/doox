@@ -393,6 +393,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
             cal.add(Calendar.DAY_OF_MONTH, -7);
             startAtDate = atStartOfDay(firstDayOfWeek(cal.getTime()));
         } else if (TimeUnitEO.MONTH.is(timeUnit)) {
+            cal.add(Calendar.MONTH, 1);
             beforeThisDate = atStartOfDay(firstDayOfMonth(cal.getTime()));
             cal.add(Calendar.MONTH, -1);
             startAtDate = atStartOfDay(firstDayOfMonth(cal.getTime()));
