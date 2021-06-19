@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.persistence.Column;
+import javax.persistence.Table;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -81,12 +82,14 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         Optional.ofNullable(this.extendFieldMapping()).ifPresent(xs -> Arrays.asList(xs).forEach(x -> {
             Method[] methods;
             if (x != null && (methods = x.getMethods()) != null) {
+                Table table = (Table) x.getDeclaredAnnotation(Table.class);
                 for (Method m : methods) {
                     Column c = m.getAnnotation(Column.class);
                     if (c == null)
                         continue;
 
-                    fieldMapping.put(x.getSimpleName() + "." + PropertyNamer.methodToProperty(m.getName()), "`" + c.name().trim() + "`");
+                    fieldMapping.put(x.getSimpleName() + "." + PropertyNamer.methodToProperty(m.getName()),
+                            (table == null ? "" : "`" + table.name().trim() + "`") + "`" + c.name().trim() + "`");
                 }
             }
         }));
