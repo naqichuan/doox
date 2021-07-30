@@ -153,13 +153,21 @@ public class NPage implements INPage, Serializable {
 
     @Override
     public INPage setOffset(long offset) {
-        calculate(page, 0, -1, offset);
+        calculate(0, 0, -1, offset);
         return this;
     }
 
     @Override
     public INPage setTotalCount(long totalCount) {
         calculate(0, 0, totalCount, -1);
+        return this;
+    }
+
+    @Override
+    public INPage setShowPage(long showPage) {
+        if (showPage > 0 && showPage <= 10)
+            this.showPage = showPage;
+        calculate(0, 0, -1, -1);
         return this;
     }
 
@@ -238,9 +246,10 @@ public class NPage implements INPage, Serializable {
     public static void main(String[] args) {
         INPage pb = new NPage();
         pb.setTotalCount(188);
-        pb.setPage(10);
-        pb.setPageSize(55);
-        pb.setOffset(6);
+        pb.setPage(1);
+        pb.setPageSize(10);
+        pb.setOffset(0);
+        pb.setShowPage(3);
         System.out.println(pb.getTotalPage());
         System.out.println(pb.getPageSize());
         System.out.println(pb.getPage());
