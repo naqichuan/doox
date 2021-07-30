@@ -34,10 +34,20 @@ public interface INPage {
     INPage setPageSize(long pageSize);
 
     /**
-     * @param offset 起始偏移值
-     * @return
+     * @param offset offset 起始偏移值
+     * @return {@link INPage}
+     * @author naqichuan 7/30/21 1:57 PM
      */
     INPage setOffset(long offset);
+
+    /**
+     * setShowPage
+     *
+     * @param showPage showPage
+     * @return {@link INPage}
+     * @author naqichuan 7/30/21 1:57 PM
+     */
+    INPage setShowPage(long showPage);
 
     /**
      * 取得记录总数
@@ -70,7 +80,7 @@ public interface INPage {
     /**
      * 取得起始偏移值
      *
-     * @return
+     * @return long
      */
     long getOffset();
 
@@ -91,28 +101,28 @@ public interface INPage {
     /**
      * 取得每页显示分页页数
      *
-     * @return
+     * @return long
      */
     long getShowPage();
 
     /**
      * 取得分页数组
      *
-     * @return
+     * @return long [][]
      */
     long[][] getShowArray();
 
     /**
      * 获取上一页页码
      *
-     * @return
+     * @return long
      */
     long getPrevPage();
 
     /**
      * 获取下一页页码
      *
-     * @return
+     * @return long
      */
     long getNextPage();
 }
