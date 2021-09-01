@@ -60,6 +60,7 @@
         <spring-data-commons.version>2.2.6.RELEASE</spring-data-commons.version>
         <spring-data-jpa.version>2.2.6.RELEASE</spring-data-jpa.version>
         <spring-data-redis.version>2.2.6.RELEASE</spring-data-redis.version>
+        <spring-boot-maven-plugin.version>2.2.6.RELEASE</spring-boot-maven-plugin.version>
         <mysql.version>5.1.46</mysql.version>
         <druid.version>1.0.27</druid.version>
         <fastjson.version>1.2.29</fastjson.version>
