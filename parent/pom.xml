@@ -71,7 +71,6 @@
                     <include>gmsg/*.properties</include>
                     <include>spring/*.xml</include>
                     <include>mybatis/*.xml</include>
-                    <include>mybatis/*.xml</include>
                     <include>assets/**/*.*</include>
                     <include>templates/**/*.*</include>
                     <include>resources/**/*.*</include>
