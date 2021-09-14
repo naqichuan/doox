@@ -183,8 +183,8 @@ public class DTO implements Serializable {
         return this;
     }
 
-    public long getTotalCount() {
-        return getPage() == null ? 0 : getPage().getTotalCount();
+    public Long getTotalCount() {
+        return getPage() == null ? null : getPage().getTotalCount();
     }
 
     public DTO newPageWith(Long page) {
