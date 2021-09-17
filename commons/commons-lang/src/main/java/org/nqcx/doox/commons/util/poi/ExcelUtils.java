@@ -1,6 +1,5 @@
 package org.nqcx.doox.commons.util.poi;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.nqcx.doox.commons.util.date.DateFormatUtils;
 
@@ -16,9 +15,10 @@ public class ExcelUtils {
     /**
      * 加载数据
      *
-     * @param inputStream
-     * @param sheetindex
-     * @return
+     * @param inputStream inputStream
+     * @param sheetindex  sheetindex
+     * @return {@link List<Object[]>}
+     * @author naqichuan 9/16/21 4:34 PM
      */
     public static List<Object[]> loadData(InputStream inputStream, int sheetindex) {
         Workbook workbook = getWorkbook(inputStream);
@@ -40,13 +40,13 @@ public class ExcelUtils {
     private static Object getCellValue(Cell cell) {
         Object value = null;
         switch (cell.getCellType()) {
-            case Cell.CELL_TYPE_BLANK:
+            case BLANK:
                 value = "";
                 break;
-            case Cell.CELL_TYPE_BOOLEAN:
+            case BOOLEAN:
                 value = cell.getBooleanCellValue();
                 break;
-            case Cell.CELL_TYPE_NUMERIC:
+            case NUMERIC:
                 if (DateUtil.isCellDateFormatted(cell)) {
                     value = DateUtil.getJavaDate(cell.getNumericCellValue());
                     if (value != null) {
@@ -56,17 +56,17 @@ public class ExcelUtils {
                     value = cell.getNumericCellValue();
                 }
                 break;
-            case Cell.CELL_TYPE_STRING:
+            case STRING:
                 value = cell.getRichStringCellValue().toString();
                 break;
-            case Cell.CELL_TYPE_FORMULA:
+            case FORMULA:
                 value = String.valueOf(cell.getNumericCellValue());
-                if (value != null && value.equals("NaN")) {
+                if (value.equals("NaN")) {
                     // 如果获取的数据值为非法值,则转换为获取字符串
                     value = cell.getRichStringCellValue().toString();
                 }
                 break;
-            case Cell.CELL_TYPE_ERROR:
+            case ERROR:
                 // 故障
                 value = "";
                 break;
@@ -88,8 +88,6 @@ public class ExcelUtils {
             wb = WorkbookFactory.create(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (InvalidFormatException e) {
-            e.printStackTrace();
         }
         return wb;
     }
@@ -100,8 +98,6 @@ public class ExcelUtils {
             File f = new File(file);
             wb = WorkbookFactory.create(f);
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidFormatException e) {
             e.printStackTrace();
         }
         return wb;
@@ -124,8 +120,8 @@ public class ExcelUtils {
                 if (row == null) {
                     continue;
                 }
-                Integer cols = new Integer(row.getLastCellNum());
-                if (cols == null || cols <= 0) {
+                int cols = (int) row.getLastCellNum();
+                if (cols <= 0) {
                     continue;
                 }
                 Object[] objectArray = new Object[cols];

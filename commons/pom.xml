@@ -32,7 +32,7 @@
         <jmagick.version>6.6.9</jmagick.version>
         <httpclient.version>4.5.5</httpclient.version>
         <httpcore.version>4.4.9</httpcore.version>
-        <poi.version>3.9</poi.version>
+        <poi.version>4.1.2</poi.version>
         <bcprov.version>1.56</bcprov.version>
         <zxing.version>3.3.0</zxing.version>
     </properties>

@@ -60,8 +60,12 @@ public abstract class WebSupport {
     }
 
     protected String e(String code, Object[] arguments) {
+        return e(code, arguments, null);
+    }
+
+    protected String e(String code, Object[] arguments, String defaultValue) {
         NqcxResult nqcxResult = getResult(ResultBuilder.E, code);
-        return nqcxResult == null ? "" : getPropertyValue(nqcxResult.getSubject(), arguments);
+        return nqcxResult == null ? "" : getPropertyValue(nqcxResult.getSubject(), arguments, defaultValue);
     }
 
     protected String s(String code) {
@@ -100,7 +104,19 @@ public abstract class WebSupport {
      * @return
      */
     protected String getPropertyValue(String code, Object[] arguments) {
-        return getPropertyValue(code, arguments, null);
+        return getPropertyValue(code, arguments, null, null);
+    }
+
+    /**
+     * 从 properties 中取值
+     *
+     * @param code           code
+     * @param arguments      arguments
+     * @param defaultMessage defaultMessage
+     * @return
+     */
+    protected String getPropertyValue(String code, Object[] arguments, String defaultMessage) {
+        return getPropertyValue(code, arguments, defaultMessage, null);
     }
 
     /**
@@ -112,12 +128,24 @@ public abstract class WebSupport {
      * @return
      */
     protected String getPropertyValue(String code, Object[] arguments, Locale locale) {
+        return getPropertyValue(code, arguments, null, locale);
+    }
+
+    /**
+     * 从 properties 中取值
+     *
+     * @param code      code
+     * @param arguments arguments
+     * @param locale    locale
+     * @return String
+     */
+    protected String getPropertyValue(String code, Object[] arguments, String defaultMessage, Locale locale) {
         String rv = null;
         try {
             if (locale == null)
                 locale = getLocale();
 
-            rv = messageSource == null ? null : messageSource.getMessage(code, arguments, locale);
+            rv = messageSource == null ? null : messageSource.getMessage(code, arguments, defaultMessage, locale);
         } catch (NoSuchMessageException e) {
             LOGGER.warn("WebSupport.getPropertyValue ," + e.getMessage());
         }
@@ -134,9 +162,20 @@ public abstract class WebSupport {
      * @return
      */
     protected Map<?, ?> putError(Map<Object, Object> map, String value, Object[] arguments) {
+        return putError(map, value, arguments, null);
+    }
+
+    /**
+     * 向 MAP 中添加错误信息，同时转换错误代码为说明
+     *
+     * @param map
+     * @param value
+     * @return
+     */
+    protected Map<?, ?> putError(Map<Object, Object> map, String value, Object[] arguments, String defaultValue) {
         if (map != null && value != null) {
             putValue(map, ERROR_CODE, value);
-            putValue(map, ERROR_TEXT, e(value, arguments));
+            putValue(map, ERROR_TEXT, e(value, arguments, defaultValue));
         }
         return map;
     }
@@ -144,19 +183,31 @@ public abstract class WebSupport {
     /**
      * 向 MAP 中添加错误信息，同时转换错误代码为说明
      *
-     * @param value
-     * @param arguments
-     * @return
+     * @param value     value
+     * @param arguments arguments
+     * @return Map
      */
     protected Map<?, ?> putError(String value, Object[] arguments) {
-        return putError(new HashMap<>(), value, arguments);
+        return putError(value, arguments, null);
     }
 
     /**
      * 向 MAP 中添加错误信息，同时转换错误代码为说明
      *
-     * @param value
-     * @return
+     * @param value        value
+     * @param arguments    arguments
+     * @param defaultValue defaultValue
+     * @return Map
+     */
+    protected Map<?, ?> putError(String value, Object[] arguments, String defaultValue) {
+        return putError(new HashMap<>(), value, arguments, defaultValue);
+    }
+
+    /**
+     * 向 MAP 中添加错误信息，同时转换错误代码为说明
+     *
+     * @param value value
+     * @return map
      */
     protected Map<?, ?> putError(String value) {
         return putError(new HashMap<>(), value, null);
@@ -165,9 +216,9 @@ public abstract class WebSupport {
     /**
      * 向 MAP 中添加信息
      *
-     * @param map
-     * @param key
-     * @param value
+     * @param map   map
+     * @param key   key
+     * @param value value
      * @return
      */
     protected Map<?, ?> putValue(Map<Object, Object> map, String key, Object value) {
@@ -314,7 +365,7 @@ public abstract class WebSupport {
         if (entry.getValue() instanceof Object[])
             mapBuilder.putMap(putError(entry.getKey(), (Object[]) entry.getValue()));
         else
-            mapBuilder.putMap(putError(entry.getKey()));
+            mapBuilder.putMap(putError(entry.getKey(), null, String.valueOf(entry.getValue())));
     }
 
     /**
