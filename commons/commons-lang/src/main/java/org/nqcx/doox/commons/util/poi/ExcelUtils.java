@@ -2,15 +2,20 @@ package org.nqcx.doox.commons.util.poi;
 
 import org.apache.poi.ss.usermodel.*;
 import org.nqcx.doox.commons.util.date.DateFormatUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 public class ExcelUtils {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(ExcelUtils.class);
 
     /**
      * 加载数据
@@ -87,7 +92,7 @@ public class ExcelUtils {
         try {
             wb = WorkbookFactory.create(inputStream);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("", e);
         }
         return wb;
     }
@@ -95,10 +100,9 @@ public class ExcelUtils {
     public static Workbook getWorkbook(String file) {
         Workbook wb = null;
         try {
-            File f = new File(file);
-            wb = WorkbookFactory.create(f);
+            wb = WorkbookFactory.create(new File(file));
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("", e);
         }
         return wb;
     }
@@ -111,34 +115,43 @@ public class ExcelUtils {
      * @return
      */
     private static List<Object[]> loadData(Workbook wb, int sheetindex) {
-        List<Object[]> dataList = new ArrayList<Object[]>();
+        List<Object[]> rows = new ArrayList<>();
+
         Sheet sheet = wb.getSheetAt(sheetindex);
+
+        // sheet name
+        String sheetName = sheet.getSheetName();
+        LOGGER.info("Sheet name \"{}\"", sheetName);
+
+        // 取标题，第一行
+        Row titleRow = sheet.getRow(0);
+        int cellCount = titleRow.getPhysicalNumberOfCells();
+
+        int rowCount = sheet.getPhysicalNumberOfRows();
         // 遍历该行所有的行,j表示行数 getPhysicalNumberOfRows行的总数
-        for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
+        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
             try {
-                Row row = sheet.getRow(i);
-                if (row == null) {
+                Row sheetRow = sheet.getRow(rowIndex);
+                if (sheetRow == null)
                     continue;
-                }
-                int cols = (int) row.getLastCellNum();
-                if (cols <= 0) {
-                    continue;
-                }
-                Object[] objectArray = new Object[cols];
-                for (int j = 0; j < objectArray.length; j++) {
-                    Cell cell = row.getCell(j);
+
+                Object[] row = new Object[cellCount + 1];
+                Arrays.fill(row, null);
+                row[0] = rowIndex;
+
+                for (int cellIndex = 0; cellIndex < cellCount; cellIndex++) {
+                    Cell cell = sheetRow.getCell(cellIndex);
                     if (cell != null) {
-                        objectArray[j] = getCellValue(cell);
-                    } else {
-                        objectArray[j] = null;
+                        row[cellIndex + 1] = getCellValue(cell);
                     }
                 }
-                dataList.add(objectArray);
+
+                rows.add(row);
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.error("", e);
             }
         }
-        return dataList;
+        return rows;
     }
 
     public static void writeData(Sheet sheet, Integer rowIndex, Integer column, String value) {
