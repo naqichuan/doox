@@ -117,16 +117,21 @@ public class NqcxCookie {
     }
 
     public String getValue(String value) {
-        if (!StringUtils.isEmpty(value)) {
-            return isEncrypt() ? cookieCipherTools.decrypt(value, getKey()) : value;
-        } else {
-            return value;
-        }
+        // 非原始文件
+        return getValue(value, true);
     }
 
-    public String getValue(String value, boolean isEncrypt) {
-        if (!StringUtils.isEmpty(value)) {
-            return isEncrypt ? cookieCipherTools.decrypt(value, getKey()) : value;
+    /**
+     * 取 value 值，指定是否返回原始文本内容
+     *
+     * @param value       value
+     * @param notOriginal 为 true 表示非原始文本，按 cookie 配置返回
+     * @return {@link String}
+     * @author naqichuan 9/23/21 1:17 PM
+     */
+    public String getValue(String value, boolean notOriginal) {
+        if (!StringUtils.isBlank(value)) {
+            return notOriginal && isEncrypt() ? cookieCipherTools.decrypt(value, getKey()) : value;
         } else {
             return value;
         }
