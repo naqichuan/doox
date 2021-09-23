@@ -28,6 +28,21 @@ public class CookieUtils {
     private static Map<String, NqcxCookie> cookieMap;
 
     public static String getCookieValue(HttpServletRequest request, String name) {
+        // 取非原始文件
+        return getCookieValue(request, name, true);
+    }
+
+
+    /**
+     * getCookieValue
+     *
+     * @param request     request
+     * @param name        name
+     * @param notOriginal 为 true 表示非原始文件
+     * @return {@link String}
+     * @author naqichuan 9/23/21 1:27 PM
+     */
+    public static String getCookieValue(HttpServletRequest request, String name, boolean notOriginal) {
         NqcxCookie nCookie = cookieMap.get(name);
         if (nCookie == null)
             return null;
@@ -38,7 +53,7 @@ public class CookieUtils {
 
         for (Cookie cookie : cookies) {
             if (name.equals(cookie.getName()))
-                return nCookie.getValue(cookie.getValue());
+                return nCookie.getValue(cookie.getValue(), notOriginal);
         }
         return null;
     }
