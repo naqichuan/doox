@@ -19,7 +19,7 @@ public class NSort implements Serializable {
 
     public static final NDirection DEFAULT_DIRECTION = NDirection.ASC;
     private static final NSort UNSORTED = NSort.by(new NOrder[0]);
-    private final List<NOrder> orders = new ArrayList<>();
+    private List<NOrder> orders;
 
     public NSort() {
         // nothing
@@ -28,11 +28,11 @@ public class NSort implements Serializable {
     public NSort(List<NOrder> _orders) {
         if (_orders == null)
             return;
-        this.orders.addAll(_orders);
+        this.orders = _orders;
     }
 
     public Iterator<NOrder> iterator() {
-        return this.orders.iterator();
+        return orders == null ? UNSORTED.iterator() : this.orders.iterator();
     }
 
     public List<NOrder> getOrders() {
@@ -40,10 +40,10 @@ public class NSort implements Serializable {
     }
 
     public void setOrders(List<NOrder> _orders) {
-        this.orders.clear();
         if (_orders == null)
             return;
-        this.orders.addAll(_orders);
+
+        this.orders = _orders;
     }
 
     public String orderString() {
@@ -127,8 +127,11 @@ public class NSort implements Serializable {
 
     public static class NOrder implements Serializable {
 
-        private final NDirection direction;
-        private final String field;
+        private NDirection direction;
+        private String field;
+
+        public NOrder() {
+        }
 
         public NOrder(NDirection _direction, String _field) {
             if (_field == null || _field.length() == 0)
@@ -136,6 +139,17 @@ public class NSort implements Serializable {
 
             this.direction = _direction == null ? DEFAULT_DIRECTION : _direction;
             this.field = _field;
+        }
+
+        public void setDirection(NDirection _direction) {
+            this.direction = _direction == null ? DEFAULT_DIRECTION : _direction;
+        }
+
+        public void setField(String _field) {
+            if (_field == null || _field.length() == 0)
+                throw new IllegalArgumentException("Field must not null or empty!");
+
+            this.field = field;
         }
 
         public NOrder by(String field) {
