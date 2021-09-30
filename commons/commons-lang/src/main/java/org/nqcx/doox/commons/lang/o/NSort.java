@@ -19,16 +19,31 @@ public class NSort implements Serializable {
 
     public static final NDirection DEFAULT_DIRECTION = NDirection.ASC;
     private static final NSort UNSORTED = NSort.by(new NOrder[0]);
-    private final List<NOrder> orders;
+    private final List<NOrder> orders = new ArrayList<>();
+
+    public NSort() {
+        // nothing
+    }
 
     public NSort(List<NOrder> _orders) {
         if (_orders == null)
-            throw new IllegalArgumentException("Orders must not be null!");
-        this.orders = _orders;
+            return;
+        this.orders.addAll(_orders);
     }
 
     public Iterator<NOrder> iterator() {
         return this.orders.iterator();
+    }
+
+    public List<NOrder> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<NOrder> _orders) {
+        this.orders.clear();
+        if (_orders == null)
+            return;
+        this.orders.addAll(_orders);
     }
 
     public String orderString() {
