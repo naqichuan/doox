@@ -39,6 +39,17 @@ public class HttpRequest {
     /**
      * get
      *
+     * @param uri uri
+     * @return {@link String}
+     * @author naqichuan 10/27/21 5:04 PM
+     */
+    public static String get(String uri) {
+        return get(uri, HttpMap.newInstance(), Consts.UTF_8.toString(), HttpConfig.CONNECTION_TIMEOUT, HttpConfig.SOCKET_TIMEOUT);
+    }
+
+    /**
+     * get
+     *
      * @param uri
      * @param httpMap
      * @return
