@@ -10,5 +10,5 @@ package org.nqcx.doox.commons.util.io;
  * @author naqichuan 14/12/3 10:45
  */
 public enum OutputType {
-    BYTE, CHAR;
+    BYTE, CHAR
 }
