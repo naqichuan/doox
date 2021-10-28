@@ -8,7 +8,6 @@
 
 package org.nqcx.doox.commons.util.http;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -16,16 +15,21 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.nqcx.doox.commons.lang.consts.LoggerConst;
+import org.nqcx.doox.commons.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.*;
 
 /**
@@ -50,10 +54,10 @@ public class HttpRequest {
     /**
      * get
      *
-     * @param uri
-     * @param httpMap
-     * @return
-     * @author 黄保光 Nov 6, 2013 3:43:46 PM
+     * @param uri     uri
+     * @param httpMap httpMap
+     * @return {@link String}
+     * @author naqichuan 10/27/21 8:06 PM
      */
     public static String get(String uri, HttpMap httpMap) {
         return get(uri, httpMap, Consts.UTF_8.toString(), HttpConfig.CONNECTION_TIMEOUT, HttpConfig.SOCKET_TIMEOUT);
@@ -62,10 +66,10 @@ public class HttpRequest {
     /**
      * get
      *
-     * @param uri
-     * @param map
-     * @return
-     * @author 黄保光 Nov 6, 2013 3:43:46 PM
+     * @param uri uri
+     * @param map map
+     * @return {@link String}
+     * @author naqichuan 10/27/21 8:06 PM
      */
     public static String get(String uri, Map<String, Object> map) {
         return get(uri, map, Consts.UTF_8.toString(), HttpConfig.CONNECTION_TIMEOUT, HttpConfig.SOCKET_TIMEOUT);
@@ -74,13 +78,13 @@ public class HttpRequest {
     /**
      * get
      *
-     * @param uri
-     * @param map
-     * @param chareset
-     * @param connectionTimeout
-     * @param socketTimeout
-     * @return
-     * @author 黄保光 Nov 6, 2013 3:40:06 PM
+     * @param uri               uri
+     * @param map               map
+     * @param chareset          chareset
+     * @param connectionTimeout connectionTimeout
+     * @param socketTimeout     socketTimeout
+     * @return {@link String}
+     * @author naqichuan 10/27/21 8:06 PM
      */
     public static String get(String uri, Map<String, Object> map,
                              String chareset, int connectionTimeout, int socketTimeout) {
@@ -89,14 +93,15 @@ public class HttpRequest {
     }
 
     /**
-     * @param uri
-     * @param httpMap
-     * @param chareset
-     * @param connectionTimeout
-     * @param socketTimeout
-     * @return
-     * @author nqcx 2013-10-22 下午2:13:57
-     * @author 黄保光 Nov 6, 2013 3:40:09 PM
+     * get
+     *
+     * @param uri               uri
+     * @param httpMap           httpMap
+     * @param chareset          chareset
+     * @param connectionTimeout connectionTimeout
+     * @param socketTimeout     socketTimeout
+     * @return {@link String}
+     * @author naqichuan 10/27/21 8:05 PM
      */
     public static String get(String uri, HttpMap httpMap, String chareset,
                              int connectionTimeout, int socketTimeout) {
@@ -125,10 +130,21 @@ public class HttpRequest {
     /**
      * post
      *
-     * @param uri
-     * @param map
-     * @return
-     * @author 黄保光 Nov 6, 2013 3:43:46 PM
+     * @param uri uri
+     * @return {@link String}
+     * @author naqichuan 10/27/21 8:00 PM
+     */
+    public static String post(String uri) {
+        return post(uri, HttpMap.newInstance(), Consts.UTF_8.toString(), HttpConfig.CONNECTION_TIMEOUT, HttpConfig.SOCKET_TIMEOUT);
+    }
+
+    /**
+     * post
+     *
+     * @param uri uri
+     * @param map map
+     * @return {@link String}
+     * @author naqichuan 10/27/21 8:00 PM
      */
     public static String post(String uri, Map<String, Object> map) {
         return post(uri, map, Consts.UTF_8.toString(), HttpConfig.CONNECTION_TIMEOUT, HttpConfig.SOCKET_TIMEOUT);
@@ -137,10 +153,10 @@ public class HttpRequest {
     /**
      * post
      *
-     * @param uri
-     * @param httpMap
-     * @return
-     * @author 黄保光 Nov 6, 2013 3:43:46 PM
+     * @param uri     uri
+     * @param httpMap httpMap
+     * @return {@link String}
+     * @author naqichuan 10/27/21 8:00 PM
      */
     public static String post(String uri, HttpMap httpMap) {
         return post(uri, httpMap, Consts.UTF_8.toString(), HttpConfig.CONNECTION_TIMEOUT, HttpConfig.SOCKET_TIMEOUT);
@@ -149,12 +165,13 @@ public class HttpRequest {
     /**
      * post
      *
-     * @param uri
-     * @param map
-     * @param chareset
-     * @param connectionTimeout
-     * @param socketTimeout
-     * @return
+     * @param uri               uri
+     * @param map               map
+     * @param chareset          chareset
+     * @param connectionTimeout connectionTimeout
+     * @param socketTimeout     socketTimeout
+     * @return {@link String}
+     * @author naqichuan 10/27/21 8:00 PM
      */
     public static String post(String uri, Map<String, Object> map,
                               String chareset, int connectionTimeout, int socketTimeout) {
@@ -165,13 +182,13 @@ public class HttpRequest {
     /**
      * post
      *
-     * @param uri
-     * @param httpMap
-     * @param chareset
-     * @param connectionTimeout
-     * @param socketTimeout
-     * @return
-     * @author 黄保光 Nov 6, 2013 3:40:06 PM
+     * @param uri               uri
+     * @param httpMap           httpMap
+     * @param chareset          chareset
+     * @param connectionTimeout connectionTimeout
+     * @param socketTimeout     socketTimeout
+     * @return {@link String}
+     * @author naqichuan 10/27/21 8:00 PM
      */
     public static String post(String uri, HttpMap httpMap,
                               String chareset, int connectionTimeout, int socketTimeout) {
@@ -193,13 +210,14 @@ public class HttpRequest {
     /**
      * post
      *
-     * @param uri
-     * @param chareset
-     * @param headers
-     * @param requestEntity
-     * @param connectionTimeout
-     * @param socketTimeout
-     * @return
+     * @param uri               uri
+     * @param chareset          chareset
+     * @param headers           headers
+     * @param requestEntity     requestEntity
+     * @param connectionTimeout connectionTimeout
+     * @param socketTimeout     socketTimeout
+     * @return {@link String}
+     * @author naqichuan 10/27/21 8:01 PM
      */
     private static String post(String uri, String chareset, Map<String, Object> headers, HttpEntity requestEntity,
                                int connectionTimeout, int socketTimeout) {
@@ -224,23 +242,27 @@ public class HttpRequest {
     }
 
     /**
+     * postJson
+     *
      * @param uri  uri
      * @param json json
-     * @return String
+     * @return {@link String}
+     * @author naqichuan 10/27/21 8:05 PM
      */
     public static String postJson(String uri, String json) {
         return postJson(uri, Consts.UTF_8.toString(), json, HttpConfig.CONNECTION_TIMEOUT, HttpConfig.SOCKET_TIMEOUT);
     }
 
     /**
-     * post json
+     * postJson
      *
-     * @param uri
-     * @param chareset
-     * @param json
-     * @param connectionTimeout
-     * @param socketTimeout
-     * @return String
+     * @param uri               uri
+     * @param chareset          chareset
+     * @param json              json
+     * @param connectionTimeout connectionTimeout
+     * @param socketTimeout     socketTimeout
+     * @return {@link String}
+     * @author naqichuan 10/27/21 8:05 PM
      */
     public static String postJson(String uri, String chareset, String json,
                                   int connectionTimeout, int socketTimeout) {
@@ -255,10 +277,92 @@ public class HttpRequest {
     }
 
     /**
-     * @param response
-     * @param chareset
-     * @return
-     * @throws IOException
+     * postBinaryBody
+     *
+     * @param uri           uri
+     * @param params        params
+     * @param fileParamName fileParamName
+     * @param fileName      fileName
+     * @return {@link String}
+     * @author naqichuan 10/28/21 9:21 AM
+     */
+    public static String postBinaryBody(String uri, HttpMap params, String fileParamName, String fileName) {
+        return postBinaryBody(uri, Consts.UTF_8.toString(), null, params,
+                fileParamName, fileName,
+                HttpConfig.CONNECTION_TIMEOUT, HttpConfig.SOCKET_TIMEOUT);
+
+    }
+
+    /**
+     * postBinaryBody
+     *
+     * @param uri               uri
+     * @param chareset          chareset
+     * @param headers           headers
+     * @param params            params
+     * @param fileParamName     fileParamName
+     * @param fileName          fileName
+     * @param connectionTimeout connectionTimeout
+     * @param socketTimeout     socketTimeout
+     * @return {@link String}
+     * @author naqichuan 10/28/21 9:21 AM
+     */
+    public static String postBinaryBody(String uri, String chareset, HttpMap headers, HttpMap params,
+                                        String fileParamName, String fileName,
+                                        int connectionTimeout, int socketTimeout) {
+
+        Charset chset = Consts.UTF_8;
+        try {
+            if (chareset != null)
+                chset = Charset.forName(chareset);
+        } catch (UnsupportedCharsetException ignore) {
+        }
+
+        final String boundary = "------" + StringUtils.randomCharAndNum(32);
+
+        if (headers == null)
+            headers = HttpMap.newInstance();
+
+        headers.put("Content-Type", "multipart/form-data; boundary=" + boundary);
+
+        //HttpEntity builder
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        //字符编码
+        builder.setCharset(chset);
+        //模拟浏览器
+        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        //boundary
+        builder.setBoundary(boundary);
+        //其他参数
+        final ContentType textType = ContentType.create("text/plain", chset);
+        if (params != null) {
+            params.getMap().forEach((k, v) -> builder.addTextBody(k, String.valueOf(v), textType));
+        }
+
+        //// multipart/form-data
+        //builder.addPart("multipartFile", new FileBody(file));
+        // binary
+        File file = new File(fileName);
+        if (file.exists() && file.isFile()) {
+            try {
+                builder.addBinaryBody("name=\"" + fileParamName + "\"; filename=\"" + file.getName() + "\"",
+                        new FileInputStream(file), ContentType.MULTIPART_FORM_DATA, file.getName());// 文件流
+            } catch (FileNotFoundException e) {
+                logger.warn(e.getMessage());
+            }
+        }
+
+        return post(uri, chset.toString(), headers.getMap(), builder.build(),
+                connectionTimeout, socketTimeout);
+    }
+
+    /**
+     * getResponseBody
+     *
+     * @param response response
+     * @param chareset chareset
+     * @return {@link String}
+     * @author naqichuan 10/27/21 8:05 PM
      */
     private static String getResponseBody(CloseableHttpResponse response, String chareset) throws IOException {
         String responseBody;
