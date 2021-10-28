@@ -13,8 +13,6 @@ import java.io.*;
  */
 public class Output {
 
-//    private final Logger logger = LoggerFactory.getLogger(Output.class);
-
     protected final static int BUF_LEN = 1024;
 
     /**
@@ -64,16 +62,14 @@ public class Output {
         BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(outputStream));
         char[] data = new char[buflen];
-        int len = 0;
+        int len;
         while ((len = in.read(data)) > -1) {
             out.write(data, 0, len);
             out.flush();
         }
 
-        if (in != null)
-            in.close();
-        if (out != null)
-            out.close();
+        in.close();
+        out.close();
     }
 
     /**
@@ -88,15 +84,13 @@ public class Output {
         BufferedInputStream in = new BufferedInputStream(inputStream);
         BufferedOutputStream out = new BufferedOutputStream(outputStream);
         byte[] data = new byte[buflen];
-        int len = 0;
+        int len;
         while ((len = in.read(data)) > -1) {
             out.write(data, 0, len);
             out.flush();
         }
 
-        if (in != null)
-            in.close();
-        if (out != null)
-            out.close();
+        in.close();
+        out.close();
     }
 }
