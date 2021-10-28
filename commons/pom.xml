@@ -35,6 +35,7 @@
         <poi.version>4.1.2</poi.version>
         <bcprov.version>1.56</bcprov.version>
         <zxing.version>3.3.0</zxing.version>
+        <tika.version>1.5</tika.version>
     </properties>
 
     <dependencyManagement>
@@ -110,6 +111,13 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpmime</artifactId>
                 <version>${httpclient.version}</version>
+                <optional>true</optional>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.tika</groupId>
+                <artifactId>tika-core</artifactId>
+                <version>${tika.version}</version>
                 <optional>true</optional>
             </dependency>
 

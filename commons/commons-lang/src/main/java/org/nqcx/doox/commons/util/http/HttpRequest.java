@@ -22,12 +22,16 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.apache.tika.Tika;
 import org.nqcx.doox.commons.lang.consts.LoggerConst;
 import org.nqcx.doox.commons.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.*;
@@ -345,9 +349,14 @@ public class HttpRequest {
         File file = new File(fileName);
         if (file.exists() && file.isFile()) {
             try {
-                builder.addBinaryBody("name=\"" + fileParamName + "\"; filename=\"" + file.getName() + "\"",
-                        new FileInputStream(file), ContentType.MULTIPART_FORM_DATA, file.getName());// 文件流
-            } catch (FileNotFoundException e) {
+                String mimeType = new Tika().detect(file);
+                ContentType contentType = ContentType.getByMimeType(mimeType);
+                if (contentType == null)
+                    contentType = ContentType.DEFAULT_BINARY;
+
+                builder.addBinaryBody(fileParamName,
+                        new FileInputStream(file), contentType, file.getName());// 文件流
+            } catch (Exception e) {
                 logger.warn(e.getMessage());
             }
         }
