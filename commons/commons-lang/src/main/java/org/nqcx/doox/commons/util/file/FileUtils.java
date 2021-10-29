@@ -149,7 +149,7 @@ public class FileUtils {
         if (lines == null)
             return;
 
-        try (FileWriter fw = new FileWriter(file, appending)) {
+        try (Writer fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, appending), UTF_8))) {
             for (String line : lines) {
                 fw.write(line + "\n");
             }
