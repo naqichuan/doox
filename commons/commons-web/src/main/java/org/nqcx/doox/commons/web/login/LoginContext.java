@@ -25,9 +25,15 @@ public class LoginContext implements Serializable {
     private final static ThreadLocal<LoginContext> holder = ThreadLocal.withInitial(LoginContext::new);
 
     /**
-     * member id or 0
+     * app 下的 member id or 0
      */
     private long id;
+
+    /**
+     * app id
+     */
+    private String appid;
+
     /**
      * 账户 account
      */
@@ -61,6 +67,14 @@ public class LoginContext implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getAppid() {
+        return appid;
+    }
+
+    public void setAppid(String appid) {
+        this.appid = appid;
     }
 
     public String getAcco() {
@@ -269,6 +283,9 @@ public class LoginContext implements Serializable {
         final StringBuilder sb = new StringBuilder();
         if (id != 0)
             sb.append(",id=").append(id);
+
+        if (appid != null)
+            sb.append(",appid=").append(appid);
 
         if (acco != null)
             sb.append(",acco=").append(acco);
