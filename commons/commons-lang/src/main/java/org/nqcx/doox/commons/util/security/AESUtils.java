@@ -8,8 +8,7 @@
 
 package org.nqcx.doox.commons.util.security;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -70,7 +69,7 @@ public class AESUtils {
      */
     public static String encryptBase64(String text, String key) {
         try {
-            return (new BASE64Encoder()).encodeBuffer(encrypt(text.getBytes(DEFAULT_CHARSET), key));
+            return Base64.encodeBase64String(encrypt(text.getBytes(DEFAULT_CHARSET), key));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -163,7 +162,7 @@ public class AESUtils {
      */
     public static String decryptBase64(String text, String key) {
         try {
-            return new String(decrypt(new BASE64Decoder().decodeBuffer(text), key), DEFAULT_CHARSET);
+            return new String(decrypt(Base64.decodeBase64(text), key), DEFAULT_CHARSET);
         } catch (IOException e) {
             e.printStackTrace();
         }

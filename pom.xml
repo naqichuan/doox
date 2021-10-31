@@ -6,7 +6,7 @@
 
     <groupId>org.nqcx.doox</groupId>
     <artifactId>doox</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.2.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>doox</name>
@@ -36,10 +36,10 @@
     </distributionManagement>
 
     <!--<scm>-->
-        <!--<connection>scm:git@github.com:naqichuan/doox.git</connection>-->
-        <!--<developerConnection>scm:git@github.com:naqichuan/doox.git</developerConnection>-->
-        <!--<url>https://github.com/naqichuan/doox/tree/${project.scm.tag}</url>-->
-        <!--<tag>master</tag>-->
+    <!--<connection>scm:git@github.com:naqichuan/doox.git</connection>-->
+    <!--<developerConnection>scm:git@github.com:naqichuan/doox.git</developerConnection>-->
+    <!--<url>https://github.com/naqichuan/doox/tree/${project.scm.tag}</url>-->
+    <!--<tag>master</tag>-->
     <!--</scm>-->
 
     <modules>
@@ -54,6 +54,7 @@
         <doox.commons.version>1.2.0-SNAPSHOT</doox.commons.version>
         <commons-lang3.version>3.7</commons-lang3.version>
         <commons-io.version>2.6</commons-io.version>
+        <commons-codec.version>1.15</commons-codec.version>
         <beanutils.version>1.9.3</beanutils.version>
         <orika.version>1.5.2</orika.version>
         <spring.version>5.2.3.RELEASE</spring.version>
@@ -151,6 +152,11 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-beanutils</groupId>
