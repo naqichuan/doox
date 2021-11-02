@@ -216,6 +216,9 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
 
     @Override
     public PO findById(ID id) {
+        if (Objects.isNull(id))
+            return null;
+
         AtomicReference<String> value = new AtomicReference<>(null);
         Optional.ofNullable(KOS.get(idField())).ifPresent(ko -> {
             try {
@@ -313,6 +316,9 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
 
     @Override
     public PO deleteById(ID id) {
+        if (Objects.isNull(id))
+            return null;
+
         PO po = mapper.findById(id);
 
         this.beforeDelete(po);
