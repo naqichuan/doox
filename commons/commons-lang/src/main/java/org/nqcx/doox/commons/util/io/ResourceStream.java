@@ -6,7 +6,6 @@
 
 package org.nqcx.doox.commons.util.io;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -20,7 +19,7 @@ public class ResourceStream extends Resource {
     }
 
     @Override
-    protected InputStream getIn() throws IOException {
+    protected InputStream getIn() {
         return inputStream;
     }
 }
