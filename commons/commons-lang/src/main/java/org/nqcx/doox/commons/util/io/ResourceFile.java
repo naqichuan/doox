@@ -35,6 +35,17 @@ public class ResourceFile extends Resource {
         }
     }
 
+    public ResourceFile(File file) {
+        if (file == null)
+            throw new RuntimeException("File can't null");
+        this.file = file;
+        this.pathName = this.file.getPath();
+        exist = this.file.exists();
+        if (exist)
+            length = file.length();
+    }
+
+
     @Override
     protected InputStream getIn() throws IOException {
         if (this.isExist())
