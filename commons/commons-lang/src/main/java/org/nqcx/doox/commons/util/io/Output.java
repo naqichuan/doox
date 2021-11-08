@@ -25,6 +25,11 @@ public class Output {
      */
     protected OutputType outputType = OutputType.BYTE;
 
+    /**
+     * Output
+     *
+     * @author naqichuan 11/8/21 2:27 PM
+     */
     public Output() {
         outputStream = System.out;
     }
@@ -34,29 +39,40 @@ public class Output {
         this.outputType = outputType;
     }
 
+     public Output(File file) throws FileNotFoundException {
+        this(new FileOutputStream(file));
+    }
+
+    public Output(File file, OutputType outputType) throws FileNotFoundException {
+        this(new FileOutputStream(file), outputType);
+    }
+
     public Output(OutputStream outputStream) {
-        this.outputStream = outputStream;
+        this(outputStream, OutputType.BYTE);
     }
 
     public Output(OutputStream outputStream, OutputType outputType) {
         this.outputStream = outputStream;
-        this.outputType = outputType;
+        if (outputType != null)
+            this.outputType = outputType;
     }
 
+
+
     public void out(InputStream in) throws IOException {
-        if (OutputType.CHAR == this.outputType)
+        if (OutputType.CHAR.is(this.outputType))
             writeChar(BUF_LEN, in, outputStream);
-        else
-            writeByte(BUF_LEN, in, outputStream);
+
+        writeByte(BUF_LEN, in, outputStream);
     }
 
     /**
      * 按照缓冲长度大小，将输入字符流内数据读出后写到输出字符流中
      *
-     * @param buflen
-     * @param inputStream
-     * @param outputStream
-     * @throws IOException
+     * @param buflen       buflen
+     * @param inputStream  inputStream
+     * @param outputStream outputStream
+     * @author naqichuan 11/8/21 2:29 PM
      */
     protected void writeChar(int buflen, InputStream inputStream, OutputStream outputStream) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));

@@ -16,16 +16,18 @@ public abstract class Resource {
 
 
     /**
-     * @return
-     * @throws IOException
+     * getIn
+     *
+     * @return {@link InputStream}
+     * @author naqichuan 11/8/21 2:25 PM
      */
     protected abstract InputStream getIn() throws IOException;
 
     /**
      * 执行资源输出
      *
-     * @param output
-     * @throws IOException
+     * @param output output
+     * @author naqichuan 11/8/21 2:24 PM
      */
     public void out(Output output) throws IOException {
         output.out(getIn());
