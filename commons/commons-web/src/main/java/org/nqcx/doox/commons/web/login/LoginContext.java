@@ -26,7 +26,10 @@ public class LoginContext implements Serializable {
 
     /**
      * app 下的 member id or 0
+     * <p>
+     * 为了让该类更具能用性，之后版本将改用 String 弄的 uid 代替id
      */
+    @Deprecated
     private long id;
 
     /**
@@ -35,9 +38,14 @@ public class LoginContext implements Serializable {
     private String appid;
 
     /**
-     * 账户 account
+     * 账户 account，全局唯一身份标识
      */
     private String acco;
+
+    /**
+     * 用户 id，app 下自行维护的唯一 user id
+     */
+    private String uid;
 
     /**
      * 显示名称
@@ -61,10 +69,12 @@ public class LoginContext implements Serializable {
      */
     private long expires = -1;
 
+    @Deprecated
     public long getId() {
         return id;
     }
 
+    @Deprecated
     public void setId(long id) {
         this.id = id;
     }
@@ -83,6 +93,14 @@ public class LoginContext implements Serializable {
 
     public void setAcco(String acco) {
         this.acco = acco;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     /**
@@ -266,7 +284,7 @@ public class LoginContext implements Serializable {
                             BeanUtils.setProperty(context, field, keyValue[1]);
                         }
                     } catch (Exception e) {
-                        logger.error("praser error!", e);
+                        logger.error("parser error!", e);
                     }
                 }
             }
@@ -289,6 +307,9 @@ public class LoginContext implements Serializable {
 
         if (acco != null)
             sb.append(",acco=").append(acco);
+
+        if (uid != null)
+            sb.append(",uid=").append(uid);
 
         if (nick != null)
             sb.append(",nick=").append(nick);
