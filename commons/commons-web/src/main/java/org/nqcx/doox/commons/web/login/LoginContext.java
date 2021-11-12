@@ -27,7 +27,7 @@ public class LoginContext implements Serializable {
     /**
      * app 下的 member id or 0
      * <p>
-     * 为了让该类更具能用性，之后版本将改用 String 弄的 uid 代替id
+     * 为了让该类更具通用性，之后版本将改用 String 型的 uid 代替 id
      */
     @Deprecated
     private long id;
@@ -38,12 +38,12 @@ public class LoginContext implements Serializable {
     private String appid;
 
     /**
-     * 账户 account，全局唯一身份标识
+     * 账户 account。全局唯一身份标识
      */
     private String acco;
 
     /**
-     * 用户 id，app 下自行维护的唯一 user id
+     * 用户 user id。app 下自行维护的唯一身份标识
      */
     private String uid;
 

@@ -38,7 +38,7 @@ public class CookieUtils {
      *
      * @param request     request
      * @param name        name
-     * @param notOriginal 为 true 表示非原始文件
+     * @param notOriginal 为 true 表示非原始文本
      * @return {@link String}
      * @author naqichuan 9/23/21 1:27 PM
      */
