@@ -33,7 +33,7 @@ public class LoginContext implements Serializable {
     private long id;
 
     /**
-     * app id
+     * app 的 app id
      */
     private String appid;
 
