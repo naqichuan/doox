@@ -63,9 +63,6 @@ public class Base32 {
             } catch (ArrayIndexOutOfBoundsException e) {
                 throw new Exception("Illegal character");
             }
-            if (val == 0xFF) {
-                throw new Exception("Illegal character");
-            }
             if (index <= 3) {
                 index = (index + 5) % 8;
                 if (index == 0) {
