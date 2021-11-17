@@ -110,7 +110,7 @@ public class AesGcmUtils {
      * @param args args
      * @author naqichuan 7/12/21 10:48 PM
      */
-    public static void main(String[] args) throws GeneralSecurityException, IOException {
+    public static void main(String[] args) throws GeneralSecurityException {
         String text = "ldsf;asd;kldfs;lkasd;kldfs;kljdasf;kjldasf;jkldsaf;jkldsfa;jklsdaf;jklasdf;jlk";
 
 
