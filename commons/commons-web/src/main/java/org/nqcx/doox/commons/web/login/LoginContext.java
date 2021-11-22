@@ -327,11 +327,11 @@ public class LoginContext implements Serializable {
     }
 
     /**
-     * 判断是否登录。标准：acco.trim().length() > 0
+     * 判断是否登录。标准：uid.trim().length() > 0，如果没有 uid 将 uid 和 acco 设置成相同的值
      *
      * @return true 已经登录 false 没有登录
      */
     public boolean isLogin() {
-        return acco != null && acco.trim().length() > 0;
+        return uid != null && uid.trim().length() > 0;
     }
 }
