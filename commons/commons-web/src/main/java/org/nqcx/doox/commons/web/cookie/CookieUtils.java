@@ -11,6 +11,9 @@ package org.nqcx.doox.commons.web.cookie;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,8 +55,15 @@ public class CookieUtils {
             return null;
 
         for (Cookie cookie : cookies) {
-            if (name.equals(cookie.getName()))
-                return nCookie.getValue(cookie.getValue(), notOriginal);
+            if (name.equals(cookie.getName())) {
+                String cookieValue = cookie.getValue();
+                try {
+                    cookieValue = URLDecoder.decode(cookieValue, StandardCharsets.UTF_8.toString());
+                } catch (UnsupportedEncodingException e) {
+                    // ignore
+                }
+                return nCookie.getValue(cookieValue, notOriginal);
+            }
         }
         return null;
     }
