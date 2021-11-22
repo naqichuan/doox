@@ -12,6 +12,9 @@ package org.nqcx.doox.commons.web.cookie;
 import org.nqcx.doox.commons.util.StringUtils;
 
 import javax.servlet.http.Cookie;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author naqichuan 2014年8月14日 上午11:50:15
@@ -104,6 +107,12 @@ public class NqcxCookie {
             newValue = isEncrypt() ? cookieCipherTools.encrypt(value, getKey()) : value;
         else
             newValue = value;
+
+        try {
+            newValue = URLEncoder.encode(newValue, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            // ignore
+        }
 
         Cookie cookie = new Cookie(name, newValue);
         if (!StringUtils.isBlank(domain))
