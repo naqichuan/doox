@@ -26,10 +26,7 @@ public class LoginContext implements Serializable {
 
     /**
      * app 下的 member id or 0
-     * <p>
-     * 为了让该类更具通用性，之后版本将改用 String 型的 uid 代替 id
      */
-    @Deprecated
     private long id;
 
     /**
@@ -69,12 +66,10 @@ public class LoginContext implements Serializable {
      */
     private long expires = -1;
 
-    @Deprecated
     public long getId() {
         return id;
     }
 
-    @Deprecated
     public void setId(long id) {
         this.id = id;
     }
