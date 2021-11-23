@@ -109,7 +109,8 @@ public class NqcxCookie {
             newValue = value;
 
         try {
-            newValue = URLEncoder.encode(newValue, StandardCharsets.UTF_8.toString());
+            if (StringUtils.isNotBlank(newValue))
+                newValue = URLEncoder.encode(newValue, StandardCharsets.UTF_8.toString());
         } catch (UnsupportedEncodingException e) {
             // ignore
         }

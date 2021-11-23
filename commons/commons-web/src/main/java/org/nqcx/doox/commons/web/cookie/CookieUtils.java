@@ -8,6 +8,8 @@
 
 package org.nqcx.doox.commons.web.cookie;
 
+import org.nqcx.doox.commons.util.StringUtils;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,7 +60,8 @@ public class CookieUtils {
             if (name.equals(cookie.getName())) {
                 String cookieValue = cookie.getValue();
                 try {
-                    cookieValue = URLDecoder.decode(cookieValue, StandardCharsets.UTF_8.toString());
+                    if (StringUtils.isNotBlank(cookieValue))
+                        cookieValue = URLDecoder.decode(cookieValue, StandardCharsets.UTF_8.toString());
                 } catch (UnsupportedEncodingException e) {
                     // ignore
                 }
