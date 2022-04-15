@@ -89,7 +89,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
                         continue;
 
                     fieldMapping.put(x.getSimpleName() + "." + PropertyNamer.methodToProperty(m.getName()),
-                            (table == null ? "" : "`" + table.name().trim() + "`") + "`" + c.name().trim() + "`");
+                            (table == null ? "" : "`" + table.name().trim() + "`.") + "`" + c.name().trim() + "`");
                 }
             }
         }));
