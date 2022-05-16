@@ -53,7 +53,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <doox.commons.version>1.2.2-SNAPSHOT</doox.commons.version>
         <commons-lang3.version>3.7</commons-lang3.version>
-        <commons-io.version>2.6</commons-io.version>
+        <commons-io.version>2.7</commons-io.version>
         <commons-codec.version>1.15</commons-codec.version>
         <beanutils.version>1.9.3</beanutils.version>
         <orika.version>1.5.2</orika.version>
