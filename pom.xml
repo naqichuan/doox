@@ -55,7 +55,7 @@
         <commons-lang3.version>3.7</commons-lang3.version>
         <commons-io.version>2.7</commons-io.version>
         <commons-codec.version>1.15</commons-codec.version>
-        <beanutils.version>1.9.3</beanutils.version>
+        <beanutils.version>1.9.4</beanutils.version>
         <orika.version>1.5.2</orika.version>
         <spring.version>5.2.3.RELEASE</spring.version>
         <spring-data-commons.version>2.2.6.RELEASE</spring-data-commons.version>
