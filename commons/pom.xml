@@ -33,7 +33,7 @@
         <httpclient.version>4.5.13</httpclient.version>
         <httpcore.version>4.4.9</httpcore.version>
         <poi.version>4.1.2</poi.version>
-        <bcprov.version>1.56</bcprov.version>
+        <bcprov.version>1.67</bcprov.version>
         <zxing.version>3.3.0</zxing.version>
         <tika.version>1.5</tika.version>
     </properties>
