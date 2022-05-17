@@ -10,13 +10,10 @@ package org.nqcx.doox.commons.web;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import org.nqcx.doox.commons.lang.o.DTO;
-import org.nqcx.doox.commons.lang.o.INPage;
+import org.nqcx.doox.commons.lang.o.*;
 import org.nqcx.doox.commons.lang.url.UrlBuilder;
 import org.nqcx.doox.commons.util.MapBuilder;
 import org.nqcx.doox.commons.util.StringUtils;
-import org.nqcx.doox.commons.web.result.NqcxResult;
-import org.nqcx.doox.commons.web.result.ResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,107 +42,120 @@ public abstract class WebSupport {
 
     protected final static String DEFAULT_CHARSET_NAME = "UTF-8";
 
-    @Autowired(required = false)
-    protected ResultBuilder resultBuilder;
+    //    @Autowired(required = false)
+//    protected ResultBuilder resultBuilder;
     @Autowired(required = false)
     protected MessageSource messageSource;
 
-    protected String m(String code) {
-        NqcxResult nqcxResult = getResult(ResultBuilder.M, code);
-        return nqcxResult == null ? "" : getPropertyValue(nqcxResult.getSubject());
-    }
+//    protected String m(String code) {
+//        NqcxResult nqcxResult = getResult(ResultBuilder.M, code);
+//        return nqcxResult == null ? "" : getPropertyValue(nqcxResult.getSubject());
+//    }
+//
+//    protected String e(String code) {
+//        return e(code, null);
+//    }
+//
+//    protected String e(String code, Object[] args) {
+//        return e(code, args, null);
+//    }
+//
+//    protected String e(String code, Object[] args, String defaultValue) {
+//        NqcxResult nqcxResult = getResult(ResultBuilder.E, code);
+//        return nqcxResult == null ? "" : getPropertyValue(nqcxResult.getSubject(), args, defaultValue);
+//    }
+//
+//    protected String s(String code) {
+//        NqcxResult nqcxResult = getResult(ResultBuilder.S, code);
+//        return nqcxResult == null ? "" : getPropertyValue(nqcxResult.getSubject());
+//    }
 
-    protected String e(String code) {
-        return e(code, null);
-    }
-
-    protected String e(String code, Object[] arguments) {
-        return e(code, arguments, null);
-    }
-
-    protected String e(String code, Object[] arguments, String defaultValue) {
-        NqcxResult nqcxResult = getResult(ResultBuilder.E, code);
-        return nqcxResult == null ? "" : getPropertyValue(nqcxResult.getSubject(), arguments, defaultValue);
-    }
-
-    protected String s(String code) {
-        NqcxResult nqcxResult = getResult(ResultBuilder.S, code);
-        return nqcxResult == null ? "" : getPropertyValue(nqcxResult.getSubject());
-    }
-
-    /**
-     * 取得配置文件中的Result
-     *
-     * @param type
-     * @param code
-     * @return
-     */
-    protected NqcxResult getResult(String type, String code) {
-        return resultBuilder == null ? null : resultBuilder.getResult(type, code);
-    }
+//    /**
+//     * 取得配置文件中的Result
+//     *
+//     * @param type
+//     * @param code
+//     * @return
+//     */
+//    protected NqcxResult getResult(String type, String code) {
+//        return resultBuilder == null ? null : resultBuilder.getResult(type, code);
+//    }
 
     // ========================================================================
 
-    /**
-     * 从 properties 中取值
-     *
-     * @param code
-     * @return
-     */
-    protected String getPropertyValue(String code) {
-        return getPropertyValue(code, null);
-    }
+//    /**
+//     * 从 properties 中取值
+//     *
+//     * @param code
+//     * @return
+//     */
+//    protected String getPropertyValue(String code) {
+//        return getPropertyValue(code, null);
+//    }
+//
+//    /**
+//     * 从 properties 中取值
+//     *
+//     * @param code
+//     * @param args
+//     * @return
+//     */
+//    protected String getPropertyValue(String code, Object[] args) {
+//        return getPropertyValue(code, args, null, null);
+//    }
+//
+//    /**
+//     * 从 properties 中取值
+//     *
+//     * @param code           code
+//     * @param args      args
+//     * @param defaultMessage defaultMessage
+//     * @return
+//     */
+//    protected String getPropertyValue(String code, Object[] args, String defaultMessage) {
+//        return getPropertyValue(code, args, defaultMessage, null);
+//    }
+//
+//    /**
+//     * 从 properties 中取值
+//     *
+//     * @param code
+//     * @param args
+//     * @param locale
+//     * @return
+//     */
+//    protected String getPropertyValue(String code, Object[] args, Locale locale) {
+//        return getPropertyValue(code, args, null, locale);
+//    }
 
     /**
-     * 从 properties 中取值
-     *
-     * @param code
-     * @param arguments
-     * @return
-     */
-    protected String getPropertyValue(String code, Object[] arguments) {
-        return getPropertyValue(code, arguments, null, null);
-    }
-
-    /**
-     * 从 properties 中取值
+     * getPropertyValue
      *
      * @param code           code
-     * @param arguments      arguments
+     * @param args           args
      * @param defaultMessage defaultMessage
-     * @return
+     * @return {@link String}
+     * @author naqichuan 22-5-17 下午6:10
      */
-    protected String getPropertyValue(String code, Object[] arguments, String defaultMessage) {
-        return getPropertyValue(code, arguments, defaultMessage, null);
+    protected String getPropertyValue(String code, Object[] args, String defaultMessage) {
+        return this.getPropertyValue(code, args, defaultMessage, getLocale());
     }
 
     /**
      * 从 properties 中取值
      *
-     * @param code
-     * @param arguments
-     * @param locale
-     * @return
-     */
-    protected String getPropertyValue(String code, Object[] arguments, Locale locale) {
-        return getPropertyValue(code, arguments, null, locale);
-    }
-
-    /**
-     * 从 properties 中取值
-     *
-     * @param code      code
-     * @param arguments arguments
-     * @param locale    locale
+     * @param code   code
+     * @param args   args
+     * @param locale locale
      * @return String
      */
-    protected String getPropertyValue(String code, Object[] arguments, String defaultMessage, Locale locale) {
+    protected String getPropertyValue(String code, Object[] args, String defaultMessage, Locale locale) {
         String rv = null;
         try {
             if (locale == null)
                 locale = getLocale();
 
-            rv = messageSource == null ? null : messageSource.getMessage(code, arguments, defaultMessage, locale);
+            rv = messageSource == null ? null : messageSource.getMessage(code, args, defaultMessage, locale);
         } catch (NoSuchMessageException e) {
             LOGGER.warn("WebSupport.getPropertyValue ," + e.getMessage());
         }
@@ -161,8 +171,8 @@ public abstract class WebSupport {
      * @param value
      * @return
      */
-    protected Map<?, ?> putError(Map<Object, Object> map, String value, Object[] arguments) {
-        return putError(map, value, arguments, null);
+    protected Map<?, ?> putError(Map<Object, Object> map, String value, Object[] args) {
+        return putError(map, value, args, null);
     }
 
     /**
@@ -172,10 +182,10 @@ public abstract class WebSupport {
      * @param value
      * @return
      */
-    protected Map<?, ?> putError(Map<Object, Object> map, String value, Object[] arguments, String defaultValue) {
+    protected Map<?, ?> putError(Map<Object, Object> map, String value, Object[] args, String defaultValue) {
         if (map != null && value != null) {
             putValue(map, ERROR_CODE, value);
-            putValue(map, ERROR_TEXT, e(value, arguments, defaultValue));
+            putValue(map, ERROR_TEXT, e(value, args, defaultValue));
         }
         return map;
     }
@@ -183,24 +193,24 @@ public abstract class WebSupport {
     /**
      * 向 MAP 中添加错误信息，同时转换错误代码为说明
      *
-     * @param value     value
-     * @param arguments arguments
+     * @param value value
+     * @param args  args
      * @return Map
      */
-    protected Map<?, ?> putError(String value, Object[] arguments) {
-        return putError(value, arguments, null);
+    protected Map<?, ?> putError(String value, Object[] args) {
+        return putError(value, args, null);
     }
 
     /**
      * 向 MAP 中添加错误信息，同时转换错误代码为说明
      *
      * @param value        value
-     * @param arguments    arguments
+     * @param args         args
      * @param defaultValue defaultValue
      * @return Map
      */
-    protected Map<?, ?> putError(String value, Object[] arguments, String defaultValue) {
-        return putError(new HashMap<>(), value, arguments, defaultValue);
+    protected Map<?, ?> putError(String value, Object[] args, String defaultValue) {
+        return putError(new HashMap<>(), value, args, defaultValue);
     }
 
     /**
@@ -327,45 +337,144 @@ public abstract class WebSupport {
     protected Map<?, ?> buildResult(DTO dto) {
         if (dto == null)
             // 这里的 value 只做说明，最终返回以 gmsg.properties 中 key 对应的配置为准
-            dto = new DTO().putResult("10", "操作数据出错");
+            dto = new DTO().putError(NErrorCode.E6.error());
 
-        MapBuilder mb = MapBuilder.newInstance().put(SUCCESS, dto.isSuccess());
+        MapBuilder mb = MapBuilder.instance()
+                .put(SUCCESS, dto.isSuccess());
 
-        if (dto.isSuccess())
-            parseSuccess(mb, dto);
-        else
-            parseError(mb, dto);
+        this.parseResult(mb, dto.getResults());
+
+        if (dto.isSuccess()) {
+            // 1. 解析对象
+            this.parseObject(mb, dto.getObject());
+            // 2. 解析列表
+            this.parseList(mb, dto.getList());
+            // 3. 解析分页
+            this.parsePage(mb, dto.getPage());
+            // 4. 解析排序
+            this.parseSort(mb, dto.getSort());
+
+        } else
+            this.parseErrors(mb, dto.getErrors());
+
 
         return mb.build();
     }
 
     /**
-     * 解析错误结果
+     * parseResult
      *
-     * @param mapBuilder
-     * @param dto
+     * @param mb  mb
+     * @param map map
+     * @author naqichuan 22-5-17 下午9:24
      */
-    private void parseError(MapBuilder mapBuilder, DTO dto) {
-        Map<String, Object> errorMap;
-        if (mapBuilder == null || dto == null || (errorMap = dto.getResultMap()) == null || errorMap.isEmpty())
+    private void parseResult(final MapBuilder mb, Map<String, Object> map) {
+        if (mb == null)
             return;
-        else if (errorMap.size() == 1)
-            parseErrorJson(mapBuilder, errorMap.entrySet().iterator().next());
-        else
-            parseMultipleErrorJson(mapBuilder, errorMap.entrySet());
+
+        Optional.ofNullable(map).ifPresent(x -> mb.put("results", x));
     }
+
+    /**
+     * 处理 object
+     *
+     * @param mb     mb
+     * @param object object
+     * @author naqichuan 22-5-17 下午9:54
+     */
+    private void parseObject(final MapBuilder mb, Object object) {
+        if (mb == null)
+            return;
+
+        if (object != null)
+            mapBuilder.put("object", object);
+    }
+
+    /**
+     * 处理 list
+     *
+     * @param mb   mb
+     * @param list list
+     * @author naqichuan 22-5-17 下午9:50
+     */
+    private void parseList(final MapBuilder mb, List<?> list) {
+        if (mb == null)
+            return;
+
+        Optional.ofNullable(list).ifPresent(x -> mb.put("list", x));
+    }
+
+    /**
+     * 设置返回分页的结果
+     *
+     * @param mb   mb
+     * @param page page
+     * @author naqichuan 22-5-17 下午9:46
+     */
+    private void parsePage(final MapBuilder mb, NPage page) {
+        if (mb == null)
+            return;
+
+        Optional.ofNullable(page).ifPresent(x -> mb.put("page", MapBuilder.instance()
+                .put("page", x.getPage())
+                .put("totalCount", x.getTotalCount())
+                .put("pageSize", x.getPageSize())
+                .put("totalPage", x.getTotalPage())
+                .put("offset", x.getOffset()).build())
+        );
+    }
+
+    /**
+     * parseSort
+     *
+     * @param mb   mb
+     * @param sort sort
+     * @author naqichuan 22-5-17 下午10:01
+     */
+    private void parseSort(final MapBuilder mb, NSort sort) {
+        if (mb == null)
+            return;
+
+        Optional.ofNullable(sort).ifPresent(x -> mb.put("sort", x));
+    }
+
+    /**
+     * parseError
+     *
+     * @param mb     mb
+     * @param errors errors
+     * @author naqichuan 22-5-17 下午10:04
+     */
+    private void parseErrors(final MapBuilder mb, Map<NError, Object[]> errors) {
+        if (mb == null)
+            return;
+
+        Optional.ofNullable(errors).ifPresent(x -> {
+            if (x.size() == 1)
+                this.parseErrorCode(mb, errors.entrySet().iterator().next());
+            else if (x.size() > 1)
+                this.parseErrorCodes(mb, errors.entrySet());
+        });
+    }
+
 
     /**
      * 处理单个错误
      *
-     * @param mapBuilder
-     * @param entry
+     * @param mb    mb
+     * @param error error
      */
-    protected void parseErrorJson(MapBuilder mapBuilder, Map.Entry<String, Object> entry) {
-        if (entry.getValue() instanceof Object[])
-            mapBuilder.putMap(putError(entry.getKey(), (Object[]) entry.getValue()));
-        else
-            mapBuilder.putMap(putError(entry.getKey(), null, String.valueOf(entry.getValue())));
+    protected void parseErrorCode(final MapBuilder mb, Map.Entry<NError, Object[]> error) {
+        if (mb == null)
+            return;
+
+        Optional.ofNullable(error).ifPresent(x -> {
+            NError nerror = error.getKey();
+            Object[] args = error.getValue();
+
+            mb.put(ERROR_CODE, nerror.getErrorCode())
+                    .put("errorText", getPropertyValue(nerror.getErrorCode(), args, IErrorCode.finalErrorText(nerror.getErrorText(), args)))
+        });
     }
 
     /**
@@ -402,13 +511,16 @@ public abstract class WebSupport {
      * }
      * </pre>
      *
-     * @param mapBuilder mapBuilder
-     * @param entrySet   entrySet
+     * @param mb     mb
+     * @param errors errors
      */
-    protected void parseMultipleErrorJson(MapBuilder mapBuilder, Set<Map.Entry<String, Object>> entrySet) {
-        if (mapBuilder == null || entrySet == null)
+    protected void parseErrorCodes(final MapBuilder mb, Set<Map.Entry<NError, Object[]>> errors) {
+        if (mb == null)
             return;
-        mapBuilder.putMap(putError("10")).put(ERROR_MULTIPLE, convertMultipleErrorJsonArray(entrySet));
+
+        Optional.ofNullable(errors).ifPresent(x -> {
+            mapBuilder.putMap(putError("10")).put(ERROR_MULTIPLE, convertMultipleErrorJsonArray(entrySet));
+        });
     }
 
     /**
@@ -468,7 +580,7 @@ public abstract class WebSupport {
         List<Object> list = new ArrayList<Object>();
         if (entrySet != null && entrySet.size() > 0) {
             for (Map.Entry<String, Object> error : entrySet)
-                list.add(MapBuilder.newInstance().put(ERROR_MULTIPLE_CODE, error.getKey()).put(ERROR_MULTIPLE_TEXT, error.getValue()).build());
+                list.add(MapBuilder.instance().put(ERROR_MULTIPLE_CODE, error.getKey()).put(ERROR_MULTIPLE_TEXT, error.getValue()).build());
         }
         return list;
     }
@@ -484,113 +596,46 @@ public abstract class WebSupport {
         List<Object> list = new ArrayList<Object>();
         if (errors != null && errors.size() > 0) {
             for (String error : errors)
-                list.add(MapBuilder.newInstance().put(ERROR_MULTIPLE_CODE, "1X").put(ERROR_MULTIPLE_TEXT, error).build());
+                list.add(MapBuilder.instance().put(ERROR_MULTIPLE_CODE, "1X").put(ERROR_MULTIPLE_TEXT, error).build());
         }
         return list;
     }
 
-    /**
-     * 处理成功结果
-     *
-     * @param mapBuilder
-     * @param dto
-     */
-    private <T> void parseSuccess(MapBuilder mapBuilder, DTO dto) {
-        // 1. 解析对象
-        parseSuccessObject(mapBuilder, dto.getObject());
-        // 2. 解析分页
-        parsePageBuilder(mapBuilder, dto.getPage());
-        // 3. 解析列表
-        parseSuccessList(mapBuilder, dto.getList());
-        // 4. 解析结果
-        parseSuccessResult(mapBuilder, dto.getResultMap());
-    }
-
-    /**
-     * 处理 object
-     *
-     * @param mapBuilder
-     * @param object
-     */
-    private void parseSuccessObject(MapBuilder mapBuilder, Object object) {
-        if (object != null)
-            mapBuilder.put("object", object);
-    }
-
-    /**
-     * 处理 list
-     *
-     * @param mapBuilder
-     * @param list
-     */
-    private void parseSuccessList(MapBuilder mapBuilder, List<?> list) {
-        if (list != null)
-            mapBuilder.put("list", list);
-    }
-
-    /**
-     * 处理 result
-     *
-     * @param mapBuilder
-     * @param map
-     */
-    private void parseSuccessResult(MapBuilder mapBuilder, Map<?, ?> map) {
-        if (map != null)
-            mapBuilder.put("result", map);
-    }
-
-    /**
-     * 设置返回分页的结果
-     *
-     * @param mapBuilder
-     * @param pageIO
-     */
-    private void parsePageBuilder(MapBuilder mapBuilder, INPage pageIO) {
-        if (pageIO == null)
-            return;
-
-        mapBuilder.put("page", pageIO.getPage());
-        mapBuilder.put("totalCount", pageIO.getTotalCount());
-        mapBuilder.put("pageSize", pageIO.getPageSize());
-        mapBuilder.put("totalPage", pageIO.getTotalPage());
-        mapBuilder.put("offset", pageIO.getOffset());
-    }
 
     // ========================================================================
 
     /**
      * 通过 response 直接返回 ContentType 为 application/json 格式字符串
      *
-     * @param response
-     * @param result
+     * @param response response
+     * @param json     json
      * @author naqichuan Sep 26, 2013 3:02:32 PM
      */
-    protected void responseJsonResult(HttpServletResponse response, String result) {
+    protected void responseJson(HttpServletResponse response, String json) {
         response.setContentType("application/json; charset=UTF-8");
-        responseResult(response, result);
+        response(response, json);
     }
 
     /**
      * 通过 response 直接返回 ContentType 为 text/html 格式字符串
      *
-     * @param response
-     * @param result
+     * @param response response
+     * @param html     html
      * @author naqichuan Sep 26, 2013 3:02:32 PM
      */
-    protected void responseHtmlResult(HttpServletResponse response, String result) {
+    protected void responseHtml(HttpServletResponse response, String html) {
         response.setContentType("text/html; charset=UTF-8");
-        responseResult(response, result);
+        response(response, html);
     }
 
     /**
      * 通过 response 直接返回字符串
      *
-     * @param response
-     * @param result
+     * @param response response
+     * @param result   result
      * @author naqichuan Sep 26, 2013 3:02:32 PM
      */
-
-    protected void responseResult(HttpServletResponse response, String result) {
+    protected void response(HttpServletResponse response, String result) {
         response.setCharacterEncoding(DEFAULT_CHARSET_NAME);
         PrintWriter out = null;
         try {
@@ -604,6 +649,46 @@ public abstract class WebSupport {
             }
         }
     }
+
+    // ========================================================================
+
+    /**
+     * 跳转到错误页
+     *
+     * @param response response
+     * @param error    error
+     */
+    protected void sendRedirectErrorPage(HttpServletResponse response, NError error) {
+        if (error == null || error.getErrorCode() == null || error.getErrorCode().length() == 0)
+            error = NErrorCode.E12.error();
+
+        try {
+            response.sendRedirect(getContextPath() + "/error/" + error.getErrorCode());
+        } catch (IOException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    /**
+     * 跳转到普通页
+     *
+     * @param response response
+     * @param uri      uri
+     */
+    protected void sendRedirectNormalPage(HttpServletResponse response, String uri) {
+        if (uri == null)
+            uri = "";
+
+        try {
+            if (UrlBuilder.containProtocol(uri))
+                response.sendRedirect(uri);
+            else
+                response.sendRedirect((getContextPath() == null ? "" : getContextPath()) + (uri.startsWith("/") ? uri : "/" + uri));
+        } catch (IOException e) {
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
     // ========================================================================
 
     /**
@@ -759,49 +844,5 @@ public abstract class WebSupport {
             newKeyValue = new String[]{paramValue};
 
         paramMap.put(key, newKeyValue);
-    }
-
-    // ========================================================================
-
-    /**
-     * 跳转到错误页
-     *
-     * @param response response
-     * @param dto      dto
-     */
-    protected void sendRedirectErrorPage(HttpServletResponse response, DTO dto) {
-        String errorCode = "1";
-        Map<String, Object> errorMap;
-
-        if (dto != null && dto.isSuccess())
-            return;
-        else if (dto != null && (errorMap = dto.getResultMap()) != null && errorMap.size() > 0)
-            errorCode = errorMap.entrySet().iterator().next().getKey();
-
-        try {
-            response.sendRedirect(getContextPath() + "/r/e/" + errorCode);
-        } catch (IOException e) {
-            LOGGER.warn(e.getMessage());
-        }
-    }
-
-    /**
-     * 跳转到普通页
-     *
-     * @param response response
-     * @param uri      uri
-     */
-    protected void sendRedirectNormalPage(HttpServletResponse response, String uri) {
-        if (uri == null)
-            uri = "";
-
-        try {
-            if (UrlBuilder.containProtocol(uri))
-                response.sendRedirect(uri);
-            else
-                response.sendRedirect((getContextPath() == null ? "" : getContextPath()) + (uri.startsWith("/") ? uri : "/" + uri));
-        } catch (IOException e) {
-            LOGGER.warn(e.getMessage());
-        }
     }
 }
