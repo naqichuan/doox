@@ -46,5 +46,5 @@ public class LoggerConst {
     /**
      * kafka 日志
      */
-    public final static String LOGGER_KAFKA_NAME = "_NQCX_LOGGER_KAFK";
+    public final static String LOGGER_KAFKA_NAME = "_NQCX_LOGGER_KAFKA";
 }
