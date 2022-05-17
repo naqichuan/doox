@@ -11,28 +11,29 @@ package org.nqcx.doox.commons.util;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author naqichuan 2014年8月14日 上午11:47:41
  */
 public class MapBuilder {
 
-    private Map<Object, Object> map = new LinkedHashMap<Object, Object>();
+    private final Map<Object, Object> map;
 
     private MapBuilder(){
-
+        map = new LinkedHashMap<>();
     }
 
-    @SuppressWarnings("unchecked")
     private MapBuilder(Map<?, ?> map){
-        this.map = (Map<Object, Object>) map;
+        this();
+        Optional.ofNullable(map).ifPresent(this.map::putAll);
     }
 
-    public static MapBuilder newInstance() {
+    public static MapBuilder instance() {
         return new MapBuilder();
     }
 
-    public static MapBuilder newInstance(Map<?, ?> map) {
+    public static MapBuilder instance(Map<?, ?> map) {
         return new MapBuilder(map);
     }
 

@@ -17,7 +17,7 @@ import java.util.Arrays;
  *
  * @author naqichuan 2014年8月14日 上午11:03:13
  */
-public class NPage implements INPage, Serializable {
+public class NPage implements Serializable {
 
     // 记录总数
     private long totalCount = 0L;
@@ -139,89 +139,73 @@ public class NPage implements INPage, Serializable {
         }
     }
 
-    @Override
-    public INPage setPage(long page) {
+    public NPage setPage(long page) {
         calculate(page, 0, -1, -1);
         return this;
     }
 
-    @Override
-    public INPage setPageSize(long pageSize) {
+    public NPage setPageSize(long pageSize) {
         calculate(0, pageSize, -1, -1);
         return this;
     }
 
-    @Override
-    public INPage setOffset(long offset) {
+    public NPage setOffset(long offset) {
         calculate(0, 0, -1, offset);
         return this;
     }
 
-    @Override
-    public INPage setTotalCount(long totalCount) {
+    public NPage setTotalCount(long totalCount) {
         calculate(0, 0, totalCount, -1);
         return this;
     }
 
-    @Override
-    public INPage setShowPage(long showPage) {
+    public NPage setShowPage(long showPage) {
         if (showPage > 0 && showPage <= 10)
             this.showPage = showPage;
         calculate(0, 0, -1, -1);
         return this;
     }
 
-    @Override
     public long getTotalCount() {
         return totalCount;
     }
 
-    @Override
     public long getTotalPage() {
         return ((totalCount - this.getOffset() > 0 ? totalCount - this.getOffset() : 0) + this.getPageSize() - 1) / this.getPageSize();
     }
 
-    @Override
     public long getPage() {
         return page;
     }
 
-    @Override
     public long getPageSize() {
         return pageSize;
     }
 
-    @Override
     public long getOffset() {
         return offset;
     }
 
-    @Override
     public long getStartIndex() {
         return (this.getPage() - 1) * this.getPageSize() + this.getOffset();
     }
 
-    @Override
     public long getEndIndex() {
         return this.getPage() * this.getPageSize() + this.getOffset() - 1;
     }
 
-    @Override
     public long getShowPage() {
         return showPage;
     }
 
-    @Override
     public long[][] getShowArray() {
         return showArray;
     }
 
-    @Override
     public long getPrevPage() {
         return this.getPage() - 1 < 1 ? 1 : this.getPage() - 1;
     }
 
-    @Override
     public long getNextPage() {
         return this.getPage() + 1 > this.getTotalPage() ? this.getTotalPage() : this.getPage() + 1;
     }
@@ -244,7 +228,7 @@ public class NPage implements INPage, Serializable {
     }
 
     public static void main(String[] args) {
-        INPage pb = new NPage();
+        NPage pb = new NPage();
         pb.setTotalCount(188);
         pb.setPage(1);
         pb.setPageSize(10);
@@ -253,7 +237,7 @@ public class NPage implements INPage, Serializable {
         System.out.println(pb.getTotalPage());
         System.out.println(pb.getPageSize());
         System.out.println(pb.getPage());
-        System.out.println(pb.getShowArray());
+        System.out.println(Arrays.deepToString(pb.getShowArray()));
         System.out.println(pb.getPrevPage());
         System.out.println(pb.getNextPage());
     }

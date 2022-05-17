@@ -34,7 +34,7 @@ public class LoginContextInterceptor extends WebContextInterceptor {
     protected NqcxCookie loginCookie;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         LoginContext.remove();
 
         if (loginCookie == null)

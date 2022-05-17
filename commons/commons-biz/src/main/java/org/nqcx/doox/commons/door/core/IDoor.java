@@ -9,7 +9,7 @@ package org.nqcx.doox.commons.door.core;
 import org.nqcx.doox.commons.lang.o.DTO;
 
 /**
- * 门接口，用于构造门和实现开门方法，请要用于动态代理
+ * 门接口，用于构造门和实现开门方法，主要用于动态代理
  *
  * @author naqichuan 17/8/14 18:13
  */

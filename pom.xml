@@ -6,7 +6,7 @@
 
     <groupId>org.nqcx.doox</groupId>
     <artifactId>doox</artifactId>
-    <version>1.2.2-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>doox</name>
@@ -24,13 +24,11 @@
         <repository>
             <id>doox-releases</id>
             <name>Release Repository</name>
-            <!--<url>http://dooxframework.com/nexus/repository/maven-releases/</url>-->
             <url>https://packages.aliyun.com/maven/repository/2129364-release-xIeY0a/</url>
         </repository>
         <snapshotRepository>
             <id>doox-snapshots</id>
             <name>Snapshot Repository</name>
-            <!--<url>http://dooxframework.com/nexus/repository/maven-snapshots/</url>-->
             <url>https://packages.aliyun.com/maven/repository/2129364-snapshot-MVBXir/</url>
         </snapshotRepository>
     </distributionManagement>
@@ -51,7 +49,8 @@
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <doox.commons.version>1.2.2-SNAPSHOT</doox.commons.version>
+
+        <doox.commons.version>2.0.0-SNAPSHOT</doox.commons.version>
         <commons-lang3.version>3.7</commons-lang3.version>
         <commons-io.version>2.6</commons-io.version>
         <commons-codec.version>1.15</commons-codec.version>

@@ -105,7 +105,7 @@ public class NSort implements Serializable {
         return UNSORTED;
     }
 
-    public static enum NDirection {
+    public enum NDirection {
         ASC, DESC;
 
         public boolean isAscending() {
@@ -170,6 +170,14 @@ public class NSort implements Serializable {
 
         public String getField() {
             return field;
+        }
+
+        @Override
+        public String toString() {
+            return new StringJoiner(", ", NOrder.class.getSimpleName() + "[", "]")
+                    .add("direction=" + direction)
+                    .add("field='" + field + "'")
+                    .toString();
         }
     }
 

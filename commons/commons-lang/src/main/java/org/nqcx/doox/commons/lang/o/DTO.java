@@ -9,9 +9,7 @@
 package org.nqcx.doox.commons.lang.o;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -21,57 +19,203 @@ import java.util.function.Predicate;
  */
 public class DTO implements Serializable {
 
-    /**
-     * 成功标记
-     */
-    private boolean success = false;
+    // 调用参数表
+    protected Map<String, Object> params;
 
-    /**
-     * 实体对象
-     */
+    // 调用成功标记（默认false：调用失败；true：调用成功）
+    protected boolean success = false;
+    // 调用失败，返回错误码及错误值
+    protected Map<NError, Object[]> errors;
+
+    // 调用成功，返回的实体对象
     protected Object object;
-
-    /**
-     * 实例对象列表
-     */
+    // 调用成功，返回的实体对象列表
     protected List<?> list;
-
-    /**
-     * 参数列表
-     */
-    protected Map<String, Object> paramsMap;
-
-    /**
-     * 返回结果
-     */
-    protected Map<String, Object> resultMap;
-
-    /**
-     * 分页
-     */
-    protected INPage page;
-
-    /**
-     * 排序
-     */
+    // 调用成功，分页
+    protected NPage page;
+    // 调用成功，排序
     protected NSort sort;
 
-    public DTO() {
+    // 调用成功或失败，返回key-value 的结果
+    protected Map<String, Object> results;
 
+    public DTO() {
     }
 
     public DTO(boolean success) {
         this.success = success;
     }
 
+    // ========================================================================
+
+    public DTO setParams(Map<String, Object> params) {
+        this.params = params;
+        return this;
+    }
+
+    public Map<String, Object> getParams() {
+        return this.params;
+    }
+
+    /**
+     * putParam
+     *
+     * @param name  name
+     * @param value value
+     * @return {@link DTO}
+     * @author naqichuan 22-5-17 下午4:29
+     */
+    public DTO putParam(String name, Object value) {
+        Map<String, Object> params = this.getParams();
+        if (params == null)
+            params = new LinkedHashMap<>();
+
+        params.put(name, value);
+
+        return this.setParams(params);
+    }
+
+    /**
+     * putParamWhen
+     *
+     * @param name      name
+     * @param value     value
+     * @param predicate predicate
+     * @return {@link DTO}
+     * @author naqichuan 22-5-17 下午4:29
+     */
+    public <T> DTO putParamWhen(String name, T value, Predicate<T> predicate) {
+        if (predicate != null && predicate.test(value))
+            return putParam(name, value);
+
+        return this;
+    }
+
+    /**
+     * putParamWith
+     *
+     * @param name      name
+     * @param value     value
+     * @param predicate predicate
+     * @return {@link DTO}
+     * @author naqichuan 22-5-17 下午4:30
+     */
+    @Deprecated
+    public <T> DTO putParamWith(String name, T value, Predicate<T> predicate) {
+        return putParamWhen(name, value, predicate);
+    }
+
+    /**
+     * removeParam
+     *
+     * @param name name
+     * @author naqichuan 22-5-17 下午4:31
+     */
+    public void removeParam(String name) {
+        Optional.ofNullable(this.getParams()).ifPresent(x -> x.remove(name));
+    }
+
+    /**
+     * param
+     *
+     * @param name name
+     * @return {@link T}
+     * @author naqichuan 22-5-17 下午4:35
+     */
+    public <T> T param(String name) {
+        return this.getParams() == null ? null : (T) this.getParams().get(name);
+    }
+
+    // ========================================================================
+
+    /**
+     * isSuccess
+     *
+     * @return {@link boolean}
+     * @author naqichuan 22-5-17 下午5:04
+     */
     public boolean isSuccess() {
         return success;
     }
 
+    /**
+     * setSuccess
+     *
+     * @param success success
+     * @return {@link DTO}
+     * @author naqichuan 22-5-17 下午5:04
+     */
     public DTO setSuccess(boolean success) {
         this.success = success;
+
         return this;
     }
+
+    /**
+     * getErrors
+     *
+     * @return {@link Map< NError, String>}
+     * @author naqichuan 22-5-17 下午5:03
+     */
+    public Map<NError, Object[]> getErrors() {
+        return this.errors;
+    }
+
+    /**
+     * setErrors
+     *
+     * @param errors errors
+     * @return {@link DTO}
+     * @author naqichuan 22-5-17 下午5:03
+     */
+    public DTO setErrors(Map<NError, Object[]> errors) {
+        this.errors = errors;
+
+        return this;
+    }
+
+    /**
+     * putError
+     *
+     * @param error error
+     * @param args  args
+     * @return {@link DTO}
+     * @author naqichuan 22-5-17 下午5:03
+     */
+    public DTO putError(NError error, Object... args) {
+        Map<NError, Object[]> errors = this.getErrors();
+        if (errors == null)
+            errors = new LinkedHashMap<>();
+
+        errors.put(error, args);
+
+        return this.setErrors(errors);
+    }
+
+    /**
+     * putError
+     *
+     * @param error error
+     * @return {@link DTO}
+     * @author naqichuan 22-5-17 下午5:03
+     */
+    public DTO putError(NError error) {
+        return this.putError(error, null);
+    }
+
+    /**
+     * removeError
+     *
+     * @param error error
+     * @author naqichuan 22-5-17 下午5:03
+     */
+    public void removeError(NError error) {
+        Optional.ofNullable(this.getErrors()).ifPresent(x -> {
+            x.remove(error);
+        });
+    }
+
+    // ========================================================================
 
     /**
      * 取实体对象
@@ -88,11 +232,18 @@ public class DTO implements Serializable {
         return this;
     }
 
-    public <T> DTO setObjectWith(T t, Predicate<T> predicate) {
+    public <T> DTO setObjectWhen(T t, Predicate<T> predicate) {
         if (predicate != null && predicate.test(t))
             this.setObject(t);
         return this;
     }
+
+    @Deprecated
+    public <T> DTO setObjectWith(T t, Predicate<T> predicate) {
+        return setObjectWhen(t, predicate);
+    }
+
+    // ========================================================================
 
     /**
      * 取实体对象列表
@@ -109,81 +260,18 @@ public class DTO implements Serializable {
         return this;
     }
 
-    public Map<String, Object> getParamsMap() {
-        return paramsMap;
-    }
+    // ========================================================================
 
-    public DTO setParamsMap(Map<String, Object> paramsMap) {
-        this.paramsMap = paramsMap;
-        return this;
-    }
-
-    public DTO putParam(String key, Object value) {
-        if (this.paramsMap == null)
-            this.paramsMap = new LinkedHashMap<>();
-        this.paramsMap.put(key, value);
-        return this;
-    }
-
-    public <T> DTO putParamWith(String key, T value, Predicate<T> predicate) {
-        if (predicate != null && predicate.test(value))
-            return putParam(key, value);
-
-        return this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T getParam(String key) {
-        return this.paramsMap == null ? null : (T) this.paramsMap.get(key);
-    }
-
-    public void removeParam(String key) {
-        if (this.paramsMap != null)
-            this.paramsMap.remove(key);
-    }
-
-    public Map<String, Object> getResultMap() {
-        return resultMap;
-    }
-
-    public DTO setResultMap(Map<String, Object> resultMap) {
-        this.resultMap = resultMap;
-        return this;
-    }
-
-    public DTO putResult(String key, Object value) {
-        if (this.resultMap == null)
-            this.resultMap = new LinkedHashMap<>();
-        this.resultMap.put(key, value);
-        return this;
-    }
-
-    public <T> DTO putResultWith(String key, T value, Predicate<T> predicate) {
-        if (predicate != null && predicate.test(value))
-            return this.putParam(key, value);
-        return this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T getResult(String key) {
-        return this.resultMap == null ? null : (T) this.resultMap.get(key);
-    }
-
-    public void removeResult(String key) {
-        if (this.resultMap != null)
-            this.resultMap.remove(key);
-    }
-
-    public INPage getPage() {
+    public NPage getPage() {
         return page;
     }
 
-    public DTO setPage(INPage page) {
+    public DTO setPage(NPage page) {
         this.page = page;
         return this;
     }
 
-    public Long getTotalCount() {
+    public Long totalCount() {
         return getPage() == null ? null : getPage().getTotalCount();
     }
 
@@ -206,6 +294,8 @@ public class DTO implements Serializable {
 
         return this;
     }
+
+    // ========================================================================
 
     public NSort getSort() {
         return sort;
@@ -232,16 +322,123 @@ public class DTO implements Serializable {
         return this;
     }
 
+    // ========================================================================
+
+    /**
+     * setResults
+     *
+     * @param results results
+     * @return {@link DTO}
+     * @author naqichuan 22-5-17 下午4:44
+     */
+    public DTO setResults(Map<String, Object> results) {
+        this.results = results;
+
+        return this;
+    }
+
+    /**
+     * getResults
+     *
+     * @return {@link Map<String, Object>}
+     * @author naqichuan 22-5-17 下午4:44
+     */
+    public Map<String, Object> getResults() {
+        return results;
+    }
+
+    /**
+     * putResult
+     *
+     * @param name  name
+     * @param value value
+     * @return {@link DTO}
+     * @author naqichuan 22-5-17 下午4:29
+     */
+    public DTO putResult(String name, Object value) {
+        Map<String, Object> results = this.getResults();
+        if (results == null)
+            results = new LinkedHashMap<>();
+
+        results.put(name, value);
+
+        return this.setResults(results);
+    }
+
+    /**
+     * putResultWhen
+     *
+     * @param name      name
+     * @param value     value
+     * @param predicate predicate
+     * @return {@link DTO}
+     * @author naqichuan 22-5-17 下午4:29
+     */
+    public <T> DTO putResultWhen(String name, T value, Predicate<T> predicate) {
+        if (predicate != null && predicate.test(value))
+            return putResult(name, value);
+
+        return this;
+    }
+
+    /**
+     * putResultWith
+     *
+     * @param name      name
+     * @param value     value
+     * @param predicate predicate
+     * @return {@link DTO}
+     * @author naqichuan 22-5-17 下午4:30
+     */
+    @Deprecated
+    public <T> DTO putResultWith(String name, T value, Predicate<T> predicate) {
+        return putResultWhen(name, value, predicate);
+    }
+
+    /**
+     * removeResult
+     *
+     * @param name name
+     * @author naqichuan 22-5-17 下午4:31
+     */
+    public void removeResult(String name) {
+        Optional.ofNullable(this.getResults()).ifPresent(x -> x.remove(name));
+    }
+
+    /**
+     * result
+     *
+     * @param name name
+     * @return {@link T}
+     * @author naqichuan 22-5-17 下午4:35
+     */
+    public <T> T result(String name) {
+        return this.getResults() == null ? null : (T) this.getResults().get(name);
+    }
+
+    // ========================================================================
+
     @Override
     public String toString() {
-        return "DTO{" +
-                "success=" + success +
-                ", object=" + object +
-                ", list=" + list +
-                ", paramsMap=" + paramsMap +
-                ", resultMap=" + resultMap +
-                ", page=" + page +
-                ", sort=" + sort +
-                '}';
+        return new StringJoiner(", ", DTO.class.getSimpleName() + "[", "]")
+                .add("params=" + params)
+                .add("success=" + success)
+                .add("errors=" + errors)
+                .add("object=" + object)
+                .add("list=" + list)
+                .add("page=" + page)
+                .add("sort=" + sort)
+                .add("results=" + results)
+                .toString();
     }
+
+//    public static void main(String[] args) {
+//        DTO d = new DTO().putParam("id", "1")
+//                .putError(NErrorCode.E6.error()).putError(NErrorCode.Ex.error())
+//                .putParam("date_gt", "2021-07-22")
+//                 .setPage(new NPage(1, 20))
+//                .newPageWith(1L, 20L)
+//                .setSort(NSort.by(new NSort.NOrder(NSort.NDirection.DESC, "id")))
+//                .newSortsWith("id,desc");
+//    }
 }
