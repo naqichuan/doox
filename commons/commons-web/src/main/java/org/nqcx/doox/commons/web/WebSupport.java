@@ -14,10 +14,10 @@ import org.nqcx.doox.commons.lang.o.*;
 import org.nqcx.doox.commons.lang.url.UrlBuilder;
 import org.nqcx.doox.commons.util.MapBuilder;
 import org.nqcx.doox.commons.util.StringUtils;
-import org.nqcx.doox.commons.util.orika.Orika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanMap;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 
@@ -410,8 +410,11 @@ public abstract class WebSupport {
                 return;
             }
 
-            Map<?, ?> omap = new HashMap<>();
-            Orika.o2o(object, omap);
+            Map<String, Object> omap = new HashMap<>();
+            BeanMap beanMap = BeanMap.create(object);
+            for (Object key : beanMap.keySet()) {
+                omap.put(String.valueOf(key), beanMap.get(key));
+            }
 
             mb.putMap(omap);
         });
