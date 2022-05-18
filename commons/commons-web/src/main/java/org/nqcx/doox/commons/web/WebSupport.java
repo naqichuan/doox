@@ -14,6 +14,7 @@ import org.nqcx.doox.commons.lang.o.*;
 import org.nqcx.doox.commons.lang.url.UrlBuilder;
 import org.nqcx.doox.commons.util.MapBuilder;
 import org.nqcx.doox.commons.util.StringUtils;
+import org.nqcx.doox.commons.util.orika.Orika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.ClassUtils.isPrimitiveOrWrapper;
 
 /**
  * @author naqichuan 2014年8月14日 上午11:50:15
@@ -35,17 +39,19 @@ public abstract class WebSupport {
     protected final static String SUCCESS = "success";
     protected final static String ERROR_CODE = "errorCode";
     protected final static String ERROR_TEXT = "errorText";
-    protected final static String ERROR_MULTIPLE = "multipleError";
-    protected final static String ERROR_MULTIPLE_CODE = "multipleErrorCode";
-    protected final static String ERROR_MULTIPLE_TEXT = "multipleErrorText";
+    //    protected final static String ERROR_MULTIPLE = "multipleError";
+//    protected final static String ERROR_MULTIPLE_CODE = "multipleErrorCode";
+//    protected final static String ERROR_MULTIPLE_TEXT = "multipleErrorText";
     protected final static String NOT_FOUND = "NOT FOUND";
 
     protected final static String DEFAULT_CHARSET_NAME = "UTF-8";
+
 
     //    @Autowired(required = false)
 //    protected ResultBuilder resultBuilder;
     @Autowired(required = false)
     protected MessageSource messageSource;
+
 
 //    protected String m(String code) {
 //        NqcxResult nqcxResult = getResult(ResultBuilder.M, code);
@@ -164,90 +170,90 @@ public abstract class WebSupport {
 
     // ========================================================================
 
-    /**
-     * 向 MAP 中添加错误信息，同时转换错误代码为说明
-     *
-     * @param map
-     * @param value
-     * @return
-     */
-    protected Map<?, ?> putError(Map<Object, Object> map, String value, Object[] args) {
-        return putError(map, value, args, null);
-    }
-
-    /**
-     * 向 MAP 中添加错误信息，同时转换错误代码为说明
-     *
-     * @param map
-     * @param value
-     * @return
-     */
-    protected Map<?, ?> putError(Map<Object, Object> map, String value, Object[] args, String defaultValue) {
-        if (map != null && value != null) {
-            putValue(map, ERROR_CODE, value);
-            putValue(map, ERROR_TEXT, e(value, args, defaultValue));
-        }
-        return map;
-    }
-
-    /**
-     * 向 MAP 中添加错误信息，同时转换错误代码为说明
-     *
-     * @param value value
-     * @param args  args
-     * @return Map
-     */
-    protected Map<?, ?> putError(String value, Object[] args) {
-        return putError(value, args, null);
-    }
-
-    /**
-     * 向 MAP 中添加错误信息，同时转换错误代码为说明
-     *
-     * @param value        value
-     * @param args         args
-     * @param defaultValue defaultValue
-     * @return Map
-     */
-    protected Map<?, ?> putError(String value, Object[] args, String defaultValue) {
-        return putError(new HashMap<>(), value, args, defaultValue);
-    }
-
-    /**
-     * 向 MAP 中添加错误信息，同时转换错误代码为说明
-     *
-     * @param value value
-     * @return map
-     */
-    protected Map<?, ?> putError(String value) {
-        return putError(new HashMap<>(), value, null);
-    }
-
-    /**
-     * 向 MAP 中添加信息
-     *
-     * @param map   map
-     * @param key   key
-     * @param value value
-     * @return
-     */
-    protected Map<?, ?> putValue(Map<Object, Object> map, String key, Object value) {
-        if (map != null && key != null) {
-            map.put(key, value);
-        }
-        return map;
-    }
-
-    /**
-     * 向 MAP 中添加信息
-     *
-     * @param key
-     * @param value
-     * @return
-     */
-    protected Map<?, ?> putValue(String key, Object value) {
-        return putValue(new HashMap<>(), key, value);
-    }
+//    /**
+//     * 向 MAP 中添加错误信息，同时转换错误代码为说明
+//     *
+//     * @param map
+//     * @param value
+//     * @return
+//     */
+//    protected Map<?, ?> putError(Map<Object, Object> map, String value, Object[] args) {
+//        return putError(map, value, args, null);
+//    }
+//
+//    /**
+//     * 向 MAP 中添加错误信息，同时转换错误代码为说明
+//     *
+//     * @param map
+//     * @param value
+//     * @return
+//     */
+//    protected Map<?, ?> putError(Map<Object, Object> map, String value, Object[] args, String defaultValue) {
+//        if (map != null && value != null) {
+//            putValue(map, ERROR_CODE, value);
+//            putValue(map, ERROR_TEXT, e(value, args, defaultValue));
+//        }
+//        return map;
+//    }
+//
+//    /**
+//     * 向 MAP 中添加错误信息，同时转换错误代码为说明
+//     *
+//     * @param value value
+//     * @param args  args
+//     * @return Map
+//     */
+//    protected Map<?, ?> putError(String value, Object[] args) {
+//        return putError(value, args, null);
+//    }
+//
+//    /**
+//     * 向 MAP 中添加错误信息，同时转换错误代码为说明
+//     *
+//     * @param value        value
+//     * @param args         args
+//     * @param defaultValue defaultValue
+//     * @return Map
+//     */
+//    protected Map<?, ?> putError(String value, Object[] args, String defaultValue) {
+//        return putError(new HashMap<>(), value, args, defaultValue);
+//    }
+//
+//    /**
+//     * 向 MAP 中添加错误信息，同时转换错误代码为说明
+//     *
+//     * @param value value
+//     * @return map
+//     */
+//    protected Map<?, ?> putError(String value) {
+//        return putError(new HashMap<>(), value, null);
+//    }
+//
+//    /**
+//     * 向 MAP 中添加信息
+//     *
+//     * @param map   map
+//     * @param key   key
+//     * @param value value
+//     * @return
+//     */
+//    protected Map<?, ?> putValue(Map<Object, Object> map, String key, Object value) {
+//        if (map != null && key != null) {
+//            map.put(key, value);
+//        }
+//        return map;
+//    }
+//
+//    /**
+//     * 向 MAP 中添加信息
+//     *
+//     * @param key
+//     * @param value
+//     * @return
+//     */
+//    protected Map<?, ?> putValue(String key, Object value) {
+//        return putValue(new HashMap<>(), key, value);
+//    }
 
     // ========================================================================
 
@@ -386,8 +392,29 @@ public abstract class WebSupport {
         if (mb == null)
             return;
 
-        if (object != null)
-            mapBuilder.put("object", object);
+        Optional.ofNullable(object).ifPresent(x -> {
+            Class<?> clazz = object.getClass();
+
+            if (isPrimitiveOrWrapper(clazz)                         // primitive or wrapper
+                    || String.class.isAssignableFrom(clazz)         // string
+                    || clazz.isArray()                              // array
+                    || Collection.class.isAssignableFrom(clazz)     // collection
+                    || clazz.isEnum()                               // enum
+            ) {
+                mb.put("object", object);
+                return;
+            }
+
+            if (Map.class.isAssignableFrom(clazz)) {
+                mb.putMap((Map) object);
+                return;
+            }
+
+            Map<?, ?> omap = new HashMap<>();
+            Orika.o2o(object, omap);
+
+            mb.putMap(omap);
+        });
     }
 
     /**
@@ -439,7 +466,36 @@ public abstract class WebSupport {
     }
 
     /**
-     * parseError
+     * 处理多个错误，errorCode 使用默认错误码“10”
+     * <p/>
+     * 参数:
+     * <pre>
+     *      entrySet {key="1", value="错误1"}
+     *      entrySet {key="2", value="错误2"}
+     *      entrySet {key="3", value="错误3"}
+     * </pre>
+     * 转换结果:
+     * <pre>
+     * {
+     *     success: false,
+     *     errorCode: "1",
+     *     errorText: "错误1",
+     *     errors: [
+     *         {
+     *             errorCode: "1",
+     *             errorText: "错误1"
+     *         },
+     *         {
+     *             errorCode: "2",
+     *             errorText: "错误2"
+     *         },
+     *         {
+     *             errorCode: "3",
+     *             errorText: "错误3"
+     *         }
+     *     ]
+     * }
+     * </pre>
      *
      * @param mb     mb
      * @param errors errors
@@ -450,9 +506,14 @@ public abstract class WebSupport {
             return;
 
         Optional.ofNullable(errors).ifPresent(x -> {
-            if (x.size() == 1)
-                this.parseErrorCode(mb, errors.entrySet().iterator().next());
-            else if (x.size() > 1)
+            if (x.size() == 0)
+                errors.put(NErrorCode.E0.error(), null);
+
+            // 设置 error
+            this.parseErrorCode(mb, errors.entrySet().iterator().next());
+
+            // 解析 errors
+            if (errors.size() > 1)
                 this.parseErrorCodes(mb, errors.entrySet());
         });
     }
@@ -473,14 +534,12 @@ public abstract class WebSupport {
             Object[] args = error.getValue();
 
             mb.put(ERROR_CODE, nerror.getErrorCode())
-                    .put("errorText", getPropertyValue(nerror.getErrorCode(), args, IErrorCode.finalErrorText(nerror.getErrorText(), args)))
+                    .put("errorText", getPropertyValue(nerror.getErrorCode(), args, IErrorCode.finalErrorText(nerror.getErrorText(), args)));
         });
     }
 
     /**
      * 处理多个错误，errorCode 使用默认错误码“10”
-     * multipleError 的 multipleErrorCode 使用 Entry.key
-     * multipleError 的 multipleErrorText 使用 Entry.value
      * <p/>
      * 参数:
      * <pre>
@@ -492,20 +551,20 @@ public abstract class WebSupport {
      * <pre>
      * {
      *     success: false,
-     *     errorCode: "10",
-     *     errorText: "操作数据出错",
-     *     multipleError: [
+     *     errorCode: "1",
+     *     errorText: "错误1",
+     *     errors: [
      *         {
-     *             multipleErrorCode: "1",
-     *             multipleErrorText: "错误1"
+     *             errorCode: "1",
+     *             errorText: "错误1"
      *         },
      *         {
-     *             multipleErrorCode: "2",
-     *             multipleErrorText: "错误2"
+     *             errorCode: "2",
+     *             errorText: "错误2"
      *         },
      *         {
-     *             multipleErrorCode: "3",
-     *             multipleErrorText: "错误3"
+     *             errorCode: "3",
+     *             errorText: "错误3"
      *         }
      *     ]
      * }
@@ -518,88 +577,90 @@ public abstract class WebSupport {
         if (mb == null)
             return;
 
-        Optional.ofNullable(errors).ifPresent(x -> {
-            mapBuilder.putMap(putError("10")).put(ERROR_MULTIPLE, convertMultipleErrorJsonArray(entrySet));
-        });
+        mb.put("errors", errors.stream().map(x -> new NError(
+                x.getKey().getErrorCode(),
+                getPropertyValue(x.getKey().getErrorCode(), x.getValue(),
+                        IErrorCode.finalErrorText(x.getKey().getErrorText(), x.getValue()))))
+                .collect(Collectors.toList()));
     }
-
-    /**
-     * 处理多个错误，errorCode 使用参数中的错误码 errorCode
-     * multipleError 的 multipleErrorCode 全部使用 “1X”
-     * multipleError 的 multipleErrorText 使用参数 errors[index] 中的值
-     * <p/>
-     * 参数:
-     * <pre>
-     *     errorCode="11"
-     *     errors {"错误1","错误2","错误3"}
-     * </pre>
-     * 转换结果:
-     * <pre>
-     * {
-     *     success: false,
-     *     errorCode: "11",
-     *     errorText: "操作的数据不存在",
-     *     multipleError: [
-     *         {
-     *             multipleErrorCode: "1X",
-     *             multipleErrorText: "错误1"
-     *         },
-     *         {
-     *             multipleErrorCode: "1X",
-     *             multipleErrorText: "错误2"
-     *         },
-     *         {
-     *             multipleErrorCode: "1X",
-     *             multipleErrorText: "错误3"
-     *         }
-     *     ]
-     * }
-     * </pre>
-     *
-     * @param mapBuilder mapBuilder
-     * @param errorCode  errorCode
-     * @param errors     errors
-     */
-    protected void parseMultipleErrorJson(MapBuilder mapBuilder, String errorCode, List<String> errors) {
-        if (mapBuilder == null)
-            return;
-        if (StringUtils.isBlank(errorCode))
-            errorCode = "10";
-
-        mapBuilder.putMap(putError(errorCode)).put(ERROR_MULTIPLE, convertMultipleErrorJsonArray(errors));
-    }
-
-    /**
-     * 转换多个 Entry 错误为 array
-     *
-     * @param entrySet entrySet
-     * @return list
-     * @author 黄保光
-     */
-    private List<Object> convertMultipleErrorJsonArray(Set<Map.Entry<String, Object>> entrySet) {
-        List<Object> list = new ArrayList<Object>();
-        if (entrySet != null && entrySet.size() > 0) {
-            for (Map.Entry<String, Object> error : entrySet)
-                list.add(MapBuilder.instance().put(ERROR_MULTIPLE_CODE, error.getKey()).put(ERROR_MULTIPLE_TEXT, error.getValue()).build());
-        }
-        return list;
-    }
-
-    /**
-     * 将多个 List 型的 error 转成 List<>Map><>String,String</></>
-     *
-     * @param errors
-     * @return
-     * @author 黄保光 Sep 29, 2013 12:37:41 PM
-     */
-    protected List<Object> convertMultipleErrorJsonArray(List<String> errors) {
-        List<Object> list = new ArrayList<Object>();
-        if (errors != null && errors.size() > 0) {
-            for (String error : errors)
-                list.add(MapBuilder.instance().put(ERROR_MULTIPLE_CODE, "1X").put(ERROR_MULTIPLE_TEXT, error).build());
-        }
-        return list;
-    }
+//
+//    /**
+//     * 处理多个错误，errorCode 使用参数中的错误码 errorCode
+//     * multipleError 的 multipleErrorCode 全部使用 “1X”
+//     * multipleError 的 multipleErrorText 使用参数 errors[index] 中的值
+//     * <p/>
+//     * 参数:
+//     * <pre>
+//     *     errorCode="11"
+//     *     errors {"错误1","错误2","错误3"}
+//     * </pre>
+//     * 转换结果:
+//     * <pre>
+//     * {
+//     *     success: false,
+//     *     errorCode: "11",
+//     *     errorText: "操作的数据不存在",
+//     *     multipleError: [
+//     *         {
+//     *             multipleErrorCode: "1X",
+//     *             multipleErrorText: "错误1"
+//     *         },
+//     *         {
+//     *             multipleErrorCode: "1X",
+//     *             multipleErrorText: "错误2"
+//     *         },
+//     *         {
+//     *             multipleErrorCode: "1X",
+//     *             multipleErrorText: "错误3"
+//     *         }
+//     *     ]
+//     * }
+//     * </pre>
+//     *
+//     * @param mapBuilder mapBuilder
+//     * @param errorCode  errorCode
+//     * @param errors     errors
+//     */
+//    protected void parseMultipleErrorJson(MapBuilder mapBuilder, String errorCode, List<String> errors) {
+//        if (mapBuilder == null)
+//            return;
+//        if (StringUtils.isBlank(errorCode))
+//            errorCode = "10";
+//
+//        mapBuilder.putMap(putError(errorCode)).put(ERROR_MULTIPLE, convertMultipleErrorJsonArray(errors));
+//    }
+//
+//    /**
+//     * 转换多个 Entry 错误为 array
+//     *
+//     * @param entrySet entrySet
+//     * @return list
+//     * @author 黄保光
+//     */
+//    private List<Object> convertMultipleErrorJsonArray(Set<Map.Entry<String, Object>> entrySet) {
+//        List<Object> list = new ArrayList<Object>();
+//        if (entrySet != null && entrySet.size() > 0) {
+//            for (Map.Entry<String, Object> error : entrySet)
+//                list.add(MapBuilder.instance().put(ERROR_MULTIPLE_CODE, error.getKey()).put(ERROR_MULTIPLE_TEXT, error.getValue()).build());
+//        }
+//        return list;
+//    }
+//
+//    /**
+//     * 将多个 List 型的 error 转成 List<>Map><>String,String</></>
+//     *
+//     * @param errors
+//     * @return
+//     * @author 黄保光 Sep 29, 2013 12:37:41 PM
+//     */
+//    protected List<Object> convertMultipleErrorJsonArray(List<String> errors) {
+//        List<Object> list = new ArrayList<Object>();
+//        if (errors != null && errors.size() > 0) {
+//            for (String error : errors)
+//                list.add(MapBuilder.instance().put(ERROR_MULTIPLE_CODE, "1X").put(ERROR_MULTIPLE_TEXT, error).build());
+//        }
+//        return list;
+//    }
 
 
     // ========================================================================
