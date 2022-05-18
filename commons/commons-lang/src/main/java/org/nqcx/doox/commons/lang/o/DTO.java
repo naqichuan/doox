@@ -432,7 +432,7 @@ public class DTO implements Serializable {
                 .toString();
     }
 
-//    public static void main(String[] args) {
+    public static void main(String[] args) {
 //        DTO d = new DTO().putParam("id", "1")
 //                .putError(NErrorCode.E6.error()).putError(NErrorCode.Ex.error())
 //                .putParam("date_gt", "2021-07-22")
@@ -440,5 +440,6 @@ public class DTO implements Serializable {
 //                .newPageWith(1L, 20L)
 //                .setSort(NSort.by(new NSort.NOrder(NSort.NDirection.DESC, "id")))
 //                .newSortsWith("id,desc");
-//    }
+        System.out.println(int.class.isPrimitive());
+    }
 }

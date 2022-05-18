@@ -68,7 +68,7 @@ public class Door {
 
         DTO doorParam = new DTO();
         if (dto != null) {
-            doorParam.setParamsMap(dto.getParamsMap());
+            doorParam.setParams(dto.getParams());
             doorParam.setPage(dto.getPage());
             doorParam.setSort(dto.getSort());
         }
@@ -80,7 +80,7 @@ public class Door {
         return result.setSuccess(doorResult.isSuccess())
                 .setObject(doorResult.getObject())
                 .setList(doorResult.getList())
-                .setResultMap(doorResult.getResultMap())
+                .setResults(doorResult.getResults())
                 .setPage(doorResult.getPage());
     }
 }

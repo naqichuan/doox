@@ -7,7 +7,6 @@
 package org.nqcx.doox.commons.data.converter;
 
 import org.nqcx.doox.commons.lang.o.DTO;
-import org.nqcx.doox.commons.lang.o.INPage;
 import org.nqcx.doox.commons.lang.o.NPage;
 import org.nqcx.doox.commons.lang.o.NSort;
 import org.springframework.data.domain.Page;
@@ -58,7 +57,7 @@ public class DTOConverter {
      * @param nSort NSort
      * @return PageRequest
      */
-    public static PageRequest toPageRequest(INPage nPage, NSort nSort) {
+    public static PageRequest toPageRequest(NPage nPage, NSort nSort) {
         if (nPage == null)
             nPage = new NPage();
 
@@ -71,7 +70,7 @@ public class DTOConverter {
      * @param nPage NPage
      * @return PageRequest
      */
-    public static PageRequest toPageRequest(INPage nPage) {
+    public static PageRequest toPageRequest(NPage nPage) {
         return toPageRequest(nPage, null);
     }
 

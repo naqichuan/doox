@@ -558,8 +558,8 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     public static Map<String, Object> parseParams(DTO dto, Map<String, String> fieldMapping) {
         Map<String, Object> map = new HashMap<>();
 
-        if (dto != null && dto.getParamsMap() != null)
-            dto.getParamsMap().forEach(map::put);
+        if (dto != null && dto.getParams() != null)
+            dto.getParams().forEach(map::put);
 
         if (dto != null && dto.getSort() != null)
             map.put("_order_", "ORDER BY " + dto.getSort().orderString(fieldMapping));
