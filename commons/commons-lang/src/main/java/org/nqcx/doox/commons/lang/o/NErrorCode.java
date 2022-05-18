@@ -94,7 +94,7 @@ public enum NErrorCode implements IErrorCode {
      */
     public static void print() {
         Arrays.stream(NErrorCode.values()).forEach(x -> {
-            System.out.println("error." + x.code + "=" + x.getText());
+            System.out.println(x.codePrefix() + x.code + "=" + x.getText());
         });
     }
 
