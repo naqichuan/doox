@@ -17,11 +17,29 @@ public interface IErrorCode {
 
     String getText();
 
-    default NError error() {
-        return new NError(getCode(), getText());
+    default String codePrefix() {
+        return "error.";
     }
 
-    static String finalErrorText(String errorText, Object... placeHolderValues) {
+    /**
+     * build the NError object
+     *
+     * @return {@link NError}
+     * @author naqichuan 22-5-18 下午7:15
+     */
+    default NError buildError() {
+        return new NError(codePrefix() + getCode(), getText());
+    }
+
+    /**
+     * build full error text
+     *
+     * @param errorText         errorText
+     * @param placeHolderValues placeHolderValues
+     * @return {@link String}
+     * @author naqichuan 22-5-18 下午7:16
+     */
+    static String fullErrorText(String errorText, Object... placeHolderValues) {
         return (errorText == null || placeHolderValues == null) ? errorText : MessageFormat.format(errorText, placeHolderValues);
     }
 }

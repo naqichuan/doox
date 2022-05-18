@@ -37,7 +37,7 @@ public class LoginRequiredInterceptor extends WebContextInterceptor {
             if (isAjax()) {
                 logger.info("RemoteAddr [" + request.getRemoteAddr() + "] from ajax check login false!");
 
-                responseJson(response, buildJsonResult(new DTO().putError(NErrorCode.E11.error())));
+                responseJson(response, buildJsonResult(new DTO().putError(NErrorCode.E11.buildError())));
             } else {
                 logger.info("RemoteAddr [" + request.getRemoteAddr() + "] from normal way check login false!");
 

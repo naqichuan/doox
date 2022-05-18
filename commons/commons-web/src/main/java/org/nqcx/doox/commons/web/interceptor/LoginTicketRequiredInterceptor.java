@@ -34,7 +34,7 @@ public class LoginTicketRequiredInterceptor extends LoginRequiredInterceptor {
             if (isAjax()) {
                 logger.info("RemoteAddr [" + request.getRemoteAddr() + "] from ajax check ticket false!");
 
-                responseJson(response, buildJsonResult(new DTO().putError(NErrorCode.E11.error())));
+                responseJson(response, buildJsonResult(new DTO().putError(NErrorCode.E11.buildError())));
             } else {
                 logger.info("RemoteAddr [" + request.getRemoteAddr() + "] from normal way check ticket false!");
 

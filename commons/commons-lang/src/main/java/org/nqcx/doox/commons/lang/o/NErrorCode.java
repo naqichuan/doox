@@ -74,17 +74,6 @@ public enum NErrorCode implements IErrorCode {
     }
 
     /**
-     * error
-     *
-     * @return {@link NError}
-     *
-     * @author naqichuan 22-5-17 下午8:14
-     */
-    public NError error() {
-        return new NError(this.getCode(),this.text);
-    }
-
-    /**
      * 通过 code 取得枚举实例
      *
      * @param code code
