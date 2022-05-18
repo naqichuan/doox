@@ -8,6 +8,7 @@ package org.nqcx.doox.commons.lang.o;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
@@ -17,6 +18,7 @@ public class NError implements Serializable {
 
     private String errorCode;
     private String errorText;
+    private String codePrefix = "";
 
     public NError() {
     }
@@ -24,6 +26,11 @@ public class NError implements Serializable {
     public NError(String errorCode, String errorText) {
         this.errorCode = errorCode;
         this.errorText = errorText;
+    }
+
+    public NError(String errorCode, String errorText, String codePrefix) {
+        this(errorCode, errorText);
+        this.codePrefix = Optional.ofNullable(codePrefix).orElse("");
     }
 
     public String getErrorCode() {
@@ -40,6 +47,10 @@ public class NError implements Serializable {
 
     public void setErrorText(String errorText) {
         this.errorText = errorText;
+    }
+
+    public String codePrefix() {
+        return this.codePrefix;
     }
 
     @Override

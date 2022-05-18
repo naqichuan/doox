@@ -28,7 +28,7 @@ public interface IErrorCode {
      * @author naqichuan 22-5-18 下午7:15
      */
     default NError buildError() {
-        return new NError(codePrefix() + getCode(), getText());
+        return new NError(getCode(), getText(), codePrefix());
     }
 
     /**
