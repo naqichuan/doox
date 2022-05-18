@@ -65,7 +65,7 @@ public class Door {
         DTO result = new DTO(false);
         IDoor d = get(door);
         if (d == null)
-            return result.setSuccess(false).putError(NErrorCode.E7.error()); // 任意门不存在
+            return result.setSuccess(false).putError(NErrorCode.E7.buildError()); // 任意门不存在
 
         DTO doorParam = new DTO();
         if (dto != null) {
@@ -76,7 +76,7 @@ public class Door {
 
         DTO doorResult = d.open(doorParam);
         if (doorResult == null)
-            return result.setSuccess(false).putError(NErrorCode.E8.error()); // "任意门错误")
+            return result.setSuccess(false).putError(NErrorCode.E8.buildError()); // "任意门错误")
 
         return result.setSuccess(doorResult.isSuccess())
                 .setObject(doorResult.getObject())

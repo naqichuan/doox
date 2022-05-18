@@ -36,103 +36,20 @@ public abstract class WebSupport {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(WebSupport.class);
 
+    @SuppressWarnings("WeakerAccess")
     protected final static String SUCCESS = "success";
+    @SuppressWarnings("WeakerAccess")
     protected final static String ERROR_CODE = "errorCode";
+    @SuppressWarnings("WeakerAccess")
     protected final static String ERROR_TEXT = "errorText";
-    //    protected final static String ERROR_MULTIPLE = "multipleError";
-//    protected final static String ERROR_MULTIPLE_CODE = "multipleErrorCode";
-//    protected final static String ERROR_MULTIPLE_TEXT = "multipleErrorText";
+    @SuppressWarnings("unused")
     protected final static String NOT_FOUND = "NOT FOUND";
 
     protected final static String DEFAULT_CHARSET_NAME = "UTF-8";
 
 
-    //    @Autowired(required = false)
-//    protected ResultBuilder resultBuilder;
     @Autowired(required = false)
     protected MessageSource messageSource;
-
-
-//    protected String m(String code) {
-//        NqcxResult nqcxResult = getResult(ResultBuilder.M, code);
-//        return nqcxResult == null ? "" : getPropertyValue(nqcxResult.getSubject());
-//    }
-//
-//    protected String e(String code) {
-//        return e(code, null);
-//    }
-//
-//    protected String e(String code, Object[] args) {
-//        return e(code, args, null);
-//    }
-//
-//    protected String e(String code, Object[] args, String defaultValue) {
-//        NqcxResult nqcxResult = getResult(ResultBuilder.E, code);
-//        return nqcxResult == null ? "" : getPropertyValue(nqcxResult.getSubject(), args, defaultValue);
-//    }
-//
-//    protected String s(String code) {
-//        NqcxResult nqcxResult = getResult(ResultBuilder.S, code);
-//        return nqcxResult == null ? "" : getPropertyValue(nqcxResult.getSubject());
-//    }
-
-//    /**
-//     * 取得配置文件中的Result
-//     *
-//     * @param type
-//     * @param code
-//     * @return
-//     */
-//    protected NqcxResult getResult(String type, String code) {
-//        return resultBuilder == null ? null : resultBuilder.getResult(type, code);
-//    }
-
-    // ========================================================================
-
-//    /**
-//     * 从 properties 中取值
-//     *
-//     * @param code
-//     * @return
-//     */
-//    protected String getPropertyValue(String code) {
-//        return getPropertyValue(code, null);
-//    }
-//
-//    /**
-//     * 从 properties 中取值
-//     *
-//     * @param code
-//     * @param args
-//     * @return
-//     */
-//    protected String getPropertyValue(String code, Object[] args) {
-//        return getPropertyValue(code, args, null, null);
-//    }
-//
-//    /**
-//     * 从 properties 中取值
-//     *
-//     * @param code           code
-//     * @param args      args
-//     * @param defaultMessage defaultMessage
-//     * @return
-//     */
-//    protected String getPropertyValue(String code, Object[] args, String defaultMessage) {
-//        return getPropertyValue(code, args, defaultMessage, null);
-//    }
-//
-//    /**
-//     * 从 properties 中取值
-//     *
-//     * @param code
-//     * @param args
-//     * @param locale
-//     * @return
-//     */
-//    protected String getPropertyValue(String code, Object[] args, Locale locale) {
-//        return getPropertyValue(code, args, null, locale);
-//    }
 
     /**
      * getPropertyValue
@@ -162,6 +79,7 @@ public abstract class WebSupport {
                 locale = getLocale();
 
             rv = messageSource == null ? null : messageSource.getMessage(code, args, defaultMessage, locale);
+
         } catch (NoSuchMessageException e) {
             LOGGER.warn("WebSupport.getPropertyValue ," + e.getMessage());
         }
@@ -170,144 +88,81 @@ public abstract class WebSupport {
 
     // ========================================================================
 
-//    /**
-//     * 向 MAP 中添加错误信息，同时转换错误代码为说明
-//     *
-//     * @param map
-//     * @param value
-//     * @return
-//     */
-//    protected Map<?, ?> putError(Map<Object, Object> map, String value, Object[] args) {
-//        return putError(map, value, args, null);
-//    }
-//
-//    /**
-//     * 向 MAP 中添加错误信息，同时转换错误代码为说明
-//     *
-//     * @param map
-//     * @param value
-//     * @return
-//     */
-//    protected Map<?, ?> putError(Map<Object, Object> map, String value, Object[] args, String defaultValue) {
-//        if (map != null && value != null) {
-//            putValue(map, ERROR_CODE, value);
-//            putValue(map, ERROR_TEXT, e(value, args, defaultValue));
-//        }
-//        return map;
-//    }
-//
-//    /**
-//     * 向 MAP 中添加错误信息，同时转换错误代码为说明
-//     *
-//     * @param value value
-//     * @param args  args
-//     * @return Map
-//     */
-//    protected Map<?, ?> putError(String value, Object[] args) {
-//        return putError(value, args, null);
-//    }
-//
-//    /**
-//     * 向 MAP 中添加错误信息，同时转换错误代码为说明
-//     *
-//     * @param value        value
-//     * @param args         args
-//     * @param defaultValue defaultValue
-//     * @return Map
-//     */
-//    protected Map<?, ?> putError(String value, Object[] args, String defaultValue) {
-//        return putError(new HashMap<>(), value, args, defaultValue);
-//    }
-//
-//    /**
-//     * 向 MAP 中添加错误信息，同时转换错误代码为说明
-//     *
-//     * @param value value
-//     * @return map
-//     */
-//    protected Map<?, ?> putError(String value) {
-//        return putError(new HashMap<>(), value, null);
-//    }
-//
-//    /**
-//     * 向 MAP 中添加信息
-//     *
-//     * @param map   map
-//     * @param key   key
-//     * @param value value
-//     * @return
-//     */
-//    protected Map<?, ?> putValue(Map<Object, Object> map, String key, Object value) {
-//        if (map != null && key != null) {
-//            map.put(key, value);
-//        }
-//        return map;
-//    }
-//
-//    /**
-//     * 向 MAP 中添加信息
-//     *
-//     * @param key
-//     * @param value
-//     * @return
-//     */
-//    protected Map<?, ?> putValue(String key, Object value) {
-//        return putValue(new HashMap<>(), key, value);
-//    }
-
-    // ========================================================================
-
     /**
-     * @return
+     * getWebContext
+     *
+     * @return {@link WebContext}
+     * @author naqichuan 22-5-18 下午6:59
      */
     protected WebContext getWebContext() {
         return WebContext.getWebContext();
     }
 
     /**
-     * @return
+     * getScheme
+     *
+     * @return {@link String}
+     * @author naqichuan 22-5-18 下午6:59
      */
     protected String getScheme() {
         return getWebContext().getScheme();
     }
 
     /**
-     * @return
+     * getServerName
+     *
+     * @return {@link String}
+     * @author naqichuan 22-5-18 下午6:58
      */
     protected String getServerName() {
         return getWebContext().getServerName();
     }
 
     /**
-     * @return
+     * getRemoteAddr
+     *
+     * @return {@link String}
+     * @author naqichuan 22-5-18 下午6:58
      */
     protected String getRemoteAddr() {
         return getWebContext().getRemoteAddr();
     }
 
     /**
-     * @return
+     * getContextPath
+     *
+     * @return {@link String}
+     * @author naqichuan 22-5-18 下午6:58
      */
     protected String getContextPath() {
         return getWebContext().getContextPath();
     }
 
     /**
-     * @return
+     * getServletPath
+     *
+     * @return {@link String}
+     * @author naqichuan 22-5-18 下午6:58
      */
     protected String getServletPath() {
         return getWebContext().getServletPath();
     }
 
     /**
-     * @return
+     * isAjax
+     *
+     * @return {@link boolean}
+     * @author naqichuan 22-5-18 下午6:58
      */
     protected boolean isAjax() {
         return getWebContext().isAjax();
     }
 
     /**
-     * @return
+     * getLocale
+     *
+     * @return {@link Locale}
+     * @author naqichuan 22-5-18 下午6:58
      */
     protected Locale getLocale() {
         return getWebContext().getLocale();
@@ -337,13 +192,14 @@ public abstract class WebSupport {
     /**
      * 构建返回结果，返回 map 类型
      *
-     * @param dto
-     * @return
+     * @param dto dto
+     * @return {@link Map<?,?>}
+     * @author naqichuan 22-5-18 下午6:59
      */
     protected Map<?, ?> buildResult(DTO dto) {
         if (dto == null)
             // 这里的 value 只做说明，最终返回以 gmsg.properties 中 key 对应的配置为准
-            dto = new DTO().putError(NErrorCode.E6.error());
+            dto = new DTO().putError(NErrorCode.E6.buildError());
 
         MapBuilder mb = MapBuilder.instance()
                 .put(SUCCESS, dto.isSuccess());
@@ -510,7 +366,7 @@ public abstract class WebSupport {
 
         Optional.ofNullable(errors).ifPresent(x -> {
             if (x.size() == 0)
-                errors.put(NErrorCode.E0.error(), null);
+                errors.put(NErrorCode.E0.buildError(), null);
 
             // 设置 error
             this.parseErrorCode(mb, errors.entrySet().iterator().next());
@@ -537,44 +393,17 @@ public abstract class WebSupport {
             Object[] args = error.getValue();
 
             mb.put(ERROR_CODE, nerror.getErrorCode())
-                    .put("errorText", getPropertyValue(nerror.getErrorCode(), args, IErrorCode.finalErrorText(nerror.getErrorText(), args)));
+                    .put(ERROR_TEXT, getPropertyValue(nerror.getErrorCode(), args,
+                            IErrorCode.fullErrorText(nerror.getErrorText(), args)));
         });
     }
 
     /**
-     * 处理多个错误，errorCode 使用默认错误码“10”
-     * <p/>
-     * 参数:
-     * <pre>
-     *      entrySet {key="1", value="错误1"}
-     *      entrySet {key="2", value="错误2"}
-     *      entrySet {key="3", value="错误3"}
-     * </pre>
-     * 转换结果:
-     * <pre>
-     * {
-     *     success: false,
-     *     errorCode: "1",
-     *     errorText: "错误1",
-     *     errors: [
-     *         {
-     *             errorCode: "1",
-     *             errorText: "错误1"
-     *         },
-     *         {
-     *             errorCode: "2",
-     *             errorText: "错误2"
-     *         },
-     *         {
-     *             errorCode: "3",
-     *             errorText: "错误3"
-     *         }
-     *     ]
-     * }
-     * </pre>
+     * parseErrorCodes
      *
      * @param mb     mb
      * @param errors errors
+     * @author naqichuan 22-5-18 下午7:00
      */
     protected void parseErrorCodes(final MapBuilder mb, Set<Map.Entry<NError, Object[]>> errors) {
         if (mb == null)
@@ -583,88 +412,9 @@ public abstract class WebSupport {
         mb.put("errors", errors.stream().map(x -> new NError(
                 x.getKey().getErrorCode(),
                 getPropertyValue(x.getKey().getErrorCode(), x.getValue(),
-                        IErrorCode.finalErrorText(x.getKey().getErrorText(), x.getValue()))))
+                        IErrorCode.fullErrorText(x.getKey().getErrorText(), x.getValue()))))
                 .collect(Collectors.toList()));
     }
-//
-//    /**
-//     * 处理多个错误，errorCode 使用参数中的错误码 errorCode
-//     * multipleError 的 multipleErrorCode 全部使用 “1X”
-//     * multipleError 的 multipleErrorText 使用参数 errors[index] 中的值
-//     * <p/>
-//     * 参数:
-//     * <pre>
-//     *     errorCode="11"
-//     *     errors {"错误1","错误2","错误3"}
-//     * </pre>
-//     * 转换结果:
-//     * <pre>
-//     * {
-//     *     success: false,
-//     *     errorCode: "11",
-//     *     errorText: "操作的数据不存在",
-//     *     multipleError: [
-//     *         {
-//     *             multipleErrorCode: "1X",
-//     *             multipleErrorText: "错误1"
-//     *         },
-//     *         {
-//     *             multipleErrorCode: "1X",
-//     *             multipleErrorText: "错误2"
-//     *         },
-//     *         {
-//     *             multipleErrorCode: "1X",
-//     *             multipleErrorText: "错误3"
-//     *         }
-//     *     ]
-//     * }
-//     * </pre>
-//     *
-//     * @param mapBuilder mapBuilder
-//     * @param errorCode  errorCode
-//     * @param errors     errors
-//     */
-//    protected void parseMultipleErrorJson(MapBuilder mapBuilder, String errorCode, List<String> errors) {
-//        if (mapBuilder == null)
-//            return;
-//        if (StringUtils.isBlank(errorCode))
-//            errorCode = "10";
-//
-//        mapBuilder.putMap(putError(errorCode)).put(ERROR_MULTIPLE, convertMultipleErrorJsonArray(errors));
-//    }
-//
-//    /**
-//     * 转换多个 Entry 错误为 array
-//     *
-//     * @param entrySet entrySet
-//     * @return list
-//     * @author 黄保光
-//     */
-//    private List<Object> convertMultipleErrorJsonArray(Set<Map.Entry<String, Object>> entrySet) {
-//        List<Object> list = new ArrayList<Object>();
-//        if (entrySet != null && entrySet.size() > 0) {
-//            for (Map.Entry<String, Object> error : entrySet)
-//                list.add(MapBuilder.instance().put(ERROR_MULTIPLE_CODE, error.getKey()).put(ERROR_MULTIPLE_TEXT, error.getValue()).build());
-//        }
-//        return list;
-//    }
-//
-//    /**
-//     * 将多个 List 型的 error 转成 List<>Map><>String,String</></>
-//     *
-//     * @param errors
-//     * @return
-//     * @author 黄保光 Sep 29, 2013 12:37:41 PM
-//     */
-//    protected List<Object> convertMultipleErrorJsonArray(List<String> errors) {
-//        List<Object> list = new ArrayList<Object>();
-//        if (errors != null && errors.size() > 0) {
-//            for (String error : errors)
-//                list.add(MapBuilder.instance().put(ERROR_MULTIPLE_CODE, "1X").put(ERROR_MULTIPLE_TEXT, error).build());
-//        }
-//        return list;
-//    }
-
 
     // ========================================================================
 
@@ -724,7 +474,7 @@ public abstract class WebSupport {
      */
     protected void sendRedirectErrorPage(HttpServletResponse response, NError error) {
         if (error == null || error.getErrorCode() == null || error.getErrorCode().length() == 0)
-            error = NErrorCode.E12.error();
+            error = NErrorCode.E12.buildError();
 
         try {
             response.sendRedirect(getContextPath() + "/error/" + error.getErrorCode());
