@@ -7,6 +7,7 @@
 package org.nqcx.doox.commons.door.core;
 
 import org.nqcx.doox.commons.lang.o.DTO;
+import org.nqcx.doox.commons.lang.o.NErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class Door {
         DTO result = new DTO(false);
         IDoor d = get(door);
         if (d == null)
-            return result.setSuccess(false).putResult("11", "任意门不存在");
+            return result.setSuccess(false).putError(NErrorCode.E7.error()); // 任意门不存在
 
         DTO doorParam = new DTO();
         if (dto != null) {
@@ -75,7 +76,7 @@ public class Door {
 
         DTO doorResult = d.open(doorParam);
         if (doorResult == null)
-            return result.setSuccess(false).putResult("13", "任意门错误");
+            return result.setSuccess(false).putError(NErrorCode.E8.error()); // "任意门错误")
 
         return result.setSuccess(doorResult.isSuccess())
                 .setObject(doorResult.getObject())
