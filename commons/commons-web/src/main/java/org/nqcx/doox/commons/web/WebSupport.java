@@ -392,8 +392,8 @@ public abstract class WebSupport {
             NError nerror = error.getKey();
             Object[] args = error.getValue();
 
-            mb.put(ERROR_CODE, nerror.fullErrorCode())
-                    .put(ERROR_TEXT, getPropertyValue(nerror.getErrorCode(), args,
+            mb.put(ERROR_CODE, nerror.getErrorCode())
+                    .put(ERROR_TEXT, getPropertyValue(nerror.fullErrorCode(), args,
                             IErrorCode.fullErrorText(nerror.getErrorText(), args)));
         });
     }
