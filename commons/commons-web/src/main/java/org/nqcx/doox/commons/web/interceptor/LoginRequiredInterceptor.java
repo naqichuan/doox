@@ -9,6 +9,7 @@
 package org.nqcx.doox.commons.web.interceptor;
 
 import org.nqcx.doox.commons.lang.o.DTO;
+import org.nqcx.doox.commons.lang.o.NErrorCode;
 import org.nqcx.doox.commons.lang.url.UrlBuilder;
 import org.nqcx.doox.commons.web.login.LoginContext;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class LoginRequiredInterceptor extends WebContextInterceptor {
             if (isAjax()) {
                 logger.info("RemoteAddr [" + request.getRemoteAddr() + "] from ajax check login false!");
 
-                responseJsonResult(response, buildJsonResult(new DTO().putResult("2", "需要登录")));
+                responseJson(response, buildJsonResult(new DTO().putError(NErrorCode.E11.error())));
             } else {
                 logger.info("RemoteAddr [" + request.getRemoteAddr() + "] from normal way check login false!");
 
