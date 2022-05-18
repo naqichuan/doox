@@ -53,18 +53,29 @@ public class NError implements Serializable {
         return this.codePrefix;
     }
 
+    public String codePrefix(String codePrefix) {
+        this.codePrefix = Optional.ofNullable(codePrefix).orElse("");
+        return this.codePrefix;
+    }
+
+    public String fullErrorCode() {
+        return this.codePrefix + this.errorCode;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NError nError = (NError) o;
         return Objects.equals(errorCode, nError.errorCode) &&
-                Objects.equals(errorText, nError.errorText);
+                Objects.equals(errorText, nError.errorText) &&
+                Objects.equals(codePrefix, nError.codePrefix);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(errorCode, errorText);
+        return Objects.hash(errorCode, errorText, codePrefix);
     }
 
     @Override
@@ -72,6 +83,7 @@ public class NError implements Serializable {
         return new StringJoiner(", ", NError.class.getSimpleName() + "[", "]")
                 .add("errorCode='" + errorCode + "'")
                 .add("errorText='" + errorText + "'")
+                .add("codePrefix='" + codePrefix + "'")
                 .toString();
     }
 }

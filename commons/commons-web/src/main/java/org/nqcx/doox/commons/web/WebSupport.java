@@ -392,7 +392,7 @@ public abstract class WebSupport {
             NError nerror = error.getKey();
             Object[] args = error.getValue();
 
-            mb.put(ERROR_CODE, nerror.getErrorCode())
+            mb.put(ERROR_CODE, nerror.fullErrorCode())
                     .put(ERROR_TEXT, getPropertyValue(nerror.getErrorCode(), args,
                             IErrorCode.fullErrorText(nerror.getErrorText(), args)));
         });
@@ -411,7 +411,7 @@ public abstract class WebSupport {
 
         mb.put("errors", errors.stream().map(x -> new NError(
                 x.getKey().getErrorCode(),
-                getPropertyValue(x.getKey().getErrorCode(), x.getValue(),
+                getPropertyValue(x.getKey().fullErrorCode(), x.getValue(),
                         IErrorCode.fullErrorText(x.getKey().getErrorText(), x.getValue()))))
                 .collect(Collectors.toList()));
     }
