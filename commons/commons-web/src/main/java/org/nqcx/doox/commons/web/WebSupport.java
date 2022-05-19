@@ -234,7 +234,7 @@ public abstract class WebSupport {
         if (mb == null)
             return;
 
-        Optional.ofNullable(map).ifPresent(x -> mb.put("nresults", x));
+        Optional.ofNullable(map).ifPresent(x -> mb.put("results", x));
     }
 
     /**
@@ -291,7 +291,7 @@ public abstract class WebSupport {
         if (mb == null)
             return;
 
-        Optional.ofNullable(list).ifPresent(x -> mb.put("nlist", x));
+        Optional.ofNullable(list).ifPresent(x -> mb.put("list", x));
     }
 
     /**
