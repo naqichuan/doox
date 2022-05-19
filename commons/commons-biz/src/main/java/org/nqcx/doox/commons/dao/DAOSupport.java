@@ -284,8 +284,8 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         if (dto == null)
             dto = new DTO();
 
-        if (dto.getPage() != null)
-            dto.getPage().setTotalCount(this.getCount(dto));
+        if (dto.getNpage() != null)
+            dto.getNpage().setTotalCount(this.getCount(dto));
 
         List<PO> list;
         dto.setList((list = mapper.findAll(parseParams(dto, fieldMapping))) == null ? new ArrayList<>(0) : list);
@@ -561,11 +561,11 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
         if (dto != null && dto.getParams() != null)
             dto.getParams().forEach(map::put);
 
-        if (dto != null && dto.getSort() != null)
-            map.put("_order_", "ORDER BY " + dto.getSort().orderString(fieldMapping));
+        if (dto != null && dto.getNsort() != null)
+            map.put("_order_", "ORDER BY " + dto.getNsort().orderString(fieldMapping));
 
-        if (dto != null && dto.getPage() != null)
-            map.put("_page_", "LIMIT " + dto.getPage().getStartIndex() + ", " + dto.getPage().getPageSize());
+        if (dto != null && dto.getNpage() != null)
+            map.put("_page_", "LIMIT " + dto.getNpage().getStartIndex() + ", " + dto.getNpage().getNpageSize());
 
         return map;
     }

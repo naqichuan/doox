@@ -32,9 +32,9 @@ public class DTO implements Serializable {
     // 调用成功，返回的实体对象列表
     protected List<?> list;
     // 调用成功，分页
-    protected NPage page;
+    protected NPage npage;
     // 调用成功，排序
-    protected NSort sort;
+    protected NSort nsort;
 
     // 调用成功或失败，返回key-value 的结果
     protected Map<String, Object> results;
@@ -192,16 +192,6 @@ public class DTO implements Serializable {
         return this.setErrors(errors);
     }
 
-    /**
-     * putError
-     *
-     * @param error error
-     * @return {@link DTO}
-     * @author naqichuan 22-5-17 下午5:03
-     */
-    public DTO putError(NError error) {
-        return this.putError(error, null);
-    }
 
     /**
      * removeError
@@ -262,17 +252,18 @@ public class DTO implements Serializable {
 
     // ========================================================================
 
-    public NPage getPage() {
-        return page;
+
+    public NPage getNpage() {
+        return npage;
     }
 
-    public DTO setPage(NPage page) {
-        this.page = page;
+    public DTO setNpage(NPage npage) {
+        this.npage = npage;
         return this;
     }
 
     public Long totalCount() {
-        return getPage() == null ? null : getPage().getTotalCount();
+        return getNpage() == null ? null : getNpage().getTotalCount();
     }
 
     public DTO newPageWith(Long page) {
@@ -285,11 +276,11 @@ public class DTO implements Serializable {
 
     public DTO newPageWith(Long page, Long pageSize, Long totalCount) {
         if (page == null) {
-            this.page = null;
+            this.npage = null;
             return this;
         }
 
-        this.page = new NPage(page, pageSize == null ? 0 : pageSize)
+        this.npage = new NPage(page, pageSize == null ? 0 : pageSize)
                 .setTotalCount(totalCount == null ? -1 : totalCount);
 
         return this;
@@ -297,12 +288,12 @@ public class DTO implements Serializable {
 
     // ========================================================================
 
-    public NSort getSort() {
-        return sort;
+    public NSort getNsort() {
+        return nsort;
     }
 
-    public DTO setSort(NSort sort) {
-        this.sort = sort;
+    public DTO setNsort(NSort nsort) {
+        this.nsort = nsort;
         return this;
     }
 
@@ -315,9 +306,9 @@ public class DTO implements Serializable {
      */
     public DTO newSortsWith(String... sorts) {
         if (sorts == null || sorts.length == 0)
-            this.sort = null;
+            this.nsort = null;
         else
-            this.sort = NSort.parse(sorts);
+            this.nsort = NSort.parse(sorts);
 
         return this;
     }
@@ -426,8 +417,8 @@ public class DTO implements Serializable {
                 .add("errors=" + errors)
                 .add("object=" + object)
                 .add("list=" + list)
-                .add("page=" + page)
-                .add("sort=" + sort)
+                .add("npage=" + npage)
+                .add("nsort=" + nsort)
                 .add("results=" + results)
                 .toString();
     }
@@ -436,9 +427,9 @@ public class DTO implements Serializable {
 //        DTO d = new DTO().putParam("id", "1")
 //                .putError(NErrorCode.E6.error()).putError(NErrorCode.Ex.error())
 //                .putParam("date_gt", "2021-07-22")
-//                 .setPage(new NPage(1, 20))
+//                 .setNpage(new NPage(1, 20))
 //                .newPageWith(1L, 20L)
-//                .setSort(NSort.by(new NSort.NOrder(NSort.NDirection.DESC, "id")))
+//                .setNsort(NSort.by(new NSort.NOrder(NSort.NDirection.DESC, "id")))
 //                .newSortsWith("id,desc");
         System.out.println(int.class.isPrimitive());
     }

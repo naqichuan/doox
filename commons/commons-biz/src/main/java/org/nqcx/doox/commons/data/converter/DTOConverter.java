@@ -34,7 +34,7 @@ public class DTOConverter {
         Assert.notNull(page, "page must be not null.");
 
         return new DTO(true)
-                .setPage(new NPage(page.getNumber() + 1, page.getSize()).setTotalCount(page.getTotalElements()))
+                .setNpage(new NPage(page.getNumber() + 1, page.getSize()).setTotalCount(page.getTotalElements()))
                 .setList(page.getContent());
     }
 
@@ -47,7 +47,7 @@ public class DTOConverter {
     public static PageRequest toPageRequest(DTO dto) {
         Assert.notNull(dto, "page must be not null.");
 
-        return toPageRequest(dto.getPage(), dto.getSort());
+        return toPageRequest(dto.getNpage(), dto.getNsort());
     }
 
     /**
@@ -61,7 +61,7 @@ public class DTOConverter {
         if (nPage == null)
             nPage = new NPage();
 
-        return PageRequest.of((int) nPage.getPage() - 1, (int) nPage.getPageSize(), toSort(nSort));
+        return PageRequest.of((int) nPage.getNpage() - 1, (int) nPage.getNpageSize(), toSort(nSort));
     }
 
     /**

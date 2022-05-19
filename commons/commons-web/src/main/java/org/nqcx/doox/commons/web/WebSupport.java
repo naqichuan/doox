@@ -212,9 +212,9 @@ public abstract class WebSupport {
             // 2. 解析列表
             this.parseList(mb, dto.getList());
             // 3. 解析分页
-            this.parsePage(mb, dto.getPage());
+            this.parsePage(mb, dto.getNpage());
             // 4. 解析排序
-            this.parseSort(mb, dto.getSort());
+            this.parseSort(mb, dto.getNsort());
 
         } else
             this.parseErrors(mb, dto.getErrors());
@@ -234,7 +234,7 @@ public abstract class WebSupport {
         if (mb == null)
             return;
 
-        Optional.ofNullable(map).ifPresent(x -> mb.put("results", x));
+        Optional.ofNullable(map).ifPresent(x -> mb.put("nresults", x));
     }
 
     /**
@@ -272,6 +272,10 @@ public abstract class WebSupport {
                 omap.put(String.valueOf(key), beanMap.get(key));
             }
 
+            // object 中存储对象，用于 DTO -> DTO
+            mb.put("object", omap);
+
+            // root 根下直接存储对象 field 用于直接映射成 object
             mb.putMap(omap);
         });
     }
@@ -287,7 +291,7 @@ public abstract class WebSupport {
         if (mb == null)
             return;
 
-        Optional.ofNullable(list).ifPresent(x -> mb.put("list", x));
+        Optional.ofNullable(list).ifPresent(x -> mb.put("nlist", x));
     }
 
     /**
@@ -301,10 +305,10 @@ public abstract class WebSupport {
         if (mb == null)
             return;
 
-        Optional.ofNullable(page).ifPresent(x -> mb.put("page", MapBuilder.instance()
-                .put("page", x.getPage())
+        Optional.ofNullable(page).ifPresent(x -> mb.put("npage", MapBuilder.instance()
+                .put("page", x.getNpage())
                 .put("totalCount", x.getTotalCount())
-                .put("pageSize", x.getPageSize())
+                .put("pageSize", x.getNpageSize())
                 .put("totalPage", x.getTotalPage())
                 .put("offset", x.getOffset()).build())
         );
@@ -321,7 +325,7 @@ public abstract class WebSupport {
         if (mb == null)
             return;
 
-        Optional.ofNullable(sort).ifPresent(x -> mb.put("sort", x));
+        Optional.ofNullable(sort).ifPresent(x -> mb.put("nsort", x));
     }
 
     /**
