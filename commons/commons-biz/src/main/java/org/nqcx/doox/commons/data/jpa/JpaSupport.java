@@ -97,7 +97,7 @@
 //    public List<PO> listAll(DTO dto) {
 //        Assert.notNull(dto, "DTO must be not null.");
 //
-//        Sort sort = DTOConverter.toSort(dto.getSort());
+//        Sort sort = DTOConverter.toSort(dto.getNsort());
 //
 //        Example<PO> example = getExample(dto, this.clazz);
 //        if (example == null)
