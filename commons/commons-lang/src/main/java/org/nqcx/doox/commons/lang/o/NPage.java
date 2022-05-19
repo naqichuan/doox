@@ -27,8 +27,8 @@ public class NPage implements Serializable {
     private long pageSize = 20L;
     // 偏移值（默认值0）
     private long offset = 0L;
-    private long showPage = 10L; //每页显示页数
-    private long[][] showArray; //二维长度为2  [*][1] 数值 [*][2]页类型 －1记录总数 0当前页 1上一页 2首页 3普通页 4末页 5下一页
+//    private long showPage = 10L; //每页显示页数
+//    private long[][] showArray; //二维长度为2  [*][1] 数值 [*][2]页类型 －1记录总数 0当前页 1上一页 2首页 3普通页 4末页 5下一页
 
     public NPage() {
     }
@@ -62,81 +62,81 @@ public class NPage implements Serializable {
             this.page = totalPages;
 
         //生成每页显示页数数组
-        long first = 0;
-        long previous = 0;
-        long commonBegin = 0;
-        long commonEnd = 0;
-        long last = 0;
-        long next = 0;
+//        long first = 0;
+//        long previous = 0;
+//        long commonBegin = 0;
+//        long commonEnd = 0;
+//        long last = 0;
+//        long next = 0;
 
-        if (totalPages < this.showPage) {
-            commonBegin = 1;
-            commonEnd = totalPages;
-        } else {
-            commonBegin = ((this.page - 2) < 1) ? 1 : (this.page - 2);
-            commonEnd = (commonBegin + this.showPage - 1) > totalPages ? totalPages : (commonBegin + this.showPage - 1);
-
-            if ((commonEnd - commonBegin) < (this.showPage - 1)) {
-                commonBegin = commonEnd - this.showPage + 1;
-            }
-        }
-
-        if (totalPages > 1) {
-            if (this.page == 1) {
-                next = 1;
-                if ((totalPages - commonEnd) > 0)
-                    last = 1;
-            } else if (this.page == totalPages) {
-                previous = 1;
-                if ((commonBegin - 1) > 0)
-                    first = 1;
-            } else {
-                next = 1;
-                previous = 1;
-                if ((totalPages - commonEnd) > 0)
-                    last = 1;
-                if ((commonBegin - 1) > 0)
-                    first = 1;
-            }
-        }
-
-        int len = (int) (first + previous + (commonEnd - commonBegin + 1) + last + next);
-        if (this.totalCount > 0)
-            len = len + 1;
-        showArray = new long[len][2];
-        int arrayindex = 0;
-        //－1记录总数 0当前页 1 首页  2上一页 3普通页 4末页 5下一页
-        if (this.totalCount > 0) {
-            showArray[arrayindex][0] = this.totalCount;
-            showArray[arrayindex][1] = -1;
-            arrayindex++;
-        }
-
-        if (previous == 1) {
-            showArray[arrayindex][0] = this.page - 1;
-            showArray[arrayindex][1] = 1;
-            arrayindex++;
-        }
-        if (first == 1) {
-            showArray[arrayindex][0] = 1;
-            showArray[arrayindex][1] = 2;
-            arrayindex++;
-        }
-        if (last == 1) {
-            showArray[showArray.length - 2][0] = totalPages;
-            showArray[showArray.length - 2][1] = 4;
-        }
-        if (next == 1) {
-            showArray[showArray.length - 1][0] = this.page + 1;
-            showArray[showArray.length - 1][1] = 5;
-        }
-
-        for (long i = commonBegin; i <= commonEnd; i++, arrayindex++) {
-            showArray[arrayindex][0] = i;
-            showArray[arrayindex][1] = 3;
-            if (this.page == i)
-                showArray[arrayindex][1] = 0;
-        }
+//        if (totalPages < this.showPage) {
+//            commonBegin = 1;
+//            commonEnd = totalPages;
+//        } else {
+//            commonBegin = ((this.page - 2) < 1) ? 1 : (this.page - 2);
+//            commonEnd = (commonBegin + this.showPage - 1) > totalPages ? totalPages : (commonBegin + this.showPage - 1);
+//
+//            if ((commonEnd - commonBegin) < (this.showPage - 1)) {
+//                commonBegin = commonEnd - this.showPage + 1;
+//            }
+//        }
+//
+//        if (totalPages > 1) {
+//            if (this.page == 1) {
+//                next = 1;
+//                if ((totalPages - commonEnd) > 0)
+//                    last = 1;
+//            } else if (this.page == totalPages) {
+//                previous = 1;
+//                if ((commonBegin - 1) > 0)
+//                    first = 1;
+//            } else {
+//                next = 1;
+//                previous = 1;
+//                if ((totalPages - commonEnd) > 0)
+//                    last = 1;
+//                if ((commonBegin - 1) > 0)
+//                    first = 1;
+//            }
+//        }
+//
+//        int len = (int) (first + previous + (commonEnd - commonBegin + 1) + last + next);
+//        if (this.totalCount > 0)
+//            len = len + 1;
+//        showArray = new long[len][2];
+//        int arrayindex = 0;
+//        //－1记录总数 0当前页 1 首页  2上一页 3普通页 4末页 5下一页
+//        if (this.totalCount > 0) {
+//            showArray[arrayindex][0] = this.totalCount;
+//            showArray[arrayindex][1] = -1;
+//            arrayindex++;
+//        }
+//
+//        if (previous == 1) {
+//            showArray[arrayindex][0] = this.page - 1;
+//            showArray[arrayindex][1] = 1;
+//            arrayindex++;
+//        }
+//        if (first == 1) {
+//            showArray[arrayindex][0] = 1;
+//            showArray[arrayindex][1] = 2;
+//            arrayindex++;
+//        }
+//        if (last == 1) {
+//            showArray[showArray.length - 2][0] = totalPages;
+//            showArray[showArray.length - 2][1] = 4;
+//        }
+//        if (next == 1) {
+//            showArray[showArray.length - 1][0] = this.page + 1;
+//            showArray[showArray.length - 1][1] = 5;
+//        }
+//
+//        for (long i = commonBegin; i <= commonEnd; i++, arrayindex++) {
+//            showArray[arrayindex][0] = i;
+//            showArray[arrayindex][1] = 3;
+//            if (this.page == i)
+//                showArray[arrayindex][1] = 0;
+//        }
     }
 
     public NPage setNpage(long page) {
@@ -159,12 +159,12 @@ public class NPage implements Serializable {
         return this;
     }
 
-    public NPage setShowPage(long showPage) {
-        if (showPage > 0 && showPage <= 10)
-            this.showPage = showPage;
-        calculate(0, 0, -1, -1);
-        return this;
-    }
+//    public NPage setShowPage(long showPage) {
+//        if (showPage > 0 && showPage <= 10)
+//            this.showPage = showPage;
+//        calculate(0, 0, -1, -1);
+//        return this;
+//    }
 
     public long getTotalCount() {
         return totalCount;
@@ -194,13 +194,13 @@ public class NPage implements Serializable {
         return this.getNpage() * this.getNpageSize() + this.getOffset() - 1;
     }
 
-    public long getShowPage() {
-        return showPage;
-    }
-
-    public long[][] getShowArray() {
-        return showArray;
-    }
+//    public long getShowPage() {
+//        return showPage;
+//    }
+//
+//    public long[][] getShowArray() {
+//        return showArray;
+//    }
 
     public long getPrevPage() {
         return this.getNpage() - 1 < 1 ? 1 : this.getNpage() - 1;
@@ -222,8 +222,8 @@ public class NPage implements Serializable {
                 ", endIndex=" + getEndIndex() +
                 ", prevPage=" + getPrevPage() +
                 ", nextPage=" + getNextPage() +
-                ", showPage=" + showPage +
-                ", showArray=" + Arrays.toString(showArray) +
+//                ", showPage=" + showPage +
+//                ", showArray=" + Arrays.toString(showArray) +
                 '}';
     }
 
@@ -233,11 +233,11 @@ public class NPage implements Serializable {
         pb.setNpage(1);
         pb.setNpageSize(10);
         pb.setOffset(0);
-        pb.setShowPage(3);
+//        pb.setShowPage(3);
         System.out.println(pb.getTotalPage());
         System.out.println(pb.getNpageSize());
         System.out.println(pb.getNpage());
-        System.out.println(Arrays.deepToString(pb.getShowArray()));
+//        System.out.println(Arrays.deepToString(pb.getShowArray()));
         System.out.println(pb.getPrevPage());
         System.out.println(pb.getNextPage());
     }
