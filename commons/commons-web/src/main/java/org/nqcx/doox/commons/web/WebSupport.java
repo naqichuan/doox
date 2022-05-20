@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.nqcx.doox.commons.lang.o.*;
 import org.nqcx.doox.commons.lang.url.UrlBuilder;
 import org.nqcx.doox.commons.util.MapBuilder;
@@ -38,7 +39,7 @@ public abstract class WebSupport {
 
     private final static Logger logger = LoggerFactory.getLogger(WebSupport.class);
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    public final static TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone("GMT+08:00");
 
     @SuppressWarnings("WeakerAccess")
     protected final static String SUCCESS = "success";
@@ -48,12 +49,26 @@ public abstract class WebSupport {
     protected final static String ERROR_TEXT = "errorText";
     @SuppressWarnings("unused")
     protected final static String NOT_FOUND = "NOT FOUND";
-
     protected final static String DEFAULT_CHARSET_NAME = "UTF-8";
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired(required = false)
     protected MessageSource messageSource;
+
+
+    {
+        this.configFeatures(objectMapper);
+    }
+
+    // ========================================================================
+
+    protected void configFeatures(ObjectMapper objectMapper) {
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,false);
+        objectMapper.setTimeZone(DEFAULT_TIME_ZONE);
+    }
+
+    // ========================================================================
 
     /**
      * getPropertyValue
