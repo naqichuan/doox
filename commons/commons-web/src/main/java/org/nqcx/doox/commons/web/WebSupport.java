@@ -10,6 +10,8 @@ package org.nqcx.doox.commons.web;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.nqcx.doox.commons.lang.o.*;
 import org.nqcx.doox.commons.lang.url.UrlBuilder;
 import org.nqcx.doox.commons.util.MapBuilder;
@@ -34,7 +36,9 @@ import static org.apache.commons.lang3.ClassUtils.isPrimitiveOrWrapper;
  */
 public abstract class WebSupport {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(WebSupport.class);
+    private final static Logger logger = LoggerFactory.getLogger(WebSupport.class);
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @SuppressWarnings("WeakerAccess")
     protected final static String SUCCESS = "success";
@@ -81,7 +85,7 @@ public abstract class WebSupport {
             rv = messageSource == null ? null : messageSource.getMessage(code, args, defaultMessage, locale);
 
         } catch (NoSuchMessageException e) {
-            LOGGER.warn("WebSupport.getPropertyValue ," + e.getMessage());
+            logger.warn("WebSupport.getPropertyValue ," + e.getMessage());
         }
         return rv == null ? code : rv;
     }
@@ -171,50 +175,6 @@ public abstract class WebSupport {
     // ========================================================================
 
     /**
-     * 构建返回结果，返回 String 类型
-     *
-     * @param dto dto
-     * @return String
-     */
-    @Deprecated
-    protected String buildJsonResult(DTO dto) {
-        return buildDTOJson(dto);
-    }
-
-    /**
-     * buildDTOJson
-     *
-     * @param dto dto
-     * @return {@link String}
-     * @author naqichuan 22-5-20 下午12:06
-     */
-    protected String buildDTOJson(DTO dto) {
-        return JSON.toJSONString(buildResult(dto));
-    }
-
-    /**
-     * @param dto      dto
-     * @param features features
-     * @return String
-     */
-    @Deprecated
-    protected String buildJsonResult(DTO dto, SerializerFeature... features) {
-        return buildDTOJson(dto, features);
-    }
-
-    /**
-     * buildDTOJson
-     *
-     * @param dto      dto
-     * @param features features
-     * @return {@link String}
-     * @author naqichuan 22-5-20 下午12:07
-     */
-    protected String buildDTOJson(DTO dto, SerializerFeature... features) {
-        return JSON.toJSONString(buildResult(dto), features);
-    }
-
-    /**
      * 构建返回结果，返回 map 类型
      *
      * @param dto dto
@@ -223,8 +183,37 @@ public abstract class WebSupport {
      */
     @Deprecated
     protected Map<?, ?> buildResult(DTO dto) {
-        return buildDTO(dto);
+        return dto2map(dto);
     }
+
+    /**
+     * 构建返回结果，返回 String 类型
+     *
+     * @param dto      dto
+     * @param features features
+     * @return String
+     */
+    @Deprecated
+    protected String buildJsonResult(DTO dto, SerializerFeature... features) {
+        return JSON.toJSONString(dto2map(dto), features);
+    }
+
+    /**
+     * dto2Json
+     *
+     * @param dto dto
+     * @return {@link String}
+     * @author naqichuan 22-5-20 下午12:07
+     */
+    protected String dto2Json(DTO dto) {
+        try {
+            return objectMapper.writeValueAsString(dto2map(dto));
+        } catch (JsonProcessingException e) {
+            logger.warn(e.getMessage());
+        }
+        return null;
+    }
+
 
     /**
      * buildDTO
@@ -233,7 +222,7 @@ public abstract class WebSupport {
      * @return {@link Map<?,?>}
      * @author naqichuan 22-5-20 下午12:09
      */
-    protected Map<?, ?> buildDTO(DTO dto) {
+    protected Map<?, ?> dto2map(DTO dto) {
         if (dto == null)
             // 这里的 value 只做说明，最终返回以 gmsg.properties 中 key 对应的配置为准
             dto = new DTO().putError(NErrorCode.E6.buildError());
@@ -241,33 +230,33 @@ public abstract class WebSupport {
         MapBuilder mb = MapBuilder.instance()
                 .put(SUCCESS, dto.isSuccess());
 
-        this.parseResult(mb, dto.getResults());
+        this.buildDtoResult(mb, dto.getResults());
 
         if (dto.isSuccess()) {
             // 1. 解析对象
-            this.parseObject(mb, dto.getObject());
+            this.buildDtoObject(mb, dto.getObject());
             // 2. 解析列表
-            this.parseList(mb, dto.getList());
+            this.buildDtoList(mb, dto.getList());
             // 3. 解析分页
-            this.parsePage(mb, dto.getNpage());
+            this.buildDtoNpage(mb, dto.getNpage());
             // 4. 解析排序
-            this.parseSort(mb, dto.getNsort());
+            this.buildDtoNsort(mb, dto.getNsort());
 
         } else
-            this.parseErrors(mb, dto.getErrors());
+            this.buildDtoErrors(mb, dto.getErrors());
 
 
         return mb.build();
     }
 
     /**
-     * buildDTOObject
+     * dto.object to map
      *
      * @param dto dto
      * @return {@link Map<?,?>}
      * @author naqichuan 22-5-20 下午12:29
      */
-    protected Map<?, ?> buildDTOObject(DTO dto) {
+    protected Map<?, ?> object2map(DTO dto) {
         if (dto == null)
             // 这里的 value 只做说明，最终返回以 gmsg.properties 中 key 对应的配置为准
             dto = new DTO().putError(NErrorCode.E6.buildError());
@@ -297,19 +286,19 @@ public abstract class WebSupport {
                 mb.putMap(omap);
             }
         } else
-            this.parseErrors(mb, dto.getErrors());
+            this.buildDtoErrors(mb, dto.getErrors());
 
         return mb.build();
     }
 
     /**
-     * parseResult
+     * buildDtoResult
      *
      * @param mb  mb
      * @param map map
      * @author naqichuan 22-5-17 下午9:24
      */
-    private void parseResult(final MapBuilder mb, Map<String, Object> map) {
+    private void buildDtoResult(final MapBuilder mb, Map<String, Object> map) {
         if (mb == null)
             return;
 
@@ -323,7 +312,7 @@ public abstract class WebSupport {
      * @param object object
      * @author naqichuan 22-5-17 下午9:54
      */
-    private void parseObject(final MapBuilder mb, Object object) {
+    private void buildDtoObject(final MapBuilder mb, Object object) {
         if (mb == null)
             return;
 
@@ -337,7 +326,7 @@ public abstract class WebSupport {
      * @param list list
      * @author naqichuan 22-5-17 下午9:50
      */
-    private void parseList(final MapBuilder mb, List<?> list) {
+    private void buildDtoList(final MapBuilder mb, List<?> list) {
         if (mb == null)
             return;
 
@@ -351,7 +340,7 @@ public abstract class WebSupport {
      * @param page page
      * @author naqichuan 22-5-17 下午9:46
      */
-    private void parsePage(final MapBuilder mb, NPage page) {
+    private void buildDtoNpage(final MapBuilder mb, NPage page) {
         if (mb == null)
             return;
 
@@ -365,13 +354,13 @@ public abstract class WebSupport {
     }
 
     /**
-     * parseSort
+     * buildDtoSort
      *
      * @param mb   mb
      * @param sort sort
      * @author naqichuan 22-5-17 下午10:01
      */
-    private void parseSort(final MapBuilder mb, NSort sort) {
+    private void buildDtoNsort(final MapBuilder mb, NSort sort) {
         if (mb == null)
             return;
 
@@ -414,7 +403,7 @@ public abstract class WebSupport {
      * @param errors errors
      * @author naqichuan 22-5-17 下午10:04
      */
-    private void parseErrors(final MapBuilder mb, Map<NError, Object[]> errors) {
+    private void buildDtoErrors(final MapBuilder mb, Map<NError, Object[]> errors) {
         if (mb == null)
             return;
 
@@ -423,11 +412,11 @@ public abstract class WebSupport {
                 errors.put(NErrorCode.E0.buildError(), null);
 
             // 设置 error
-            this.parseErrorCode(mb, errors.entrySet().iterator().next());
+            this.buildDtoErrorCode(mb, errors.entrySet().iterator().next());
 
             // 解析 errors
             if (errors.size() > 1)
-                this.parseErrorCodes(mb, errors.entrySet());
+                this.buildDtoErrorCodes(mb, errors.entrySet());
         });
     }
 
@@ -438,7 +427,7 @@ public abstract class WebSupport {
      * @param mb    mb
      * @param error error
      */
-    protected void parseErrorCode(final MapBuilder mb, Map.Entry<NError, Object[]> error) {
+    protected void buildDtoErrorCode(final MapBuilder mb, Map.Entry<NError, Object[]> error) {
         if (mb == null)
             return;
 
@@ -453,13 +442,13 @@ public abstract class WebSupport {
     }
 
     /**
-     * parseErrorCodes
+     * buildDtoErrorCodes
      *
      * @param mb     mb
      * @param errors errors
      * @author naqichuan 22-5-18 下午7:00
      */
-    protected void parseErrorCodes(final MapBuilder mb, Set<Map.Entry<NError, Object[]>> errors) {
+    protected void buildDtoErrorCodes(final MapBuilder mb, Set<Map.Entry<NError, Object[]>> errors) {
         if (mb == null)
             return;
 
@@ -500,17 +489,17 @@ public abstract class WebSupport {
      * 通过 response 直接返回字符串
      *
      * @param response response
-     * @param result   result
+     * @param text     text
      * @author naqichuan Sep 26, 2013 3:02:32 PM
      */
-    protected void response(HttpServletResponse response, String result) {
+    protected void response(HttpServletResponse response, String text) {
         response.setCharacterEncoding(DEFAULT_CHARSET_NAME);
         PrintWriter out = null;
         try {
             out = response.getWriter();
-            out.append(result);
+            out.append(text);
         } catch (IOException e) {
-            LOGGER.warn("WebSupport.responseResult, " + e.getMessage());
+            logger.warn("WebSupport.responseResult, " + e.getMessage());
         } finally {
             if (out != null) {
                 out.close();
@@ -533,7 +522,7 @@ public abstract class WebSupport {
         try {
             response.sendRedirect(getContextPath() + "/error/" + error.getErrorCode());
         } catch (IOException e) {
-            LOGGER.warn(e.getMessage());
+            logger.warn(e.getMessage());
         }
     }
 
@@ -553,7 +542,7 @@ public abstract class WebSupport {
             else
                 response.sendRedirect((getContextPath() == null ? "" : getContextPath()) + (uri.startsWith("/") ? uri : "/" + uri));
         } catch (IOException e) {
-            LOGGER.warn(e.getMessage());
+            logger.warn(e.getMessage());
         }
     }
 
@@ -587,7 +576,7 @@ public abstract class WebSupport {
             while ((s = br.readLine()) != null)
                 sb.append(s);
         } catch (IOException e) {
-            LOGGER.warn("requestBody error, {}", e.getMessage());
+            logger.warn("requestBody error, {}", e.getMessage());
         }
 
         return sb.toString();
