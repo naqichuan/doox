@@ -9,6 +9,7 @@
 package org.nqcx.doox.commons.util.date;
 
 import org.nqcx.doox.commons.lang.enums.TimeUnitEO;
+import org.nqcx.doox.commons.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,7 +108,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         try {
             return parseDate(str, DATE_FORMATS);
         } catch (ParseException e) {
-            logger.error("", e);
+            logger.warn("'{}' can not convert to type 'java.util.Date',just support timestamp(type of long) and following date format({})",
+                    str,
+                    StringUtils.join(DATE_FORMATS, ","));
         }
         return null;
     }
@@ -124,7 +127,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         try {
             return parseDate(str, new String[]{pattern});
         } catch (ParseException e) {
-            logger.error("", e);
+            logger.warn("'{}' can not convert to type 'java.util.Date',just support timestamp(type of long) and following date format({})",
+                    str,
+                    pattern);
         }
         return null;
     }
