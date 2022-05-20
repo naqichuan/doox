@@ -360,9 +360,9 @@ public abstract class WebSupport {
             return;
 
         Optional.ofNullable(page).ifPresent(x -> mb.put("npage", MapBuilder.instance()
-                .put("page", x.getNpage())
+                .put("page", x.getPage())
                 .put("totalCount", x.getTotalCount())
-                .put("pageSize", x.getNpageSize())
+                .put("pageSize", x.getPageSize())
                 .put("totalPage", x.getTotalPage())
                 .put("offset", x.getOffset()).build())
         );
