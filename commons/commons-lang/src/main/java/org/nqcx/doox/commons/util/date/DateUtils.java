@@ -106,7 +106,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      */
     public static Date parseDate(String str) {
         try {
-            return parseDate(str, DATE_FORMATS);
+            if (str != null)
+                return parseDate(str, DATE_FORMATS);
         } catch (ParseException e) {
             logger.warn("'{}' can not convert to type 'java.util.Date',just support timestamp(type of long) and following date format({})",
                     str,
@@ -125,7 +126,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      */
     public static Date parseDate(String str, String pattern) {
         try {
-            return parseDate(str, new String[]{pattern});
+            if (str != null && pattern != null)
+                return parseDate(str, new String[]{pattern});
         } catch (ParseException e) {
             logger.warn("'{}' can not convert to type 'java.util.Date',just support timestamp(type of long) and following date format({})",
                     str,
