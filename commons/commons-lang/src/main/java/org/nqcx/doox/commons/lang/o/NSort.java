@@ -142,7 +142,10 @@ public class NSort implements Serializable {
         }
 
         public void setDirection(NDirection _direction) {
-            this.direction = _direction == null ? DEFAULT_DIRECTION : _direction;
+            if (_direction == null)
+                throw new IllegalArgumentException("Direction must not null or empty!");
+
+            this.direction = _direction;
         }
 
         public void setField(String _field) {
