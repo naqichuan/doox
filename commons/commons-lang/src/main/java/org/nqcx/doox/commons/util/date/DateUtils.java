@@ -17,6 +17,7 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
+import static org.nqcx.doox.commons.util.date.DateFormatUtils.DATE_FORMATS;
 import static org.nqcx.doox.commons.util.date.DateFormatUtils.TIME;
 
 /**
@@ -46,7 +47,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     public static Date date(int amount) {
         return addDays(date(), amount);
     }
-
 
     /**
      * atStartOfDay
@@ -99,25 +99,30 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 字符串转日期
      *
-     * @param date date
+     * @param str str
      * @return {@link Date}
      * @author naqichuan 2021-03-26 09:41
      */
-    public static Date parseDate(String date) {
-        return parseDate(date, DateFormatUtils.DATE_FORMAT);
+    public static Date parseDate(String str) {
+        try {
+            return parseDate(str, DATE_FORMATS);
+        } catch (ParseException e) {
+            logger.error("", e);
+        }
+        return null;
     }
 
     /**
      * 字符串转日期指定格式日期
      *
-     * @param date    date
+     * @param str     str
      * @param pattern pattern
      * @return {@link Date}
      * @author naqichuan 2021-03-26 09:41
      */
-    public static Date parseDate(String date, String pattern) {
+    public static Date parseDate(String str, String pattern) {
         try {
-            return parseDate(date, new String[]{pattern});
+            return parseDate(str, new String[]{pattern});
         } catch (ParseException e) {
             logger.error("", e);
         }
@@ -500,7 +505,14 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 //
 //        }
 
-        System.out.println(atStartOfDay(firstDayOfMonth(date(-30))));
-        System.out.println(atStartOfDay(firstDayOfWeek(date())));
+//        System.out.println(atStartOfDay(firstDayOfMonth(date(-30))));
+//        System.out.println(atStartOfDay(firstDayOfWeek(date())));
+
+        System.out.println(DateFormatUtils.DATETIME.format(date()));
+        System.out.println(DateFormatUtils.DATETIME_ZZ.format(date()));
+        System.out.println(DateFormatUtils.DATETIME_S.format(date()));
+        System.out.println(DateFormatUtils.DATETIME_S_ZZ.format(date()));
+        System.out.println(DateFormatUtils.DATETIME_SSS.format(date()));
+        System.out.println(DateFormatUtils.DATETIME_SSS_ZZ.format(date()));
     }
 }
