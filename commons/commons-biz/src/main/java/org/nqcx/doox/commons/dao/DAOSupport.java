@@ -565,7 +565,7 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
             map.put("_order_", "ORDER BY " + dto.getNsort().orderString(fieldMapping));
 
         if (dto != null && dto.getNpage() != null)
-            map.put("_page_", "LIMIT " + dto.getNpage().getStartIndex() + ", " + dto.getNpage().getNpageSize());
+            map.put("_page_", "LIMIT " + dto.getNpage().getStartIndex() + ", " + dto.getNpage().getPageSize());
 
         return map;
     }
