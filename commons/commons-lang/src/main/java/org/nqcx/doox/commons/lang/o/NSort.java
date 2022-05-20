@@ -149,7 +149,7 @@ public class NSort implements Serializable {
             if (_field == null || _field.length() == 0)
                 throw new IllegalArgumentException("Field must not null or empty!");
 
-            this.field = field;
+            this.field = _field;
         }
 
         public NOrder by(String field) {
