@@ -27,6 +27,41 @@ public class DateFormatUtils extends org.apache.commons.lang3.time.DateFormatUti
     public static final String DAY_BEGIN_FORMAT = "yyyy-MM-dd 00:00:00";
     public static final String DAY_END_FORMAT = "yyyy-MM-dd 23:59:59";
 
+    public static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+    public static final String DATETIME_ZZ_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZZ";
+    public static final String DATETIME_S_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.S";
+    public static final String DATETIME_S_ZZ_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SZZ";
+    public static final String DATETIME_SSS_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+    public static final String DATETIME_SSS_ZZ_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZZ";
+
+    public final static String[] DATE_FORMATS =
+            new String[]{
+                    DATETIME_FORMAT,
+                    DATETIME_ZZ_FORMAT,
+                    DATETIME_S_FORMAT,
+                    DATETIME_S_ZZ_FORMAT,
+                    DATETIME_SSS_FORMAT,
+                    DATETIME_SSS_ZZ_FORMAT,
+                    DATE_FORMAT,
+                    "yyyy-MM-dd HH:mm",
+                    TIME_FORMAT,
+                    TIME_FORMAT + ".S",
+                    "yyyy.MM.dd",
+                    "yyyy.MM.dd HH:mm",
+                    "yyyy.MM.dd HH:mm:ss",
+                    "yyyy.MM.dd HH:mm:ss.S",
+                    "yyyy/MM/dd",
+                    "yyyy/MM/dd HH:mm",
+                    "yyyy/MM/dd HH:mm:ss",
+                    "yyyy/MM/dd HH:mm:ss.S"};
+
+    public static final FastDateFormat DATETIME= FastDateFormat.getInstance(DATETIME_FORMAT);
+    public static final FastDateFormat DATETIME_ZZ = FastDateFormat.getInstance(DATETIME_ZZ_FORMAT);
+    public static final FastDateFormat DATETIME_SSS = FastDateFormat.getInstance(DATETIME_SSS_FORMAT);
+    public static final FastDateFormat DATETIME_SSS_ZZ = FastDateFormat.getInstance(DATETIME_SSS_ZZ_FORMAT);
+    public static final FastDateFormat DATETIME_S = FastDateFormat.getInstance(DATETIME_S_FORMAT);
+    public static final FastDateFormat DATETIME_S_ZZ = FastDateFormat.getInstance(DATETIME_S_ZZ_FORMAT);
+
     /**
      * Nqcx formatter for year without time zone. The format used is <tt>yyyy</tt>.
      */
