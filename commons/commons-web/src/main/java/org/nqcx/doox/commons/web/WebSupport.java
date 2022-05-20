@@ -176,7 +176,19 @@ public abstract class WebSupport {
      * @param dto dto
      * @return String
      */
+    @Deprecated
     protected String buildJsonResult(DTO dto) {
+        return buildDTOJson(dto);
+    }
+
+    /**
+     * buildDTOJson
+     *
+     * @param dto dto
+     * @return {@link String}
+     * @author naqichuan 22-5-20 下午12:06
+     */
+    protected String buildDTOJson(DTO dto) {
         return JSON.toJSONString(buildResult(dto));
     }
 
@@ -185,7 +197,20 @@ public abstract class WebSupport {
      * @param features features
      * @return String
      */
+    @Deprecated
     protected String buildJsonResult(DTO dto, SerializerFeature... features) {
+        return buildDTOJson(dto, features);
+    }
+
+    /**
+     * buildDTOJson
+     *
+     * @param dto      dto
+     * @param features features
+     * @return {@link String}
+     * @author naqichuan 22-5-20 下午12:07
+     */
+    protected String buildDTOJson(DTO dto, SerializerFeature... features) {
         return JSON.toJSONString(buildResult(dto), features);
     }
 
@@ -196,7 +221,19 @@ public abstract class WebSupport {
      * @return {@link Map<?,?>}
      * @author naqichuan 22-5-18 下午6:59
      */
+    @Deprecated
     protected Map<?, ?> buildResult(DTO dto) {
+        return buildDTO(dto);
+    }
+
+    /**
+     * buildDTO
+     *
+     * @param dto dto
+     * @return {@link Map<?,?>}
+     * @author naqichuan 22-5-20 下午12:09
+     */
+    protected Map<?, ?> buildDTO(DTO dto) {
         if (dto == null)
             // 这里的 value 只做说明，最终返回以 gmsg.properties 中 key 对应的配置为准
             dto = new DTO().putError(NErrorCode.E6.buildError());
@@ -219,6 +256,48 @@ public abstract class WebSupport {
         } else
             this.parseErrors(mb, dto.getErrors());
 
+
+        return mb.build();
+    }
+
+    /**
+     * buildDTOObject
+     *
+     * @param dto dto
+     * @return {@link Map<?,?>}
+     * @author naqichuan 22-5-20 下午12:29
+     */
+    protected Map<?, ?> buildDTOObject(DTO dto) {
+        if (dto == null)
+            // 这里的 value 只做说明，最终返回以 gmsg.properties 中 key 对应的配置为准
+            dto = new DTO().putError(NErrorCode.E6.buildError());
+
+        MapBuilder mb = MapBuilder.instance()
+                .put(SUCCESS, dto.isSuccess());
+
+        if (dto.isSuccess() && dto.getObject() != null) {
+            Class<?> clazz = dto.getObject().getClass();
+
+            if (isPrimitiveOrWrapper(clazz)                         // primitive or wrapper
+                    || String.class.isAssignableFrom(clazz)         // string
+                    || clazz.isArray()                              // array
+                    || Collection.class.isAssignableFrom(clazz)     // collection
+                    || clazz.isEnum()                               // enum
+            ) {
+                mb.put("object", dto.getObject());
+            } else if (Map.class.isAssignableFrom(clazz)) {
+                mb.putMap(dto.getObject());
+            } else {
+                Map<String, Object> omap = new HashMap<>();
+                BeanMap beanMap = BeanMap.create(dto.getObject());
+                for (Object key : beanMap.keySet()) {
+                    omap.put(String.valueOf(key), beanMap.get(key));
+                }
+                // root 根下直接存储对象 field 用于直接映射成 object
+                mb.putMap(omap);
+            }
+        } else
+            this.parseErrors(mb, dto.getErrors());
 
         return mb.build();
     }
@@ -248,36 +327,7 @@ public abstract class WebSupport {
         if (mb == null)
             return;
 
-        Optional.ofNullable(object).ifPresent(x -> {
-            Class<?> clazz = object.getClass();
-
-            if (isPrimitiveOrWrapper(clazz)                         // primitive or wrapper
-                    || String.class.isAssignableFrom(clazz)         // string
-                    || clazz.isArray()                              // array
-                    || Collection.class.isAssignableFrom(clazz)     // collection
-                    || clazz.isEnum()                               // enum
-            ) {
-                mb.put("object", object);
-                return;
-            }
-
-            if (Map.class.isAssignableFrom(clazz)) {
-                mb.putMap((Map) object);
-                return;
-            }
-
-            Map<String, Object> omap = new HashMap<>();
-            BeanMap beanMap = BeanMap.create(object);
-            for (Object key : beanMap.keySet()) {
-                omap.put(String.valueOf(key), beanMap.get(key));
-            }
-
-            // object 中存储对象，用于 DTO -> DTO
-            mb.put("object", omap);
-
-            // root 根下直接存储对象 field 用于直接映射成 object
-            mb.putMap(omap);
-        });
+        Optional.ofNullable(object).ifPresent(x -> mb.put("object", object));
     }
 
     /**
