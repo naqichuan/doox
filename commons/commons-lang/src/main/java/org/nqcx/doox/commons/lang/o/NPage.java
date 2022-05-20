@@ -139,12 +139,12 @@ public class NPage implements Serializable {
 //        }
     }
 
-    public NPage setNpage(long page) {
+    public NPage setPage(long page) {
         calculate(page, 0, -1, -1);
         return this;
     }
 
-    public NPage setNpageSize(long pageSize) {
+    public NPage setPageSize(long pageSize) {
         calculate(0, pageSize, -1, -1);
         return this;
     }
@@ -171,14 +171,14 @@ public class NPage implements Serializable {
     }
 
     public long getTotalPage() {
-        return ((totalCount - this.getOffset() > 0 ? totalCount - this.getOffset() : 0) + this.getNpageSize() - 1) / this.getNpageSize();
+        return ((totalCount - this.getOffset() > 0 ? totalCount - this.getOffset() : 0) + this.getPageSize() - 1) / this.getPageSize();
     }
 
-    public long getNpage() {
+    public long getPage() {
         return page;
     }
 
-    public long getNpageSize() {
+    public long getPageSize() {
         return pageSize;
     }
 
@@ -187,11 +187,11 @@ public class NPage implements Serializable {
     }
 
     public long getStartIndex() {
-        return (this.getNpage() - 1) * this.getNpageSize() + this.getOffset();
+        return (this.getPage() - 1) * this.getPageSize() + this.getOffset();
     }
 
     public long getEndIndex() {
-        return this.getNpage() * this.getNpageSize() + this.getOffset() - 1;
+        return this.getPage() * this.getPageSize() + this.getOffset() - 1;
     }
 
 //    public long getShowPage() {
@@ -203,11 +203,11 @@ public class NPage implements Serializable {
 //    }
 
     public long getPrevPage() {
-        return this.getNpage() - 1 < 1 ? 1 : this.getNpage() - 1;
+        return this.getPage() - 1 < 1 ? 1 : this.getPage() - 1;
     }
 
     public long getNextPage() {
-        return this.getNpage() + 1 > this.getTotalPage() ? this.getTotalPage() : this.getNpage() + 1;
+        return this.getPage() + 1 > this.getTotalPage() ? this.getTotalPage() : this.getPage() + 1;
     }
 
     @Override
@@ -230,13 +230,13 @@ public class NPage implements Serializable {
     public static void main(String[] args) {
         NPage pb = new NPage();
         pb.setTotalCount(188);
-        pb.setNpage(1);
-        pb.setNpageSize(10);
+        pb.setPage(1);
+        pb.setPageSize(10);
         pb.setOffset(0);
 //        pb.setShowPage(3);
         System.out.println(pb.getTotalPage());
-        System.out.println(pb.getNpageSize());
-        System.out.println(pb.getNpage());
+        System.out.println(pb.getPageSize());
+        System.out.println(pb.getPage());
 //        System.out.println(Arrays.deepToString(pb.getShowArray()));
         System.out.println(pb.getPrevPage());
         System.out.println(pb.getNextPage());
