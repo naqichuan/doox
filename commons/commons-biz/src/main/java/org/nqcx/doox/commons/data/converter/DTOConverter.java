@@ -61,7 +61,7 @@ public class DTOConverter {
         if (nPage == null)
             nPage = new NPage();
 
-        return PageRequest.of((int) nPage.getNpage() - 1, (int) nPage.getNpageSize(), toSort(nSort));
+        return PageRequest.of((int) nPage.getPage() - 1, (int) nPage.getPageSize(), toSort(nSort));
     }
 
     /**
