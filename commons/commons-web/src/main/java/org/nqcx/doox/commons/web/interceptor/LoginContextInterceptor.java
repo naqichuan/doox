@@ -29,15 +29,22 @@ public class LoginContextInterceptor extends WebContextInterceptor {
     protected final static int RATE = 2;
 
     /**
-     * 需要注入
+     * 获取 loginCookie
+     *
+     * @return {@link NqcxCookie}
+     * @author naqichuan 22-6-7 下午9:02
      */
-    protected NqcxCookie loginCookie;
+    protected NqcxCookie loginCookie() {
+        return null;
+    }
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         LoginContext.remove();
 
-        if (loginCookie == null)
+        NqcxCookie loginCookie;
+        if ((loginCookie = loginCookie()) == null)
             return true;
 
         LoginContext lctx = getLoginContext(CookieUtils.getCookieValue(request, loginCookie.getName()), response);
@@ -131,19 +138,10 @@ public class LoginContextInterceptor extends WebContextInterceptor {
      * @param response
      */
     protected void removeLoginCookie(HttpServletRequest request, HttpServletResponse response) {
-        if (loginCookie == null)
+        NqcxCookie loginCookie;
+        if ((loginCookie = loginCookie()) == null)
             return;
 
         CookieUtils.removeCookie(request, response, loginCookie.getName());
-    }
-
-
-    /**
-     * 用于配置文件中配置注入
-     *
-     * @param loginCookie
-     */
-    public void setLoginCookie(NqcxCookie loginCookie) {
-        this.loginCookie = loginCookie;
     }
 }
