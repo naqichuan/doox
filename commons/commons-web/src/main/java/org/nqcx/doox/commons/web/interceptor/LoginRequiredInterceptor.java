@@ -37,7 +37,7 @@ public class LoginRequiredInterceptor extends WebContextInterceptor {
             if (isAjax()) {
                 logger.info("RemoteAddr [" + request.getRemoteAddr() + "] from ajax check login false!");
 
-                responseJson(response, buildJsonResult(new DTO().putError(NErrorCode.E11.buildError())));
+                responseJson(response, dto2Json(new DTO().putError(NErrorCode.E11.buildError())));
             } else {
                 logger.info("RemoteAddr [" + request.getRemoteAddr() + "] from normal way check login false!");
 
@@ -63,8 +63,10 @@ public class LoginRequiredInterceptor extends WebContextInterceptor {
     /**
      * 通过验证 LoginContext，判断用户是否登录，如果需要更新数据库，要重写该方法
      *
-     * @param context
-     * @return
+     * @param response response
+     * @param context  context
+     * @return {@link boolean}
+     * @author naqichuan 22-6-7 下午9:06
      */
     protected boolean checkLogin(HttpServletResponse response, LoginContext context) {
         if (context == null || !context.isLogin()) {
