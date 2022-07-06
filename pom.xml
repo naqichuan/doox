@@ -74,7 +74,7 @@
         <redisson.version>3.12.4</redisson.version>
         <ehcache.version>2.10.4</ehcache.version>
         <ehcache3.version>3.5.2</ehcache3.version>
-        <slf4j.version>1.7.25</slf4j.version>
+        <slf4j.version>1.7.26</slf4j.version>
         <commons-logging.version>1.2</commons-logging.version>
         <disruptor.version>3.3.7</disruptor.version>
         <log4j2.version>2.13.3</log4j2.version>
