@@ -4,7 +4,7 @@
 
     <groupId>org.nqcx.doox</groupId>
     <artifactId>doox</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>2.0.1</version>
     <packaging>pom</packaging>
 
     <name>doox</name>
@@ -36,7 +36,8 @@
         <developerConnection>scm:git:git@github.com:naqichuan/doox.git</developerConnection>
         <url>https://github.com/naqichuan/doox</url>
 
-    </scm>
+      <tag>doox-2.0.1</tag>
+  </scm>
 
     <modules>
         <module>parent</module>
