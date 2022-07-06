@@ -35,6 +35,7 @@
         <connection>scm:git:git@github.com:naqichuan/doox.git</connection>
         <developerConnection>scm:git:git@github.com:naqichuan/doox.git</developerConnection>
         <url>https://github.com/naqichuan/doox</url>
+
     </scm>
 
     <modules>
