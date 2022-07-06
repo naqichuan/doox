@@ -50,7 +50,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <doox.commons.version>2.0.1-SNAPSHOT</doox.commons.version>
+        <doox.commons.version>2.0.1</doox.commons.version>
         <commons-lang3.version>3.7</commons-lang3.version>
         <commons-io.version>2.7</commons-io.version>
         <commons-codec.version>1.15</commons-codec.version>
