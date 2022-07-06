@@ -8,10 +8,10 @@
 
 package org.nqcx.doox.commons.web.login;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.nqcx.doox.commons.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cglib.beans.BeanMap;
 
 import java.io.Serializable;
 
@@ -270,14 +270,13 @@ public class LoginContext implements Serializable {
     protected static void setValue(String value, LoginContext context) {
         if (StringUtils.isNotEmpty(value)) {
             String[] fields = value.split(",");
-            BeanMap beanMap = BeanMap.create(context);
             for (String keyValues : fields) {
                 String[] keyValue = keyValues.split("=");
                 if (keyValue.length == 2) {
                     try {
                         String field = keyValue[0];
                         if (StringUtils.isNotBlank(field)) {
-                            beanMap.put(field, keyValue[1]);
+                            BeanUtils.setProperty(context, field, keyValue[1]);
                         }
                     } catch (Exception e) {
                         logger.error("parser error!", e);
