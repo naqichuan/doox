@@ -34,8 +34,8 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:git@github.com:naqichuan/doox.git</connection>
-        <developerConnection>scm:git@github.com:naqichuan/doox.git</developerConnection>
+        <connection>scm:git:https://github.comnaqichuan/doox.git</connection>
+        <developerConnection>scm:git:https://github.comnaqichuan/doox.git</developerConnection>
         <url>https://github.com/naqichuan/doox/tree/${project.scm.tag}</url>
         <tag>master</tag>
     </scm>
