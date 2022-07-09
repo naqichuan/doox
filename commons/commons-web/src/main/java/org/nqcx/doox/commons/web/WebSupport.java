@@ -13,9 +13,6 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.nqcx.doox.commons.lang.o.*;
 import org.nqcx.doox.commons.lang.url.UrlBuilder;
 import org.nqcx.doox.commons.util.MapBuilder;
@@ -30,14 +27,10 @@ import org.springframework.context.NoSuchMessageException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.ClassUtils.isPrimitiveOrWrapper;
-import static org.nqcx.doox.commons.util.date.DateFormatUtils.DATETIME_SSS_ZZ_FORMAT;
 
 /**
  * @author naqichuan 2014年8月14日 上午11:50:15
