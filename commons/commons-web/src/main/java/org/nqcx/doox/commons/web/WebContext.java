@@ -16,13 +16,7 @@ import java.util.Locale;
  */
 public class WebContext {
 
-    private final static ThreadLocal<WebContext> holder = new ThreadLocal<WebContext>() {
-
-        @Override
-        protected WebContext initialValue() {
-            return new WebContext();
-        }
-    };
+    private final static ThreadLocal<WebContext> holder = ThreadLocal.withInitial(WebContext::new);
 
     private String scheme;
     private boolean secure;
