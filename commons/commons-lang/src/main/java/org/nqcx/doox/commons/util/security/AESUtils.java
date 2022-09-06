@@ -140,7 +140,8 @@ public class AESUtils {
      * @return
      */
     public static String decrypt(String text, String key) {
-        return new String(decrypt(HexUtils.toByteArray(text), key));
+        byte[] b = decrypt(HexUtils.toByteArray(text), key);
+        return b == null ? null : new String(b);
     }
 
     /**
@@ -162,7 +163,9 @@ public class AESUtils {
      */
     public static String decryptBase64(String text, String key) {
         try {
-            return new String(decrypt(Base64.decodeBase64(text), key), DEFAULT_CHARSET);
+            byte[] b = decrypt(Base64.decodeBase64(text), key);
+            if (b != null)
+                return new String(b, DEFAULT_CHARSET);
         } catch (IOException e) {
             e.printStackTrace();
         }
