@@ -27,9 +27,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -159,7 +159,7 @@ public class HttpDownload {
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
 
             Resource rr = new ResourceStream(response.getEntity().getContent());
-            rr.out(new Output(new FileOutputStream(outputFileName), OutputType.BYTE));
+            rr.out(Output.of(Paths.get(outputFileName), OutputType.BYTE));
 
         } catch (Exception e) {
             logger.error("response: post, error: ", e);

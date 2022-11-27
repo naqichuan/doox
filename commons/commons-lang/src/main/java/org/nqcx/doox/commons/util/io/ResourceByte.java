@@ -6,23 +6,21 @@
 
 package org.nqcx.doox.commons.util.io;
 
-import java.io.InputStream;
-
 /**
  * @author naqichuan 14/12/3 10:47
  */
-public class ResourceStream implements Resource {
-    private final InputStream inputStream;
+public class ResourceByte implements Resource {
 
-    public ResourceStream(InputStream inputStream) {
-        if (inputStream == null)
-            throw new RuntimeException("path can't be null.");
+    private final byte[] bytes;
 
-        this.inputStream = inputStream;
+    public ResourceByte(byte[] bytes) {
+        if (bytes == null)
+            throw new RuntimeException("bytes can't be null.");
+        this.bytes = bytes;
     }
 
     @Override
     public Output out(Output output) {
-        return output.out(inputStream);
+        return output.out(bytes);
     }
 }

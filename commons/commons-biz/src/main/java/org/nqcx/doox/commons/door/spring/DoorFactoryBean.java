@@ -6,8 +6,8 @@
 
 package org.nqcx.doox.commons.door.spring;
 
-import org.nqcx.doox.commons.door.core.IDoor;
 import org.nqcx.doox.commons.door.core.DoorProxy;
+import org.nqcx.doox.commons.door.core.IDoor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.context.ApplicationContext;

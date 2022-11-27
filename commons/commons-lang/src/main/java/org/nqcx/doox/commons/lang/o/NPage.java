@@ -10,7 +10,6 @@ package org.nqcx.doox.commons.lang.o;
 
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * Page interface object

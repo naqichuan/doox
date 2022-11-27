@@ -6,22 +6,19 @@
 
 package org.nqcx.doox.commons.util.io;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 /**
  * @author naqichuan 14/12/3 10:44
  */
-public abstract class Resource {
+public interface Resource {
 
 
-    /**
-     * getIn
-     *
-     * @return {@link InputStream}
-     * @author naqichuan 11/8/21 2:25 PM
-     */
-    protected abstract InputStream getIn() throws IOException;
+//    /**
+//     * getIn
+//     *
+//     * @return {@link InputStream}
+//     * @author naqichuan 11/8/21 2:25 PM
+//     */
+//    protected abstract InputStream getIn() throws IOException;
 
     /**
      * 执行资源输出
@@ -29,7 +26,5 @@ public abstract class Resource {
      * @param output output
      * @author naqichuan 11/8/21 2:24 PM
      */
-    public void out(Output output) throws IOException {
-        output.out(getIn());
-    }
+    Output out(Output output);
 }
