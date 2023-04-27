@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.nqcx.doox</groupId>
     <artifactId>doox</artifactId>
-    <version>2.0.9-SNAPSHOT</version>
+    <version>2.0.9</version>
     <packaging>pom</packaging>
 
     <name>doox</name>
@@ -36,7 +35,7 @@
         <connection>scm:git:git@github.com:naqichuan/doox.git</connection>
         <developerConnection>scm:git:git@github.com:naqichuan/doox.git</developerConnection>
         <url>https://github.com/naqichuan/doox</url>
-        <tag>v2.0.2</tag>
+        <tag>doox-2.0.9</tag>
     </scm>
 
     <modules>
@@ -49,7 +48,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <doox.commons.version>2.0.9-SNAPSHOT</doox.commons.version>
+        <doox.commons.version>2.0.9</doox.commons.version>
         <commons-lang3.version>3.7</commons-lang3.version>
         <commons-io.version>2.7</commons-io.version>
         <commons-codec.version>1.15</commons-codec.version>
