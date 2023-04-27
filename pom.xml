@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.nqcx.doox</groupId>
@@ -68,6 +69,7 @@
         <hibernate-validator.version>6.0.9.Final</hibernate-validator.version>
         <mybatis.version>3.5.6</mybatis.version>
         <mybatis-spring.version>2.0.5</mybatis-spring.version>
+        <mybatis-spring-boot-starter.version>2.2.1</mybatis-spring-boot-starter.version>
         <fastjson.version>1.2.83</fastjson.version>
         <jedis.version>3.1.0</jedis.version>
         <lettuce.version>6.0.4.RELEASE</lettuce.version>
@@ -221,6 +223,11 @@
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis-spring</artifactId>
                 <version>${mybatis-spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis-spring-boot-starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>redis.clients</groupId>
