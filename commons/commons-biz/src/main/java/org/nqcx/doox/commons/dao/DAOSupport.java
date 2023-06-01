@@ -58,8 +58,13 @@ public abstract class DAOSupport<Mapper extends IMapper<PO, ID>, PO, ID> impleme
     }
 
     public DAOSupport(Mapper mapper, RedisTemplate<String, String> redisTemplate) {
-        Type t = getClass().getGenericSuperclass();
-        if (t instanceof ParameterizedType) {
+        Class<?> cz = getClass();
+        while (cz != null && cz.getSuperclass() != DAOSupport.class) {
+            cz = cz.getSuperclass();
+        }
+
+        Type t;
+        if (cz != null && (t = cz.getGenericSuperclass()) instanceof  ParameterizedType) {
             Type[] types = ((ParameterizedType) t).getActualTypeArguments();
             clazz = (Class<PO>) types[1];
             Method[] methods;
