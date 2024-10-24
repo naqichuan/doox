@@ -60,7 +60,11 @@ public class NSort implements Serializable {
             if (s.length() > 0)
                 s.append(", ");
 
-            s.append(fieldMapping == null ? "`" + o.field + "`" : fieldMapping.getOrDefault(o.field, "`" + o.field + "`"))
+            String fieldName = fieldMapping == null ? "`" + o.field + "`" : fieldMapping.getOrDefault(o.field, "`" + o.field + "`");
+            if (o.field.startsWith("`") && o.field.endsWith("`"))
+                fieldName = o.field;
+
+            s.append(fieldName)
                     .append(" ")
                     .append(o.getDirection());
         }
